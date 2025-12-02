@@ -9,8 +9,7 @@ uses
   comercial.model.DAO.interfaces,
   comercial.model.business.Pedido,
   comercial.model.business.RelatorioProdutos,
-  comercial.model.business.Fornecedor,
-  comercial.model.business.Produto;
+  comercial.model.business.Fornecedor;
 
 type
   TControllerBusiness = class(TInterfacedObject, iControllerBusiness)
@@ -18,7 +17,6 @@ type
     FPedido: iModelBusinessPedido;
     FRelatorio: iModelBusinessRelatorioProdutos;
     FFornecedor: iModelBusinessFornecedor;
-    FProduto: iModelBusinessProduto;
   public
     constructor create;
     destructor destroy; override;
@@ -26,7 +24,6 @@ type
     function Pedido: iModelBusinessPedido;
     function RelatorioProdutos: iModelBusinessRelatorioProdutos;
     function Fornecedor: iModelBusinessFornecedor;
-    function Produto: iModelBusinessProduto;
   end;
 
 implementation
@@ -63,13 +60,6 @@ begin
   if not assigned(FFornecedor) then
     FFornecedor := TModelBusinessFornecedor.New;
   result := FFornecedor;
-end;
-
-function TControllerBusiness.Produto: iModelBusinessProduto;
-begin
-  if not assigned(FProduto) then
-    FProduto := TModelBusinessProduto.New;
-  result := FProduto;
 end;
 
 class function TControllerBusiness.New: iControllerBusiness;

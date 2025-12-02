@@ -7,6 +7,9 @@ uses
   System.SysUtils,
   FireDAC.Comp.Client,
   FireDAC.Stan.Param,
+  FireDAc.DApt,
+  Firedac.phys.FB,
+  firedac.Stan.Async,
   comercial.model.resource.impl.factory,
   comercial.model.resource.interfaces,
   comercial.util.log;

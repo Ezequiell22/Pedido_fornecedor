@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{3EB1CA41-992F-468C-AAD2-1C63F4F6CAE9}</ProjectGuid>
         <ProjectVersion>20.3</ProjectVersion>
@@ -135,16 +135,15 @@
         <DCCReference Include="src\model\resource\comercial.model.resource.interfaces.pas"/>
         <DCCReference Include="src\model\db\comercial.model.db.migrations.pas"/>
         <DCCReference Include="src\model\entity\comercial.model.entity.Fornecedor.pas"/>
-        <DCCReference Include="src\model\entity\comercial.model.entity.Produto.pas"/>
+        <DCCReference Include="src\model\entity\comercial.model.entity.PedidoCompra.pas"/>
+        <DCCReference Include="src\model\entity\comercial.model.entity.PedcompraItem.pas"/>
         <DCCReference Include="src\model\DAO\comercial.model.DAO.Fornecedor.pas"/>
-        <DCCReference Include="src\model\DAO\comercial.model.DAO.Produto.pas"/>
+        <DCCReference Include="src\model\DAO\comercial.model.DAO.PedidoCompra.pas"/>
+        <DCCReference Include="src\model\DAO\comercial.model.DAO.PedcompraItem.pas"/>
         <DCCReference Include="src\model\business\comercial.model.business.Pedido.pas"/>
         <DCCReference Include="src\model\business\comercial.model.business.RelatorioProdutos.pas"/>
         <DCCReference Include="src\view\comercial.view.Fornecedor.pas">
             <Form>TfrmFornecedor</Form>
-        </DCCReference>
-        <DCCReference Include="src\view\comercial.view.Produto.pas">
-            <Form>TfrmProduto</Form>
         </DCCReference>
         <DCCReference Include="src\view\comercial.view.Pedido.pas">
             <Form>TfrmPedido</Form>
@@ -156,14 +155,12 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="src\model\business\comercial.model.business.Fornecedor.pas"/>
-        <DCCReference Include="src\model\business\comercial.model.business.Produto.pas"/>
+        <DCCReference Include="src\model\resource\impl\comercial.model.resource.impl.conexaoFD.pas"/>
         <DCCReference Include="src\model\resource\impl\comercial.model.resource.impl.factory.pas"/>
-        <DCCReference Include="src\view\comercial.view.ListagemProduto.pas">
-            <Form>frmListagemProduto</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
+        <DCCReference Include="src\model\resource\impl\comercial.model.resource.impl.queryFD.pas"/>
         <DCCReference Include="src\utils\comercial.util.log.pas"/>
         <DCCReference Include="src\utils\comercial.util.printhtml.pas"/>
+        <DCCReference Include="src\model\db\comercial.model.db.migrations.seed.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

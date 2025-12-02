@@ -31,7 +31,6 @@ object frmIndex: TfrmIndex
     Height = 25
     Caption = 'Produtos'
     TabOrder = 1
-    OnClick = ButtonProdutosClick
   end
   object ButtonPedidos: TButton
     Left = 120

@@ -71,11 +71,11 @@ object frmPedido: TfrmPedido
     Caption = 'Produto'
     TabOrder = 2
     object Label4: TLabel
-      Left = 16
+      Left = 261
       Top = 17
-      Width = 46
+      Width = 33
       Height = 13
-      Caption = 'Descri'#231#227'o'
+      Caption = 'C'#243'digo'
     end
     object Label5: TLabel
       Left = 347
@@ -114,14 +114,12 @@ object frmPedido: TfrmPedido
       TabOrder = 2
       OnClick = BtnAddItemClick
     end
-    object ComboBoxProduto: TComboBox
-      Left = 16
+    object Edit1: TEdit
+      Left = 261
       Top = 36
-      Width = 325
+      Width = 80
       Height = 21
-      Style = csDropDownList
       TabOrder = 3
-      OnSelect = ComboBoxProdutoSelect
     end
   end
   object Panel1: TPanel
@@ -141,7 +139,7 @@ object frmPedido: TfrmPedido
     object Label8: TLabel
       Left = 102
       Top = 8
-      Width = 33
+      Width = 55
       Height = 13
       Caption = 'Fornecedor'
     end
@@ -182,10 +180,6 @@ object frmPedido: TfrmPedido
   end
   object DSFornecedores: TDataSource
     Left = 408
-    Top = 336
-  end
-  object DSProdutos: TDataSource
-    Left = 488
     Top = 336
   end
 end

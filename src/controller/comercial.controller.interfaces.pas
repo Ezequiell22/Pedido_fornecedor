@@ -21,7 +21,7 @@ type
     function Pedido: iModelBusinessPedido;
     function RelatorioProdutos: iModelBusinessRelatorioProdutos;
     function Fornecedor: iModelBusinessFornecedor;
-    function Produto: iModelBusinessProduto;
+
   end;
 
 implementation

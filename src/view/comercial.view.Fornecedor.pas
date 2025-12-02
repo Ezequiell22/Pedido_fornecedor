@@ -76,9 +76,6 @@ begin
 end;
 
 function ValidateFornecedorInputs(AOwner: TfrmFornecedor): Boolean;
-var
-  Doc: string;
-  Dig: string;
 begin
   Result := False;
   if Trim(AOwner.edtFantasia.Text) = '' then

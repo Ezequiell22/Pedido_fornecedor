@@ -1,4 +1,4 @@
-unit comercial.view.index;
+﻿unit comercial.view.index;
 
 interface
 
@@ -26,7 +26,6 @@ type
     ButtonProdutos: TButton;
     ButtonPedidos: TButton;
     ButtonRelatorioTopDois: TButton;
-    procedure ButtonProdutosClick(Sender: TObject);
     procedure ButtonFornecedoresClick(Sender: TObject);
     procedure ButtonPedidosClick(Sender: TObject);
     procedure ButtonRelatorioTopDoisClick(Sender: TObject);
@@ -50,10 +49,9 @@ uses
   Vcl.DBGrids,
   comercial.controller,
   comercial.view.Fornecedor,
-  comercial.view.Produto,
   comercial.view.Pedido,
   comercial.view.ListagemFornecedor,
-  comercial.view.ListagemProduto,
+
   comercial.util.printhtml;
 
 procedure TfrmIndex.ButtonFornecedoresClick(Sender: TObject);
@@ -69,16 +67,6 @@ end;
 procedure TfrmIndex.ButtonPedidosClick(Sender: TObject);
 begin
   with TfrmPedido.Create(self) do
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
-end;
-
-procedure TfrmIndex.ButtonProdutosClick(Sender: TObject);
-begin
-  with TfrmListagemProduto.Create(self) do
     try
       ShowModal;
     finally

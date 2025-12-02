@@ -84,6 +84,38 @@ begin
       Inc(r);
     end;
 
+      r := 2;
+    while True do
+    begin
+      v := WS2.Cells[r, 1].Value;
+      if VarIsNull(v) or VarIsEmpty(v) then Break;
+      Q.active(False).sqlClear
+        .sqlAdd('insert into PEDCOMPRA_ITEM (COD_PEDIDOCOMPRA, COD_PRODUTO, QUANTIDADE, VL_UNITARIO, VL_TOTAL, COD_EMPRESA, COD_FILIAL, COD_DEPARTAMENTO, COD_CENTRO_CUSTO, DESCONTO, ACRESCIMO, IPI, VALOR_IPI, PESO, VOLUME, SEQUENCIA, DT_INCLUSAO, DT_SOLICITADA, DT_RECEBIDA) ' +
+                'values (:COD_PEDIDOCOMPRA, :COD_PRODUTO, :QUANTIDADE, :VL_UNITARIO, :VL_TOTAL, :COD_EMPRESA, :COD_FILIAL, :COD_DEPARTAMENTO, :COD_CENTRO_CUSTO, :DESCONTO, :ACRESCIMO, :IPI, :VALOR_IPI, :PESO, :VOLUME, :SEQUENCIA, :DT_INCLUSAO, :DT_SOLICITADA, :DT_RECEBIDA)')
+        .addParam('COD_PEDIDOCOMPRA', v)
+        .addParam('COD_PRODUTO', WS2.Cells[r, 2].Value)
+        .addParam('QUANTIDADE', WS2.Cells[r, 3].Value)
+        .addParam('VL_UNITARIO', WS2.Cells[r, 4].Value)
+        .addParam('VL_TOTAL', WS2.Cells[r, 5].Value)
+        .addParam('COD_EMPRESA', 0)
+        .addParam('COD_FILIAL', 0)
+        .addParam('COD_DEPARTAMENTO', 0)
+        .addParam('COD_CENTRO_CUSTO', 0)
+        .addParam('DESCONTO', 0)
+        .addParam('ACRESCIMO', 0)
+        .addParam('IPI', 0)
+        .addParam('VALOR_IPI', 0)
+        .addParam('PESO', 0)
+        .addParam('VOLUME', 0)
+        .addParam('SEQUENCIA', Null)
+        .addParam('DT_INCLUSAO', Null)
+        .addParam('DT_SOLICITADA', Null)
+        .addParam('DT_RECEBIDA', Null)
+        .execSql;
+      Inc(r);
+    end;
+
+
   finally
     try
       Excel.Quit;

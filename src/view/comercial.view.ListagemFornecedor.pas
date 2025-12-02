@@ -67,8 +67,7 @@ end;
 procedure TfrmListagemFornecedor.BtnExcluirClick(Sender: TObject);
 begin
   FController.business.Fornecedor
-    .GetById(DS.DataSet.FieldByName('COD_CLIFOR').AsInteger)
-    .Excluir;
+    .Excluir(DS.DataSet.FieldByName('COD_CLIFOR').AsInteger);
   FController.business.Fornecedor.Get;
 end;
 

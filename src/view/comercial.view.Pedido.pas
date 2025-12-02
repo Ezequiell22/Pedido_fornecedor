@@ -11,6 +11,7 @@ vcl.DBGrids,
 Vcl.ExtCtrls,
 Vcl.Grids,
 Data.DB,
+System.UITypes,
 comercial.controller,
 comercial.controller.interfaces,
 comercial.util.printhtml;
@@ -31,20 +32,19 @@ type
     DSPedido: TDataSource;
     DSItens: TDataSource;
     DSFornecedores: TDataSource;
-    DSProdutos: TDataSource;
     btnFinalizar: TButton;
     GridItens: TDBGrid;
     Label8: TLabel;
     ComboBoxFornecedor: TComboBox;
-    ComboBoxProduto: TComboBox;
     btnNovo: TButton;
     btnExcluirPedido: TButton;
     btnRemoverItem: TButton;
     btnEditarItem: TButton;
+    Edit1: TEdit;
     procedure BtnAddItemClick(Sender: TObject);
     procedure BtnFinalizarClick(Sender: TObject);
     procedure ComboBoxFornecedorSelect(Sender: TObject);
-    procedure ComboBoxProdutoSelect(Sender: TObject);
+
     procedure edtIdPedidoExit(Sender: TObject);
     procedure btnNovoClick(Sender: TObject);
     procedure btnExcluirPedidoClick(Sender: TObject);
@@ -55,7 +55,6 @@ type
     function ValidatePedidoItem: Boolean;
     function ValidatePedidoCab: Boolean;
     procedure LoadComboboxFornecedor;
-    procedure LoadComboBoxProduto;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -78,7 +77,7 @@ begin
     .LinkDataSourceItens(DSItens);
 
   LoadComboboxFornecedor;
-  LoadComboBoxProduto;
+
   gridItens.Options := gridItens.Options - [dgediting];
 end;
 
@@ -111,23 +110,6 @@ begin
   end;
 end;
 
-procedure TfrmPedido.LoadComboBoxProduto;
-begin
-  FController.business.Produto.Bind(DSProdutos).Get;
-  TComboBox(FindComponent('ComboBoxProduto')).Items.Clear;
-  if Assigned(DSProdutos.DataSet) then
-  begin
-    DSProdutos.DataSet.First;
-    while not DSProdutos.DataSet.Eof do
-    begin
-      TComboBox(FindComponent('ComboBoxProduto'))
-        .Items.Add(DSProdutos.DataSet.FieldByName('DESCRICAO').AsString);
-      DSProdutos.DataSet.Next;
-    end;
-
-  end;
-end;
-
 function TfrmPedido.ValidatePedidoCab: Boolean;
 begin
   Result := False;
@@ -149,11 +131,6 @@ var
   V, Q: Double;
 begin
   Result := False;
-  if Trim(ComboBoxProduto.Text) = EmptyStr then
-  begin
-    ShowMessage('ID Produto invalido');
-    Exit;
-  end;
 
   V := StrToFloatDef(edtValor.Text, -1);
   if V < 0 then
@@ -243,17 +220,6 @@ begin
     FController.business.Pedido.
       setIdFornecedor(
         DSFornecedores.DataSet.FieldByName('COD_CLIFOR').AsInteger);
-  end;
-end;
-
-procedure TfrmPedido.ComboBoxProdutoSelect(Sender: TObject);
-begin
-   if Assigned(DSProdutos.DataSet) then
-  begin
-    FController.business.Pedido.
-      setIdProduto(
-        DSProdutos.DataSet.FieldByName('IDPRODUTO').AsInteger);
-    edtValor.Text := DSProdutos.DataSet.FieldByName('PRECO').AsString;
   end;
 end;
 

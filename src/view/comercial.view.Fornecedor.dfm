@@ -1,4 +1,4 @@
-object TfrmFornecedor: TfrmFornecedor
+object frmFornecedor: TfrmFornecedor
   Left = 0
   Top = 0
   Caption = 'Fornecedor'
@@ -16,42 +16,42 @@ object TfrmFornecedor: TfrmFornecedor
   object Label1: TLabel
     Left = 16
     Top = 16
-    Width = 12
+    Width = 11
     Height = 13
     Caption = 'ID'
   end
   object Label2: TLabel
     Left = 16
     Top = 64
-    Width = 73
+    Width = 71
     Height = 13
     Caption = 'Nome Fantasia'
   end
   object Label3: TLabel
     Left = 16
     Top = 104
-    Width = 68
+    Width = 60
     Height = 13
     Caption = 'Raz'#227'o Social'
   end
   object Label4: TLabel
     Left = 16
     Top = 144
-    Width = 27
+    Width = 25
     Height = 13
     Caption = 'CNPJ'
   end
   object Label5: TLabel
     Left = 16
     Top = 184
-    Width = 49
+    Width = 45
     Height = 13
     Caption = 'Endere'#231'o'
   end
   object Label6: TLabel
     Left = 16
     Top = 224
-    Width = 44
+    Width = 42
     Height = 13
     Caption = 'Telefone'
   end

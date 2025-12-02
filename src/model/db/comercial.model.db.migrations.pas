@@ -7,6 +7,10 @@ type
   private
     function MetadataExists(const SQL: string): Boolean;
     procedure ExecDDL(const SQL: string);
+    function HasOrphansPedidoCompra: Boolean;
+    function HasOrphansItem: Boolean;
+    function CanAddPKFornecedores: Boolean;
+    procedure SanitizeData;
   public
     procedure Apply;
   end;
@@ -35,6 +39,57 @@ begin
   Q.active(False).sqlClear.sqlAdd(SQL).execSql;
 end;
 
+function TDbMigrations.HasOrphansPedidoCompra: Boolean;
+var
+  Q: iQuery;
+begin
+  Q := TModelResourceQueryFD.New;
+  Q.active(False).sqlClear
+    .sqlAdd('select first 1 1 from PEDIDO_COMPRA pc where pc.COD_CLIFOR is not null and not exists (select 1 from FORNECEDORES f where f.COD_CLIFOR = pc.COD_CLIFOR)')
+    .open;
+  Result := not Q.DataSet.IsEmpty;
+end;
+
+function TDbMigrations.HasOrphansItem: Boolean;
+var
+  Q: iQuery;
+begin
+  Q := TModelResourceQueryFD.New;
+  Q.active(False).sqlClear
+    .sqlAdd('select first 1 1 from PEDCOMPRA_ITEM i where not exists (select 1 from PEDIDO_COMPRA p where p.COD_PEDIDOCOMPRA = i.COD_PEDIDOCOMPRA)')
+    .open;
+  Result := not Q.DataSet.IsEmpty;
+end;
+
+function TDbMigrations.CanAddPKFornecedores: Boolean;
+var
+  Q: iQuery;
+  HasNulls, HasDuplicates: Boolean;
+begin
+  HasNulls := False;
+  HasDuplicates := False;
+  Q := TModelResourceQueryFD.New;
+  Q.active(False).sqlClear
+    .sqlAdd('select first 1 1 from FORNECEDORES where COD_CLIFOR is null')
+    .open;
+  HasNulls := not Q.DataSet.IsEmpty;
+
+  Q.active(False).sqlClear
+    .sqlAdd('select first 1 COD_CLIFOR from FORNECEDORES group by COD_CLIFOR having count(*) > 1')
+    .open;
+  HasDuplicates := not Q.DataSet.IsEmpty;
+
+  Result := (not HasNulls) and (not HasDuplicates);
+end;
+
+procedure TDbMigrations.SanitizeData;
+begin
+  ExecDDL('delete from FORNECEDORES where COD_CLIFOR is null');
+  ExecDDL('delete from FORNECEDORES f where exists (select 1 from FORNECEDORES d where d.COD_CLIFOR = f.COD_CLIFOR and d.RDB$DB_KEY < f.RDB$DB_KEY)');
+  ExecDDL('update PEDIDO_COMPRA pc set COD_CLIFOR = null where COD_CLIFOR is not null and not exists (select 1 from FORNECEDORES f where f.COD_CLIFOR = pc.COD_CLIFOR)');
+  ExecDDL('delete from PEDCOMPRA_ITEM i where not exists (select 1 from PEDIDO_COMPRA p where p.COD_PEDIDOCOMPRA = i.COD_PEDIDOCOMPRA)');
+end;
+
 procedure TDbMigrations.Apply;
 begin
   if not MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name = ''FORNECEDORES''') then
@@ -48,6 +103,10 @@ begin
             '  CLIENTE varchar(255),' + #13#10 +
             '  FORNEC varchar(255)' + #13#10 +
             ')');
+
+  if not MetadataExists('select rc.rdb$constraint_name from rdb$relation_constraints rc where rc.rdb$relation_name = ''FORNECEDORES'' and rc.rdb$constraint_type = ''PRIMARY KEY''') then
+    if CanAddPKFornecedores then
+      ExecDDL('alter table FORNECEDORES add constraint PK_FORNECEDORES primary key (COD_CLIFOR)');
 
   if not MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name = ''PEDIDO_COMPRA''') then
     ExecDDL('create table PEDIDO_COMPRA ' + #13#10 +
@@ -75,7 +134,9 @@ begin
             ')');
 
   if MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name=''PEDIDO_COMPRA''') then
-    ExecDDL('alter table PEDIDO_COMPRA add constraint FK_PEDCOMPRA_FORNEC foreign key (COD_CLIFOR) references FORNECEDORES(COD_CLIFOR)');
+    if not MetadataExists('select rc.rdb$constraint_name from rdb$relation_constraints rc where rc.rdb$constraint_name = ''FK_PEDCOMPRA_FORNEC''') then
+      if not HasOrphansPedidoCompra then
+        ExecDDL('alter table PEDIDO_COMPRA add constraint FK_PEDCOMPRA_FORNEC foreign key (COD_CLIFOR) references FORNECEDORES(COD_CLIFOR)');
 
   if not MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name = ''PEDCOMPRA_ITEM''') then
     ExecDDL('create table PEDCOMPRA_ITEM ' + #13#10 +
@@ -102,8 +163,12 @@ begin
             '  constraint PK_PEDCOMPRA_ITEM primary key (COD_PEDIDOCOMPRA, SEQUENCIA)' + #13#10 +
             ')');
 
+  SanitizeData;
+
   if MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name=''PEDCOMPRA_ITEM''') then
-    ExecDDL('alter table PEDCOMPRA_ITEM add constraint FK_ITEM_PED foreign key (COD_PEDIDOCOMPRA) references PEDIDO_COMPRA(COD_PEDIDOCOMPRA)');
+    if not MetadataExists('select rc.rdb$constraint_name from rdb$relation_constraints rc where rc.rdb$constraint_name = ''FK_ITEM_PED''') then
+      if not HasOrphansItem then
+        ExecDDL('alter table PEDCOMPRA_ITEM add constraint FK_ITEM_PED foreign key (COD_PEDIDOCOMPRA) references PEDIDO_COMPRA(COD_PEDIDOCOMPRA)');
 
   if not MetadataExists('select rdb$index_name from rdb$indices where rdb$index_name = ''IDX_PEDIDO_COMPRA_CLIFOR''') then
     ExecDDL('create index IDX_PEDIDO_COMPRA_CLIFOR on PEDIDO_COMPRA (COD_CLIFOR)');
@@ -113,3 +178,4 @@ begin
 end;
 
 end.
+
