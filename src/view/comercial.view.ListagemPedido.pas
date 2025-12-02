@@ -35,6 +35,7 @@ type
     procedure LoadFornecedores;
     function SelectedFornecedorId: Integer;
   public
+    destructor Destroy; override;
   end;
 
 var

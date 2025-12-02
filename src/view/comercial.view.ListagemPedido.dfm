@@ -3,7 +3,7 @@ object frmListagemPedido: TfrmListagemPedido
   Top = 0
   Caption = 'Listagem de Pedidos'
   ClientHeight = 600
-  ClientWidth = 900
+  ClientWidth = 775
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,14 +16,14 @@ object frmListagemPedido: TfrmListagemPedido
   object LabelPeriodo: TLabel
     Left = 16
     Top = 12
-    Width = 38
+    Width = 36
     Height = 13
     Caption = 'Per'#237'odo'
   end
   object LabelFornecedor: TLabel
     Left = 280
     Top = 12
-    Width = 59
+    Width = 55
     Height = 13
     Caption = 'Fornecedor'
   end
@@ -33,7 +33,7 @@ object frmListagemPedido: TfrmListagemPedido
     Width = 120
     Height = 21
     Date = 45452.000000000000000000
-    Time = 0.000000000000000000
+    Time = 45452.000000000000000000
     TabOrder = 0
   end
   object DtFim: TDateTimePicker
@@ -41,8 +41,8 @@ object frmListagemPedido: TfrmListagemPedido
     Top = 32
     Width = 120
     Height = 21
-    Date = 45482.000000000000000000
-    Time = 0.000000000000000000
+    Date = 45481.000000000000000000
+    Time = 45481.000000000000000000
     TabOrder = 1
   end
   object CbFornecedor: TComboBox
@@ -63,11 +63,10 @@ object frmListagemPedido: TfrmListagemPedido
     OnClick = BtnAplicarFiltrosClick
   end
   object GridPedidos: TDBGrid
-    Left = 0
-    Top = 64
-    Width = 900
-    Height = 256
-    Align = alTop
+    Left = -40
+    Top = 72
+    Width = 775
+    Height = 145
     DataSource = DSPedidos
     TabOrder = 4
     TitleFont.Charset = DEFAULT_CHARSET
@@ -77,11 +76,10 @@ object frmListagemPedido: TfrmListagemPedido
     TitleFont.Style = []
   end
   object GridItens: TDBGrid
-    Left = 0
-    Top = 320
-    Width = 900
-    Height = 216
-    Align = alTop
+    Left = -16
+    Top = 232
+    Width = 775
+    Height = 192
     DataSource = DSItens
     TabOrder = 5
     TitleFont.Charset = DEFAULT_CHARSET

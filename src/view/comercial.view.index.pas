@@ -23,12 +23,12 @@ uses
 type
   TfrmIndex = class(Tform)
     ButtonFornecedores: TButton;
-    ButtonProdutos: TButton;
     ButtonPedidos: TButton;
-    ButtonRelatorioTopDois: TButton;
+    buttonPorProduto: TButton;
+    ButtonPorFornecedor: TButton;
     procedure ButtonFornecedoresClick(Sender: TObject);
     procedure ButtonPedidosClick(Sender: TObject);
-    procedure ButtonRelatorioTopDoisClick(Sender: TObject);
+    procedure buttonPorProdutoClick(Sender: TObject);
 
   private
     Fcontroller: iController;
@@ -52,7 +52,7 @@ uses
   comercial.view.Pedido,
   comercial.view.ListagemFornecedor,
 
-  comercial.util.printhtml;
+  comercial.util.printhtml, comercial.view.ListagemPedido;
 
 procedure TfrmIndex.ButtonFornecedoresClick(Sender: TObject);
 begin
@@ -66,7 +66,7 @@ end;
 
 procedure TfrmIndex.ButtonPedidosClick(Sender: TObject);
 begin
-  with TfrmPedido.Create(self) do
+  with TfrmListagemPedido.Create(self) do
     try
       ShowModal;
     finally
@@ -74,7 +74,7 @@ begin
     end;
 end;
 
-procedure TfrmIndex.ButtonRelatorioTopDoisClick(Sender: TObject);
+procedure TfrmIndex.buttonPorProdutoClick(Sender: TObject);
 var
   dtini, dtfim: TdateTime;
 begin
@@ -83,9 +83,11 @@ begin
 
   Fcontroller := TController.new;
 
-  Fcontroller.business.RelatorioProdutos.GerarPorProduto(dtini, dtfim);
+  Fcontroller.business.RelatorioProdutos
+  .GerarPorProduto(dtini, dtfim);
 
   showMessage('Relatório salvo em ' + GetCurrentDir);
+
 end;
 
 end.

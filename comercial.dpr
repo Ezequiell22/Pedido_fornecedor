@@ -30,7 +30,8 @@ uses
   comercial.model.resource.impl.queryFD in 'src\model\resource\impl\comercial.model.resource.impl.queryFD.pas',
   comercial.util.log in 'src\utils\comercial.util.log.pas',
   comercial.util.printhtml in 'src\utils\comercial.util.printhtml.pas',
-  comercial.model.db.migrations.seed in 'src\model\db\comercial.model.db.migrations.seed.pas';
+  comercial.model.db.migrations.seed in 'src\model\db\comercial.model.db.migrations.seed.pas',
+  comercial.view.ListagemPedido in 'src\view\comercial.view.ListagemPedido.pas' {frmListagemPedido};
 
 {$R *.res}
 
@@ -53,24 +54,25 @@ var
 begin
   AppExceptionLogger := TAppExceptionLogger.Create;
   Application.OnException := AppExceptionLogger.Handle;
-  var
-  Mig := TDbMigrations.Create;
-  try
-    Mig.Apply;
-  finally
-    Mig.Free;
-  end;
-
-  Var MigData := TDbMigrationsSeed.Create;
-  try
-    MigData.Apply('C:\Pedido_fornecedor\Base_Teste_Vaga_Delphi.xlsx');
-  finally
-    MigData.Free;
-  end;
+//  var
+//  Mig := TDbMigrations.Create;
+//  try
+//    Mig.Apply;
+//  finally
+//    Mig.Free;
+//  end;
+//
+//  Var MigData := TDbMigrationsSeed.Create;
+//  try
+//    MigData.Apply('C:\Pedido_fornecedor\Base_Teste_Vaga_Delphi.xlsx');
+//  finally
+//    MigData.Free;
+//  end;
 
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmIndex, frmIndex);
+  Application.CreateForm(TfrmListagemPedido, frmListagemPedido);
   Application.Run;
 
 end.

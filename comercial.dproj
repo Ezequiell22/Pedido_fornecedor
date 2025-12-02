@@ -161,6 +161,10 @@
         <DCCReference Include="src\utils\comercial.util.log.pas"/>
         <DCCReference Include="src\utils\comercial.util.printhtml.pas"/>
         <DCCReference Include="src\model\db\comercial.model.db.migrations.seed.pas"/>
+        <DCCReference Include="src\view\comercial.view.ListagemPedido.pas">
+            <Form>frmListagemPedido</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -11,6 +11,8 @@ type
     function HasOrphansItem: Boolean;
     function CanAddPKFornecedores: Boolean;
     procedure SanitizeData;
+    function IsNotNullFornecedores: Boolean;
+    function TableExists(const AName: string): Boolean;
   public
     procedure Apply;
   end;
@@ -84,10 +86,33 @@ end;
 
 procedure TDbMigrations.SanitizeData;
 begin
-  ExecDDL('delete from FORNECEDORES where COD_CLIFOR is null');
-  ExecDDL('delete from FORNECEDORES f where exists (select 1 from FORNECEDORES d where d.COD_CLIFOR = f.COD_CLIFOR and d.RDB$DB_KEY < f.RDB$DB_KEY)');
-  ExecDDL('update PEDIDO_COMPRA pc set COD_CLIFOR = null where COD_CLIFOR is not null and not exists (select 1 from FORNECEDORES f where f.COD_CLIFOR = pc.COD_CLIFOR)');
-  ExecDDL('delete from PEDCOMPRA_ITEM i where not exists (select 1 from PEDIDO_COMPRA p where p.COD_PEDIDOCOMPRA = i.COD_PEDIDOCOMPRA)');
+  if TableExists('FORNECEDORES') then
+  begin
+    ExecDDL('delete from FORNECEDORES where COD_CLIFOR is null');
+    ExecDDL('delete from FORNECEDORES f where exists (select 1 from FORNECEDORES d where d.COD_CLIFOR = f.COD_CLIFOR and d.RDB$DB_KEY < f.RDB$DB_KEY)');
+  end;
+
+  if TableExists('PEDIDO_COMPRA') and TableExists('FORNECEDORES') then
+    ExecDDL('update PEDIDO_COMPRA pc set COD_CLIFOR = null where COD_CLIFOR is not null and not exists (select 1 from FORNECEDORES f where f.COD_CLIFOR = pc.COD_CLIFOR)');
+
+  if TableExists('PEDCOMPRA_ITEM') and TableExists('PEDIDO_COMPRA') then
+    ExecDDL('delete from PEDCOMPRA_ITEM i where not exists (select 1 from PEDIDO_COMPRA p where p.COD_PEDIDOCOMPRA = i.COD_PEDIDOCOMPRA)');
+end;
+
+function TDbMigrations.IsNotNullFornecedores: Boolean;
+var
+  Q: iQuery;
+begin
+  Q := TModelResourceQueryFD.New;
+  Q.active(False).sqlClear
+    .sqlAdd('select rf.rdb$null_flag from rdb$relation_fields rf where rf.rdb$relation_name = ''FORNECEDORES'' and rf.rdb$field_name = ''COD_CLIFOR''')
+    .open;
+  Result := (not Q.DataSet.IsEmpty) and (Q.DataSet.FieldByName('rdb$null_flag').AsInteger = 1);
+end;
+
+function TDbMigrations.TableExists(const AName: string): Boolean;
+begin
+  Result := MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name = ''' + AName + '''');
 end;
 
 procedure TDbMigrations.Apply;
@@ -103,6 +128,11 @@ begin
             '  CLIENTE varchar(255),' + #13#10 +
             '  FORNEC varchar(255)' + #13#10 +
             ')');
+
+  SanitizeData;
+
+  if not IsNotNullFornecedores then
+    ExecDDL('alter table FORNECEDORES alter COD_CLIFOR set not null');
 
   if not MetadataExists('select rc.rdb$constraint_name from rdb$relation_constraints rc where rc.rdb$relation_name = ''FORNECEDORES'' and rc.rdb$constraint_type = ''PRIMARY KEY''') then
     if CanAddPKFornecedores then
