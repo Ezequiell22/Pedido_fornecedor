@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{8E1FC714-B231-4175-AA0A-614D92413579}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="comercial.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="tests\comercial.dunitx.tests.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="comercial">
+        <MSBuild Projects="comercial.dproj"/>
+    </Target>
+    <Target Name="comercial:Clean">
+        <MSBuild Projects="comercial.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="comercial:Make">
+        <MSBuild Projects="comercial.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="comercial_dunitx_tests">
+        <MSBuild Projects="tests\comercial.dunitx.tests.dproj"/>
+    </Target>
+    <Target Name="comercial_dunitx_tests:Clean">
+        <MSBuild Projects="tests\comercial.dunitx.tests.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="comercial_dunitx_tests:Make">
+        <MSBuild Projects="tests\comercial.dunitx.tests.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="comercial;comercial_dunitx_tests"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="comercial:Clean;comercial_dunitx_tests:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="comercial:Make;comercial_dunitx_tests:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
