@@ -39,7 +39,8 @@ type
 
   iModelBusinessRelatorioProdutos = interface
     ['{BFD1E2A4-1F1C-4C76-AE2B-8D6B6A1B1D3C}']
-    function Gerar(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+    function GerarPorProduto(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+    function GerarPorFornecedor(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
     function LinkDataSource(aDataSource: TDataSource)
       : iModelBusinessRelatorioProdutos;
   end;

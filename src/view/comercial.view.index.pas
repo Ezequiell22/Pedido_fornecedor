@@ -1,4 +1,4 @@
-﻿unit comercial.view.index;
+unit comercial.view.index;
 
 interface
 
@@ -95,8 +95,7 @@ begin
 
   Fcontroller := TController.new;
 
-  Fcontroller.business.RelatorioProdutos.Gerar(dtini,
-                      dtfim);
+  Fcontroller.business.RelatorioProdutos.GerarPorProduto(dtini, dtfim);
 
   showMessage('Relatório salvo em ' + GetCurrentDir);
 end;

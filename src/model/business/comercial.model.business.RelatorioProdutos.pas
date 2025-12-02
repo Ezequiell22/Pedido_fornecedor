@@ -15,7 +15,8 @@ type
     constructor Create;
     destructor Destroy; override;
     class function New: iModelBusinessRelatorioProdutos;
-    function Gerar(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+    function GerarPorProduto(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+    function GerarPorFornecedor(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
     function LinkDataSource(aDataSource: TDataSource): iModelBusinessRelatorioProdutos;
   end;
 
@@ -33,11 +34,17 @@ begin
   inherited;
 end;
 
-function TModelBusinessRelatorioProdutos.Gerar(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+
+function TModelBusinessRelatorioProdutos.GerarPorProduto(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
 begin
+  Result := Self;
+  TPrintHtmlPedido.GerarRelatorioPorProduto(adtini, adtfim, getcurrentDir);
+end;
 
-  TPrintHtmlPedido.GerarRelatorioTopProdutos(adtini, adtfim, getcurrentDir);
-
+function TModelBusinessRelatorioProdutos.GerarPorFornecedor(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+begin
+  Result := Self;
+  TPrintHtmlPedido.GerarRelatorioPorFornecedor(adtini, adtfim, getcurrentDir);
 end;
 
 function TModelBusinessRelatorioProdutos.LinkDataSource(aDataSource: TDataSource): iModelBusinessRelatorioProdutos;

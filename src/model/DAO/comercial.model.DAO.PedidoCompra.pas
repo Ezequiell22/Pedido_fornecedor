@@ -85,8 +85,39 @@ begin
 end;
 
 function TModelDAOPedidoCompra.Get(AFieldsWhere: TDictionary<string, Variant>): iModelDAOEntity<TModelEntityPedidoCompra>;
+var
+  hasWhere: Boolean;
 begin
-  Result := Get;
+  Result := Self;
+  hasWhere := False;
+  FQuery
+    .active(False)
+    .sqlClear
+      .sqlAdd('select * from PEDIDO_COMPRA');
+
+  if Assigned(AFieldsWhere) then
+  begin
+    if AFieldsWhere.ContainsKey('DT_EMISSAO_INI') and AFieldsWhere.ContainsKey('DT_EMISSAO_FIM') then
+    begin
+      FQuery.sqlAdd(' where DT_EMISSAO between :DTINI and :DTFIM');
+      FQuery.addParam('DTINI', AFieldsWhere['DT_EMISSAO_INI']);
+      FQuery.addParam('DTFIM', AFieldsWhere['DT_EMISSAO_FIM']);
+      hasWhere := True;
+    end;
+
+    if AFieldsWhere.ContainsKey('COD_CLIFOR') then
+    begin
+      if hasWhere then
+        FQuery.sqlAdd(' and COD_CLIFOR = :COD_CLIFOR')
+      else
+        FQuery.sqlAdd(' where COD_CLIFOR = :COD_CLIFOR');
+      FQuery.addParam('COD_CLIFOR', AFieldsWhere['COD_CLIFOR']);
+      hasWhere := True;
+    end;
+  end;
+
+  FQuery.open;
+  FDataSource.DataSet := FQuery.DataSet;
 end;
 
 function TModelDAOPedidoCompra.GetbyId(AValue: integer): iModelDAOEntity<TModelEntityPedidoCompra>;

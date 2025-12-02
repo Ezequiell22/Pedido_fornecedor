@@ -38,12 +38,18 @@ type
     ComboBoxFornecedor: TComboBox;
     ComboBoxProduto: TComboBox;
     btnNovo: TButton;
+    btnExcluirPedido: TButton;
+    btnRemoverItem: TButton;
+    btnEditarItem: TButton;
     procedure BtnAddItemClick(Sender: TObject);
     procedure BtnFinalizarClick(Sender: TObject);
     procedure ComboBoxFornecedorSelect(Sender: TObject);
     procedure ComboBoxProdutoSelect(Sender: TObject);
     procedure edtIdPedidoExit(Sender: TObject);
     procedure btnNovoClick(Sender: TObject);
+    procedure btnExcluirPedidoClick(Sender: TObject);
+    procedure btnRemoverItemClick(Sender: TObject);
+    procedure btnEditarItemClick(Sender: TObject);
   private
     FController: iController;
     function ValidatePedidoItem: Boolean;
@@ -194,6 +200,40 @@ procedure TfrmPedido.btnNovoClick(Sender: TObject);
 begin
    FController.business
     .Pedido.novo;
+end;
+
+procedure TfrmPedido.btnExcluirPedidoClick(Sender: TObject);
+begin
+  FController.business.Pedido.ExcluirPedido;
+  DSPedido.DataSet := FController.business.Pedido.DAOPedido.GetDataSet;
+  DSItens.DataSet := FController.business.Pedido.DAOItens.GetDataSet;
+end;
+
+procedure TfrmPedido.btnRemoverItemClick(Sender: TObject);
+var
+  seq: Integer;
+begin
+  if Assigned(DSItens.DataSet) and not DSItens.DataSet.IsEmpty then
+  begin
+    seq := DSItens.DataSet.FieldByName('SEQUENCIA').AsInteger;
+    FController.business.Pedido.RemoverItem(seq);
+    DSItens.DataSet := FController.business.Pedido.DAOItens.GetDataSet;
+  end;
+end;
+
+procedure TfrmPedido.btnEditarItemClick(Sender: TObject);
+var
+  seq: Integer;
+  v, q: Double;
+begin
+  if Assigned(DSItens.DataSet) and not DSItens.DataSet.IsEmpty then
+  begin
+    seq := DSItens.DataSet.FieldByName('SEQUENCIA').AsInteger;
+    v := StrToFloatDef(edtValor.Text, 0);
+    q := StrToFloatDef(edtQuantidade.Text, 1);
+    FController.business.Pedido.EditarItem(seq, v, q);
+    DSItens.DataSet := FController.business.Pedido.DAOItens.GetDataSet;
+  end;
 end;
 
 procedure TfrmPedido.ComboBoxFornecedorSelect(Sender: TObject);

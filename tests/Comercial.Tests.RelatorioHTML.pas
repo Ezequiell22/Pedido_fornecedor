@@ -13,7 +13,9 @@ type
     [Setup]
     procedure Setup;
     [Test]
-    procedure ShouldGenerateTopProdutosHTML;
+    procedure ShouldGenerateComprasPorProdutoHTML;
+    [Test]
+    procedure ShouldGenerateComprasPorFornecedorHTML;
   end;
 
 implementation
@@ -26,14 +28,24 @@ begin
 
 end;
 
-procedure TTestRelatorioHTML.ShouldGenerateTopProdutosHTML;
+procedure TTestRelatorioHTML.ShouldGenerateComprasPorProdutoHTML;
 var
   S: string;
 begin
-  S := TPrintHtmlPedido.GerarRelatorioTopProdutos(Now - 30, Now, '');
+  S := TPrintHtmlPedido.GerarRelatorioPorProduto(Now - 30, Now, '');
   Assert.IsTrue(S <> '');
   Assert.IsTrue(Pos('<html', S) > 0);
-  Assert.IsTrue(Pos('Top Produtos Vendidos', S) > 0);
+  Assert.IsTrue(Pos('Compras por Produto', S) > 0);
+end;
+
+procedure TTestRelatorioHTML.ShouldGenerateComprasPorFornecedorHTML;
+var
+  S: string;
+begin
+  S := TPrintHtmlPedido.GerarRelatorioPorFornecedor(Now - 30, Now, '');
+  Assert.IsTrue(S <> '');
+  Assert.IsTrue(Pos('<html', S) > 0);
+  Assert.IsTrue(Pos('Compras por Fornecedor', S) > 0);
 end;
 
 end.

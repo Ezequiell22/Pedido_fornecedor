@@ -21,6 +21,33 @@ object frmPedido: TfrmPedido
     TabOrder = 0
     OnClick = BtnFinalizarClick
   end
+  object btnExcluirPedido: TButton
+    Left = 704
+    Top = 400
+    Width = 75
+    Height = 25
+    Caption = 'Excluir'
+    TabOrder = 4
+    OnClick = btnExcluirPedidoClick
+  end
+  object btnRemoverItem: TButton
+    Left = 616
+    Top = 400
+    Width = 75
+    Height = 25
+    Caption = 'Remover Item'
+    TabOrder = 5
+    OnClick = btnRemoverItemClick
+  end
+  object btnEditarItem: TButton
+    Left = 528
+    Top = 400
+    Width = 75
+    Height = 25
+    Caption = 'Editar Item'
+    TabOrder = 6
+    OnClick = btnEditarItemClick
+  end
   object GridItens: TDBGrid
     Left = 0
     Top = 146
