@@ -13,7 +13,6 @@ uses
   Comercial.Tests.RelatorioHTML in 'Comercial.Tests.RelatorioHTML.pas',
   comercial.model.db.migrations in '..\src\model\db\comercial.model.db.migrations.pas',
   comercial.model.resource.interfaces in '..\src\model\resource\comercial.model.resource.interfaces.pas',
-  comercial.model.resource.impl.conexaoIBX in '..\src\model\resource\impl\comercial.model.resource.impl.conexaoIBX.pas',
   comercial.model.resource.impl.factory in '..\src\model\resource\impl\comercial.model.resource.impl.factory.pas',
   comercial.model.resource.impl.queryFD in '..\src\model\resource\impl\comercial.model.resource.impl.queryFD.pas',
   comercial.util.log in '..\src\utils\comercial.util.log.pas',

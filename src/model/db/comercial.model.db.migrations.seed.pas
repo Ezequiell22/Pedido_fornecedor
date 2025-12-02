@@ -32,7 +32,7 @@ begin
     WS2 := Workbook.Worksheets.Item[2];
     WS3 := Workbook.Worksheets.Item[3];
 
-    Q := TModelResourceQueryIBX.New;
+    Q := TModelResourceQueryFD.New;
 
     r := 2;
     while True do
@@ -52,21 +52,6 @@ begin
       Inc(r);
     end;
 
-    r := 2;
-    while True do
-    begin
-      v := WS2.Cells[r, 1].Value;
-      if VarIsNull(v) or VarIsEmpty(v) then Break;
-      Q.active(False).sqlClear
-        .sqlAdd('insert into PRODUTO (IDPRODUTO, DESCRICAO, MARCA, PRECO, ACTIVE) values (:IDPRODUTO, :DESCRICAO, :MARCA, :PRECO, :ACTIVE)')
-        .addParam('IDPRODUTO', v)
-        .addParam('DESCRICAO', WS2.Cells[r, 2].Value)
-        .addParam('MARCA', WS2.Cells[r, 3].Value)
-        .addParam('PRECO', WS2.Cells[r, 4].Value)
-        .addParam('ACTIVE', WS2.Cells[r, 5].Value)
-        .execSql;
-      Inc(r);
-    end;
 
     r := 2;
     while True do

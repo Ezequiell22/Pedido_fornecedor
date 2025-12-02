@@ -157,9 +157,7 @@
         </DCCReference>
         <DCCReference Include="src\model\business\comercial.model.business.Fornecedor.pas"/>
         <DCCReference Include="src\model\business\comercial.model.business.Produto.pas"/>
-        <DCCReference Include="src\model\resource\impl\comercial.model.resource.impl.conexaoIBX.pas"/>
         <DCCReference Include="src\model\resource\impl\comercial.model.resource.impl.factory.pas"/>
-        <DCCReference Include="src\model\resource\impl\comercial.model.resource.impl.queryIBX.pas"/>
         <DCCReference Include="src\view\comercial.view.ListagemProduto.pas">
             <Form>frmListagemProduto</Form>
             <FormType>dfm</FormType>

@@ -55,6 +55,8 @@ uses System.SysUtils, comercial.model.DAO.Fornecedor;
 constructor TModelBusinessPedido.Create;
 begin
   FQueryLookup := TModelResourceQueryFD.New();
+  FQuery := TModelResourceQueryFD.New();
+  FQueryItens := TModelResourceQueryFD.New();
   FDAOPedido := TModelDAOPedidoCompra.New;
   FDAOItem := TModelDAOPedcompraItem.New;
 end;

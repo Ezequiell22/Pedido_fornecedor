@@ -252,7 +252,7 @@ begin
   begin
     FController.business.Pedido.
       setIdProduto(
-        DSProdutos.DataSet.FieldByName('idProduto').AsInteger);
+        DSProdutos.DataSet.FieldByName('IDPRODUTO').AsInteger);
     edtValor.Text := DSProdutos.DataSet.FieldByName('PRECO').AsString;
   end;
 end;

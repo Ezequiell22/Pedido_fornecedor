@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{7F1FB5C5-6B99-4B0A-9D1C-9B7B33C96A72}</ProjectGuid>
         <ProjectVersion>20.3</ProjectVersion>
@@ -29,7 +29,6 @@
         <DCCReference Include="Comercial.Tests.RelatorioHTML.pas"/>
         <DCCReference Include="..\src\model\db\comercial.model.db.migrations.pas"/>
         <DCCReference Include="..\src\model\resource\comercial.model.resource.interfaces.pas"/>
-        <DCCReference Include="..\src\model\resource\impl\comercial.model.resource.impl.conexaoIBX.pas"/>
         <DCCReference Include="..\src\model\resource\impl\comercial.model.resource.impl.factory.pas"/>
         <DCCReference Include="..\src\model\resource\impl\comercial.model.resource.impl.queryFD.pas"/>
         <DCCReference Include="..\src\utils\comercial.util.log.pas"/>
