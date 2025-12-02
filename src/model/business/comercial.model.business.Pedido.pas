@@ -27,37 +27,6 @@ type
     FDAOFornecedor: iModelDAOEntity<TModelEntityFornecedor>;
     FDAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
     FDAOItem: iModelDAOEntity<TModelEntityPedcompraItem>;
-    // Header defaults
-    FCOD_USUARIO: Integer;
-    FCOD_EMPRESA: Integer;
-    FCOD_FILIAL: Integer;
-    FCOD_DEPARTAMENTO: Integer;
-    FCOD_CENTRO_CUSTO: Integer;
-    FDT_EMISSAO: TDateTime;
-    FCOD_CONDPAGTO: Integer;
-    FORDEM_COMPRA: string;
-    FVALOR_IMPOSTOS: Double;
-    FCOD_COMPRADOR: Integer;
-    FPESO_CAB: Double;
-    FVOLUME_CAB: Double;
-    FCOD_TIPOFRETE: Integer;
-    FDATA_PREVISTA_ENTREGA: TDateTime;
-    FDT_ENTREGA: TDateTime;
-    FTIPO_COMPRA: string;
-    // Item defaults
-    FIT_COD_EMPRESA: Integer;
-    FIT_COD_FILIAL: Integer;
-    FIT_COD_DEPARTAMENTO: Integer;
-    FIT_COD_CENTRO_CUSTO: Integer;
-    FIT_DESCONTO: Double;
-    FIT_ACRESCIMO: Double;
-    FIT_IPI: Double;
-    FIT_VALOR_IPI: Double;
-    FIT_PESO: Double;
-    FIT_VOLUME: Double;
-    FIT_DT_INCLUSAO: TDateTime;
-    FIT_DT_SOLICITADA: TDateTime;
-    FIT_DT_RECEBIDA: TDateTime;
   public
     constructor Create;
     destructor Destroy; override;
@@ -88,36 +57,6 @@ begin
   FQueryLookup := TModelResourceQueryFD.New();
   FDAOPedido := TModelDAOPedidoCompra.New;
   FDAOItem := TModelDAOPedcompraItem.New;
-  // sensible defaults
-  FCOD_USUARIO := 0;
-  FCOD_EMPRESA := 0;
-  FCOD_FILIAL := 0;
-  FCOD_DEPARTAMENTO := 0;
-  FCOD_CENTRO_CUSTO := 0;
-  FDT_EMISSAO := Now;
-  FCOD_CONDPAGTO := 0;
-  FORDEM_COMPRA := '';
-  FVALOR_IMPOSTOS := 0;
-  FCOD_COMPRADOR := 0;
-  FPESO_CAB := 0;
-  FVOLUME_CAB := 0;
-  FCOD_TIPOFRETE := 0;
-  FDATA_PREVISTA_ENTREGA := Now;
-  FDT_ENTREGA := 0;
-  FTIPO_COMPRA := '';
-  FIT_COD_EMPRESA := 0;
-  FIT_COD_FILIAL := 0;
-  FIT_COD_DEPARTAMENTO := 0;
-  FIT_COD_CENTRO_CUSTO := 0;
-  FIT_DESCONTO := 0;
-  FIT_ACRESCIMO := 0;
-  FIT_IPI := 0;
-  FIT_VALOR_IPI := 0;
-  FIT_PESO := 0;
-  FIT_VOLUME := 0;
-  FIT_DT_INCLUSAO := Now;
-  FIT_DT_SOLICITADA := Now;
-  FIT_DT_RECEBIDA := 0;
 end;
 
 function TModelBusinessPedido.Abrir(aIdPedido: Integer;
@@ -209,23 +148,7 @@ begin
     FDAOPedido
       .This
         .COD_CLIFOR(FIdFornecedor)
-        .COD_USUARIO(FCOD_USUARIO)
         .TOTAL(FTotal)
-        .COD_EMPRESA(FCOD_EMPRESA)
-        .COD_FILIAL(FCOD_FILIAL)
-        .COD_DEPARTAMENTO(FCOD_DEPARTAMENTO)
-        .COD_CENTRO_CUSTO(FCOD_CENTRO_CUSTO)
-        .DT_EMISSAO(FDT_EMISSAO)
-        .COD_CONDPAGTO(FCOD_CONDPAGTO)
-        .ORDEM_COMPRA(FORDEM_COMPRA)
-        .VALOR_IMPOSTOS(FVALOR_IMPOSTOS)
-        .COD_COMPRADOR(FCOD_COMPRADOR)
-        .PESO(FPESO_CAB)
-        .VOLUME(FVOLUME_CAB)
-        .COD_TIPOFRETE(FCOD_TIPOFRETE)
-        .DATA_PREVISTA_ENTREGA(FDATA_PREVISTA_ENTREGA)
-        .DT_ENTREGA(FDT_ENTREGA)
-        .TIPO_COMPRA(FTIPO_COMPRA)
         .&End
       .Insert;
 
@@ -288,19 +211,6 @@ begin
         .QUANTIDADE(aQuantidade)
         .VL_UNITARIO(VUnit)
         .VL_TOTAL(VTotalItem)
-        .COD_EMPRESA(FIT_COD_EMPRESA)
-        .COD_FILIAL(FIT_COD_FILIAL)
-        .COD_DEPARTAMENTO(FIT_COD_DEPARTAMENTO)
-        .COD_CENTRO_CUSTO(FIT_COD_CENTRO_CUSTO)
-        .DESCONTO(FIT_DESCONTO)
-        .ACRESCIMO(FIT_ACRESCIMO)
-        .IPI(FIT_IPI)
-        .VALOR_IPI(FIT_VALOR_IPI)
-        .PESO(FIT_PESO)
-        .VOLUME(FIT_VOLUME)
-        .DT_INCLUSAO(FIT_DT_INCLUSAO)
-        .DT_SOLICITADA(FIT_DT_SOLICITADA)
-        .DT_RECEBIDA(FIT_DT_RECEBIDA)
         .&End
       .Insert;
 
