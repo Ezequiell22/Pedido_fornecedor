@@ -6,7 +6,7 @@ uses
   DUnitX.TestFramework,
   comercial.model.db.migrations,
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.queryIBX;
+  comercial.model.resource.impl.queryFD;
 
 type
   [TestFixture]
@@ -40,7 +40,7 @@ function TTestMigrations.Exists(const SQL: string): Boolean;
 var
   Q: iQuery;
 begin
-  Q := TModelResourceQueryIBX.New;
+  Q := TModelResourceQueryFD.New;
   Q.active(False).sqlClear.sqlAdd(SQL).open;
   Result := not Q.DataSet.IsEmpty;
 end;

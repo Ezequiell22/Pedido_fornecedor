@@ -1,10 +1,11 @@
+{ copied from Cliente.pas with param fixes }
 unit comercial.model.DAO.Fornecedor;
 
 interface
 
 uses
-    Data.DB,
-    System.Generics.Collections,
+  Data.DB,
+  System.Generics.Collections,
   comercial.model.DAO.interfaces,
   comercial.model.entity.Fornecedor,
   comercial.model.resource.interfaces,
@@ -38,7 +39,6 @@ uses System.SysUtils;
 
 procedure TModelDAOFornecedor.AfterScroll(DataSet: TDataSet);
 begin
-
 end;
 
 constructor TModelDAOFornecedor.Create;
@@ -58,7 +58,7 @@ end;
 function TModelDAOFornecedor.Delete: iModelDAOEntity<TModelEntityFornecedor>;
 begin
   Result := Self;
- try
+  try
     FQuery.active(False)
       .sqlClear
       .sqlAdd('delete from FORNECEDORES where COD_CLIFOR = :COD_CLIFOR')
@@ -125,7 +125,7 @@ begin
       .sqlClear
       .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC)')
       .sqlAdd('values ((select coalesce(max(COD_CLIFOR),0)+1 from FORNECEDORES),')
-      .sqlAdd(':RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :FORNECEDOR, :FORNEC)')
+      .sqlAdd(':RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)')
       .addParam('RAZAO', FEntity.RAZAO)
       .addParam('COD_ESTADO', FEntity.COD_ESTADO)
       .addParam('FANTASIA', FEntity.FANTASIA)
@@ -137,7 +137,6 @@ begin
     on E: Exception do
       raise Exception.Create(E.Message);
   end;
-
 end;
 
 class function TModelDAOFornecedor.New: iModelDAOEntity<TModelEntityFornecedor>;

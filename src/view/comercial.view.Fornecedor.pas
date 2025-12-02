@@ -1,3 +1,4 @@
+{ copied from comercial.view.Cliente.pas }
 unit comercial.view.Fornecedor;
 
 interface
@@ -64,17 +65,14 @@ end;
 
 procedure TfrmFornecedor.LoadData;
 begin
-
   if not dts2.DataSet.Active then
-    exit;
-
+    Exit;
   edtId.Text := dts2.DataSet.FieldByName('IDFORNECEDOR').AsString;
   edtFantasia.Text := dts2.DataSet.FieldByName('NM_FANTASIA').AsString;
   edtRazao.Text := dts2.DataSet.FieldByName('RAZAO_SOCIAL').AsString;
   edtCnpj.Text := dts2.DataSet.FieldByName('CNPJ').AsString;
   edtEndereco.Text := dts2.DataSet.FieldByName('ENDERECO').AsString;
   edtTelefone.Text := dts2.DataSet.FieldByName('TELEFONE').AsString;
-
 end;
 
 function ValidateFornecedorInputs(AOwner: TfrmFornecedor): Boolean;
@@ -86,26 +84,25 @@ begin
   if Trim(AOwner.edtFantasia.Text) = '' then
   begin
     ShowMessage('Nome fantasia obrigatorio');
-    exit;
+    Exit;
   end;
   if Trim(AOwner.edtRazao.Text) = '' then
   begin
     ShowMessage('Razao social obrigatoria');
-    exit;
+    Exit;
   end;
   if Trim(AOwner.edtTelefone.Text) = '' then
   begin
     ShowMessage('Telefone obrigatorio');
-    exit;
+    Exit;
   end;
-
   Result := True;
 end;
 
 procedure TfrmFornecedor.BtnSalvarClick(Sender: TObject);
 begin
   if not ValidateFornecedorInputs(Self) then
-    exit;
+    Exit;
 
   if Trim(edtId.Text) = EmptyStr then
   begin
@@ -117,7 +114,7 @@ begin
       .AsInteger, edtFantasia.Text, edtRazao.Text, edtCnpj.Text,
       edtEndereco.Text, edtTelefone.Text);
 
-  self.Close;
+  Close;
 end;
 
 end.

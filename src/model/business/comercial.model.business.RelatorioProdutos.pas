@@ -4,7 +4,7 @@ interface
 
 uses Data.DB,
 comercial.model.resource.interfaces,
-comercial.model.resource.impl.queryIBX,
+comercial.model.resource.impl.queryFD,
 comercial.model.business.interfaces;
 
 type
@@ -26,7 +26,7 @@ uses System.SysUtils, comercial.util.printhtml;
 
 constructor TModelBusinessRelatorioProdutos.Create;
 begin
-  FQuery := TModelResourceQueryIBX.New;
+  FQuery := TModelResourceQueryFD.New;
 end;
 
 destructor TModelBusinessRelatorioProdutos.Destroy;

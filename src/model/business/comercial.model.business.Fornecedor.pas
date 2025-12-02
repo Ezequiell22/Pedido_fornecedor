@@ -1,3 +1,4 @@
+{ copied from comercial.model.business.Cliente.pas with uses fix }
 unit comercial.model.business.Fornecedor;
 
 interface
@@ -6,7 +7,6 @@ uses
   Data.DB,
   comercial.model.business.interfaces,
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.queryIBX,
   comercial.model.DAO.interfaces,
   comercial.model.entity.Fornecedor;
 
@@ -43,59 +43,49 @@ end;
 function TModelBusinessFornecedor.Bind(aDataSource: TDataSource): iModelBusinessFornecedor;
 begin
   Result := Self;
-
   FDAOFornecedor.DataSet(aDataSource)
 end;
 
 function TModelBusinessFornecedor.Get: iModelBusinessFornecedor;
 begin
   Result := Self;
-
   FDAOFornecedor.Get
 end;
 
 function TModelBusinessFornecedor.GetById(aId: Integer): iModelBusinessFornecedor;
 begin
   Result := Self;
-  FDAOFornecedor
-    .GetbyId(aId)
+  FDAOFornecedor.GetbyId(aId)
 end;
 
-function TModelBusinessFornecedor.Salvar( aFantasia, aRazao, aCnpj, aEndereco, aTelefone: string): iModelBusinessFornecedor;
+function TModelBusinessFornecedor.Salvar(aFantasia, aRazao, aCnpj, aEndereco, aTelefone: string): iModelBusinessFornecedor;
 begin
   Result := Self;
-
-  FDAOFornecedor
-    .This
-      .FANTASIA(aFantasia)
-      .RAZAO(aRazao)
-      .&End
+  FDAOFornecedor.This
+    .FANTASIA(aFantasia)
+    .RAZAO(aRazao)
+    .&End
     .Insert
-
 end;
 
 function TModelBusinessFornecedor.Editar(aId: Integer; aFantasia, aRazao, aCnpj, aEndereco, aTelefone: string): iModelBusinessFornecedor;
 begin
   Result := Self;
-  FDAOFornecedor
-    .This
-      .COD_CLIFOR(Aid)
-      .FANTASIA(aFantasia)
-      .RAZAO(aRazao)
-      .&End
+  FDAOFornecedor.This
+    .COD_CLIFOR(aId)
+    .FANTASIA(aFantasia)
+    .RAZAO(aRazao)
+    .&End
     .Update
 end;
 
 function TModelBusinessFornecedor.Excluir(aId: Integer): iModelBusinessFornecedor;
 begin
   Result := Self;
-
-  FDAOFornecedor
-    .This
-      .COD_CLIFOR(Aid)
-      .&End
+  FDAOFornecedor.This
+    .COD_CLIFOR(aId)
+    .&End
     .Delete
-
 end;
 
 end.

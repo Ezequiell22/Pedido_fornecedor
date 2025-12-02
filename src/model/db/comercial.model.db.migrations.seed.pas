@@ -16,7 +16,7 @@ uses
   ComObj,
   Data.DB,
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.queryIBX;
+  comercial.model.resource.impl.queryFD;
 
 procedure TDbMigrationsSeed.Apply(const AExcelPath: string);
 var

@@ -1,0 +1,76 @@
+unit comercial.model.resource.impl.conexaoFD;
+
+interface
+
+uses
+  System.SysUtils,
+  Data.DB,
+  FireDAC.Comp.Client,
+  FireDAC.Stan.Def,
+  FireDAC.Stan.Intf,
+  FireDAC.Stan.Option,
+  FireDAC.Stan.Pool,
+  FireDAC.Phys,
+  FireDAC.Phys.FB,
+  FireDAC.Phys.FBDef,
+  FireDAC.UI.Intf,
+  FireDAC.VCLUI.Wait,
+  System.IniFiles,
+  comercial.model.resource.interfaces;
+
+type
+  TModelResourceConexaoFD = class(TInterfacedObject, iConexao)
+  private
+    FConn: TFDConnection;
+  public
+    constructor Create;
+    destructor Destroy; override;
+    class function New: iConexao;
+    function Connect: TCustomConnection;
+  end;
+
+implementation
+
+function TModelResourceConexaoFD.Connect: TCustomConnection;
+begin
+  if FConn.Connected then
+    Exit(FConn);
+
+  var iniPath := ExtractFilePath(ParamStr(0)) + 'comercial.ini';
+  var ini := TIniFile.Create(iniPath);
+  try
+    var dbPath := ini.ReadString('Database', 'Path', 'C:\testeEmpresa\DADOS.FDB');
+    var dbUser := ini.ReadString('Database', 'User', 'SYSDBA');
+    var dbPass := ini.ReadString('Database', 'Password', 'masterkey');
+
+    FConn.Params.Clear;
+    FConn.Params.Values['DriverID'] := 'FB';
+    FConn.Params.Values['Database'] := dbPath;
+    FConn.Params.Values['User_Name'] := dbUser;
+    FConn.Params.Values['Password'] := dbPass;
+    FConn.LoginPrompt := False;
+  finally
+    ini.Free;
+  end;
+
+  FConn.Connected := True;
+  Result := FConn;
+end;
+
+constructor TModelResourceConexaoFD.Create;
+begin
+  FConn := TFDConnection.Create(nil);
+end;
+
+destructor TModelResourceConexaoFD.Destroy;
+begin
+  FConn.Free;
+  inherited;
+end;
+
+class function TModelResourceConexaoFD.New: iConexao;
+begin
+  Result := Self.Create;
+end;
+
+end.

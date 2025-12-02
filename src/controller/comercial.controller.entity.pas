@@ -27,7 +27,7 @@ implementation
 
 uses
   comercial.model.DAO.CadFornecedor,
-  comercial.model.DAO.CadProduto, comercial.model.resource.impl.queryIBX;
+  comercial.model.DAO.CadProduto, comercial.model.resource.impl.queryFD;
 
 { TControllerEntity }
 

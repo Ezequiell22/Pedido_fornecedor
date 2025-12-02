@@ -8,7 +8,7 @@ uses
   comercial.model.business.interfaces,
   comercial.model.business.Fornecedor,
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.queryIBX;
+  comercial.model.resource.impl.queryFD;
 
 type
   [TestFixture]
@@ -42,7 +42,7 @@ var
 begin
   id := 0;
 
-  Q := TModelResourceQueryIBX.New;
+  Q := TModelResourceQueryFD.New;
   B := TModelBusinessFornecedor.New;
 
   {}
@@ -73,7 +73,7 @@ procedure TTestFornecedor.ShouldEnforceTelefoneTrigger;
 var
   Q: iQuery;
 begin
-  Q := TModelResourceQueryIBX.New;
+  Q := TModelResourceQueryFD.New;
   Assert.WillRaise(
     procedure
     begin

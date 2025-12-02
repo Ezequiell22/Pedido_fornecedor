@@ -1,3 +1,4 @@
+{ copied from Cliente.pas with same unit name }
 unit comercial.model.entity.Fornecedor;
 
 interface
@@ -18,7 +19,7 @@ type
     FCOD_PAIS: string;
     FFORNECEDOR: string;
     FFORNEC: string;
-    FACTIVE : Boolean;
+    FACTIVE: Boolean;
   public
     constructor Create(aParent: iModelDAOEntity<TModelEntityFornecedor>);
     destructor Destroy; override;
@@ -95,48 +96,15 @@ begin
   Result := FRAZAO;
 end;
 
-function TModelEntityFornecedor.CNPJ(aValue: string): TModelEntityFornecedor;
-begin
-
-  Result := Self;
-
-  if not IsValidCNPJ(aValue) then
-     raise Exception.Create('CNPJ inválido!');
-
-  FCNPJ := aValue;
-end;
-
 function TModelEntityFornecedor.ACTIVE: Boolean;
 begin
-  result := Factive
+  Result := FACTIVE;
 end;
 
 function TModelEntityFornecedor.ACTIVE(aValue: Boolean): TModelEntityFornecedor;
 begin
-  result := Self;
-  Factive := Avalue
-end;
-
-function TModelEntityFornecedor.CNPJ: string;
-begin
-  Result := FCNPJ;
-end;
-
-function TModelEntityFornecedor.ENDERECO(aValue: string): TModelEntityFornecedor;
-begin
   Result := Self;
-  FENDERECO := aValue;
-end;
-
-function TModelEntityFornecedor.ENDERECO: string;
-begin
-  Result := FENDERECO;
-end;
-
-function TModelEntityFornecedor.TELEFONE(aValue: string): TModelEntityFornecedor;
-begin
-  Result := Self;
-  FTELEFONE := aValue;
+  FACTIVE := aValue;
 end;
 
 function TModelEntityFornecedor.COD_ESTADO(aValue: string): TModelEntityFornecedor;
@@ -181,13 +149,6 @@ end;
 function TModelEntityFornecedor.FORNEC: string;
 begin
   Result := FFORNEC;
-end;
-
-function TModelEntityFornecedor.TELEFONE: string;
-begin
-  if Trim(FTELEFONE) = '' then
-    raise Exception.Create('telefone obrigatório');
-  Result := FTELEFONE;
 end;
 
 end.

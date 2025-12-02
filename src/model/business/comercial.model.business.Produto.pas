@@ -6,7 +6,7 @@ uses
   Data.DB,
   comercial.model.business.interfaces,
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.queryIBX,
+  comercial.model.resource.impl.queryFD,
   comercial.model.DAO.interfaces,
   comercial.model.entity.Produto;
 

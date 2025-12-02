@@ -10,7 +10,7 @@ uses
   comercial.model.business.Fornecedor,
   comercial.model.business.Produto,
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.queryIBX;
+  comercial.model.resource.impl.queryFD;
 
 type
   [TestFixture]
@@ -44,7 +44,7 @@ begin
   BProduto := TModelBusinessProduto.New;
 
   BFornecedor.Salvar('Fornecedor UT', 'Razao UT', '12.345.678/0001-95', 'End', '999');
-  Q := TModelResourceQueryIBX.New;
+  Q := TModelResourceQueryFD.New;
   Q.active(False).sqlClear.sqlAdd('select max(IDFORNECEDOR) as ID from FORNECEDOR').open;
   FornecedorId := Q.DataSet.FieldByName('ID').AsInteger;
 

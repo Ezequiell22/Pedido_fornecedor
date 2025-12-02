@@ -4,7 +4,7 @@ interface
 
 uses
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.conexaoIBX;
+  comercial.model.resource.impl.conexaoFD;
 
 type
   TResource = class(TInterfacedObject, iResource)
@@ -28,7 +28,7 @@ end;
 constructor TResource.Create;
 begin
   if FSharedConexao = nil then
-    FSharedConexao := TmodelResourceConexaoIBX.New;
+    FSharedConexao := TModelResourceConexaoFD.New;
   FConexao := FSharedConexao;
 end;
 

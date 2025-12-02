@@ -8,7 +8,7 @@ uses
   comercial.model.business.interfaces,
   comercial.model.business.Produto,
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.queryIBX;
+  comercial.model.resource.impl.queryFD;
 
 type
   [TestFixture]
@@ -37,7 +37,7 @@ function TTestProduto.NextId: Integer;
 var
   Q: iQuery;
 begin
-  Q := TModelResourceQueryIBX.New;
+  Q := TModelResourceQueryFD.New;
   Q.active(False).sqlClear.sqlAdd('select coalesce(max(IDPRODUTO),0)+1 idN from PRODUTO').open;
   Result := Q.DataSet.FieldByName('idN').AsInteger;
 end;
@@ -52,7 +52,7 @@ begin
   B := TModelBusinessProduto.New;
   Desc := 'Desc UT ' + FormatDateTime('yyyymmdd_hhnnss', Now);
   B.Salvar(Desc, 'Marca UT', 10.0);
-  Q := TModelResourceQueryIBX.New;
+  Q := TModelResourceQueryFD.New;
   Q.active(False).sqlClear.sqlAdd('select max(IDPRODUTO) as ID from PRODUTO').open;
   id := Q.DataSet.FieldByName('ID').AsInteger;
   Assert.IsTrue(id > 0);
