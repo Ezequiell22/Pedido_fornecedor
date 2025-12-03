@@ -29,6 +29,7 @@ type
     procedure ButtonFornecedoresClick(Sender: TObject);
     procedure ButtonPedidosClick(Sender: TObject);
     procedure buttonPorProdutoClick(Sender: TObject);
+    procedure ButtonPorFornecedorClick(Sender: TObject);
 
   private
     Fcontroller: iController;
@@ -74,17 +75,27 @@ begin
     end;
 end;
 
-procedure TfrmIndex.buttonPorProdutoClick(Sender: TObject);
-var
-  dtini, dtfim: TdateTime;
+procedure TfrmIndex.ButtonPorFornecedorClick(Sender: TObject);
+
 begin
-  dtini := StrToDateTime('25/11/2025 00:00:00');
-  dtfim := StrToDateTime('29/11/2025 23:59:59.999');
+  Fcontroller := TController.new;
+
+  Fcontroller.business
+    .Relatorio
+    .GerarPorFornecedor();
+
+  showMessage('Relatório salvo em ' + GetCurrentDir);
+
+end;
+
+procedure TfrmIndex.buttonPorProdutoClick(Sender: TObject);
+begin
 
   Fcontroller := TController.new;
 
-  Fcontroller.business.RelatorioProdutos
-  .GerarPorProduto(dtini, dtfim);
+  Fcontroller.business
+    .Relatorio
+    .GerarPorProduto();
 
   showMessage('Relatório salvo em ' + GetCurrentDir);
 

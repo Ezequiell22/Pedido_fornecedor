@@ -1,4 +1,4 @@
-unit comercial.util.printhtml;
+﻿unit comercial.util.printhtml;
 
 interface
 
@@ -6,8 +6,8 @@ type
   TPrintHtmlPedido = class
   public
     class function GerarHtmlPedido(aIdPedido: Integer; const aFilePath: string): string; static;
-    class function GerarRelatorioPorProduto(aDtIni, aDtFim: TDateTime; const aFilePath: string): string;
-    class function GerarRelatorioPorFornecedor(aDtIni, aDtFim: TDateTime; const aFilePath: string): string;
+    class function GerarRelatorioPorProduto(const aFilePath: string): string;
+    class function GerarRelatorioPorFornecedor(const aFilePath: string): string;
   end;
 
 implementation
@@ -147,7 +147,7 @@ begin
   end;
 end;
 
-class function TPrintHtmlPedido.GerarRelatorioPorProduto(aDtIni, aDtFim: TDateTime; const aFilePath: string): string;
+class function TPrintHtmlPedido.GerarRelatorioPorProduto( const aFilePath: string): string;
 var
   Q: iQuery;
   SB: TStringBuilder;
@@ -162,10 +162,7 @@ begin
     .sqlAdd('       sum(i.VL_TOTAL) as VALOR_TOTAL')
     .sqlAdd('  from PEDCOMPRA_ITEM i')
     .sqlAdd('  left join PRODUTO p on p.IDPRODUTO = i.COD_PRODUTO')
-    .sqlAdd(' where i.DT_INCLUSAO between :DTINI and :DTFIM')
     .sqlAdd(' group by p.IDPRODUTO, p.DESCRICAO')
-    .addParam('DTINI', aDtIni)
-    .addParam('DTFIM', aDtFim)
     .open;
 
   SB := TStringBuilder.Create;
@@ -187,7 +184,7 @@ begin
     SB.AppendLine('</head>');
     SB.AppendLine('<body>');
     SB.AppendLine('<h1>Compras por Produto</h1>');
-    SB.AppendLine('<div>Período: ' + FormatDateTime('dd/mm/yyyy', aDtIni) + ' a ' + FormatDateTime('dd/mm/yyyy', aDtFim) + '</div>');
+
     SB.AppendLine('<table>');
     SB.AppendLine('<thead><tr><th>ID</th><th>Descrição</th><th class="text-right">Preço médio</th><th class="text-right">Quantidade total</th><th class="text-right">Valor total</th></tr></thead>');
     SB.AppendLine('<tbody>');
@@ -207,7 +204,7 @@ begin
     SB.AppendLine('</body>');
     SB.AppendLine('</html>');
 
-    nameDefault := Format('compras_por_produto_%s_%s.html', [FormatDateTime('yyyymmdd', aDtIni), FormatDateTime('yyyymmdd', aDtFim)]);
+    nameDefault := Format('compras_por_produto_%s.html', [FormatDateTime('yyyymmdd', now)]);
     if aFilePath = '' then
     begin
       targetDir := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)) + 'reports');
@@ -243,7 +240,7 @@ begin
   end;
 end;
 
-class function TPrintHtmlPedido.GerarRelatorioPorFornecedor(aDtIni, aDtFim: TDateTime; const aFilePath: string): string;
+class function TPrintHtmlPedido.GerarRelatorioPorFornecedor( const aFilePath: string): string;
 var
   Q: iQuery;
   SB: TStringBuilder;
@@ -255,10 +252,7 @@ begin
     .sqlAdd('select f.COD_CLIFOR, f.FANTASIA, sum(d.TOTAL) as VALOR_TOTAL')
     .sqlAdd('  from PEDIDO_COMPRA d')
     .sqlAdd('  left join FORNECEDORES f on f.COD_CLIFOR = d.COD_CLIFOR')
-    .sqlAdd(' where d.DT_EMISSAO between :DTINI and :DTFIM')
     .sqlAdd(' group by f.COD_CLIFOR, f.FANTASIA')
-    .addParam('DTINI', aDtIni)
-    .addParam('DTFIM', aDtFim)
     .open;
 
   SB := TStringBuilder.Create;
@@ -280,7 +274,7 @@ begin
     SB.AppendLine('</head>');
     SB.AppendLine('<body>');
     SB.AppendLine('<h1>Compras por Fornecedor</h1>');
-    SB.AppendLine('<div>Período: ' + FormatDateTime('dd/mm/yyyy', aDtIni) + ' a ' + FormatDateTime('dd/mm/yyyy', aDtFim) + '</div>');
+
     SB.AppendLine('<table>');
     SB.AppendLine('<thead><tr><th>ID Fornecedor</th><th>Fantasia</th><th class="text-right">Valor total</th></tr></thead>');
     SB.AppendLine('<tbody>');
@@ -298,7 +292,7 @@ begin
     SB.AppendLine('</body>');
     SB.AppendLine('</html>');
 
-    nameDefault := Format('compras_por_fornecedor_%s_%s.html', [FormatDateTime('yyyymmdd', aDtIni), FormatDateTime('yyyymmdd', aDtFim)]);
+    nameDefault := Format('compras_por_fornecedor_%s.html', [FormatDateTime('yyyymmdd', now)]);
     if aFilePath = '' then
     begin
       targetDir := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)) + 'reports');

@@ -15,14 +15,14 @@ type
   TControllerBusiness = class(TInterfacedObject, iControllerBusiness)
   private
     FPedido: iModelBusinessPedido;
-    FRelatorio: iModelBusinessRelatorioProdutos;
+    FRelatorio: iModelBusinessRelatorio;
     FFornecedor: iModelBusinessFornecedor;
   public
     constructor create;
     destructor destroy; override;
     class function New: iControllerBusiness;
     function Pedido: iModelBusinessPedido;
-    function RelatorioProdutos: iModelBusinessRelatorioProdutos;
+    function Relatorio: iModelBusinessRelatorio;
     function Fornecedor: iModelBusinessFornecedor;
   end;
 
@@ -48,10 +48,10 @@ begin
   result := FPedido;
 end;
 
-function TControllerBusiness.RelatorioProdutos: iModelBusinessRelatorioProdutos;
+function TControllerBusiness.Relatorio: iModelBusinessRelatorio;
 begin
   if not assigned(FRelatorio) then
-    FRelatorio := TModelBusinessRelatorioProdutos.New;
+    FRelatorio := TModelBusinessRelatorio.New;
   result := FRelatorio;
 end;
 

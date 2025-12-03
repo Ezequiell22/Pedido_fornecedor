@@ -49,5 +49,6 @@ object frmIndex: TfrmIndex
     Height = 25
     Caption = 'Relat'#243'rio de Compras por Fornecedor'
     TabOrder = 3
+    OnClick = ButtonPorFornecedorClick
   end
 end

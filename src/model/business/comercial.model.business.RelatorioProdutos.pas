@@ -8,52 +8,52 @@ comercial.model.resource.impl.queryFD,
 comercial.model.business.interfaces;
 
 type
-  TModelBusinessRelatorioProdutos = class(TInterfacedObject, iModelBusinessRelatorioProdutos)
+  TModelBusinessRelatorio = class(TInterfacedObject, iModelBusinessRelatorio)
   private
     FQuery: iQuery;
   public
     constructor Create;
     destructor Destroy; override;
-    class function New: iModelBusinessRelatorioProdutos;
-    function GerarPorProduto(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
-    function GerarPorFornecedor(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
-    function LinkDataSource(aDataSource: TDataSource): iModelBusinessRelatorioProdutos;
+    class function New: iModelBusinessRelatorio;
+    function GerarPorProduto: iModelBusinessRelatorio;
+    function GerarPorFornecedor: iModelBusinessRelatorio;
+    function LinkDataSource(aDataSource: TDataSource): iModelBusinessRelatorio;
   end;
 
 implementation
 
 uses System.SysUtils, comercial.util.printhtml;
 
-constructor TModelBusinessRelatorioProdutos.Create;
+constructor TModelBusinessRelatorio.Create;
 begin
   FQuery := TModelResourceQueryFD.New;
 end;
 
-destructor TModelBusinessRelatorioProdutos.Destroy;
+destructor TModelBusinessRelatorio.Destroy;
 begin
   inherited;
 end;
 
 
-function TModelBusinessRelatorioProdutos.GerarPorProduto(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+function TModelBusinessRelatorio.GerarPorProduto: iModelBusinessRelatorio;
 begin
   Result := Self;
-  TPrintHtmlPedido.GerarRelatorioPorProduto(adtini, adtfim, getcurrentDir);
+  TPrintHtmlPedido.GerarRelatorioPorProduto( getcurrentDir);
 end;
 
-function TModelBusinessRelatorioProdutos.GerarPorFornecedor(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+function TModelBusinessRelatorio.GerarPorFornecedor: iModelBusinessRelatorio;
 begin
   Result := Self;
-  TPrintHtmlPedido.GerarRelatorioPorFornecedor(adtini, adtfim, getcurrentDir);
+  TPrintHtmlPedido.GerarRelatorioPorFornecedor( getcurrentDir);
 end;
 
-function TModelBusinessRelatorioProdutos.LinkDataSource(aDataSource: TDataSource): iModelBusinessRelatorioProdutos;
+function TModelBusinessRelatorio.LinkDataSource(aDataSource: TDataSource): iModelBusinessRelatorio;
 begin
   Result := Self;
   aDataSource.DataSet := FQuery.DataSet;
 end;
 
-class function TModelBusinessRelatorioProdutos.New: iModelBusinessRelatorioProdutos;
+class function TModelBusinessRelatorio.New: iModelBusinessRelatorio;
 begin
   Result := Self.Create;
 end;
