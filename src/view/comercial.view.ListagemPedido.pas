@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ComCtrls,
-  System.Generics.Collections, comercial.controller.interfaces;
+  System.Generics.Collections, comercial.controller.interfaces, Vcl.ExtCtrls;
 
 type
   TfrmListagemPedido = class(TForm)
@@ -14,12 +14,13 @@ type
     GridItens: TDBGrid;
     DSPedidos: TDataSource;
     DSItens: TDataSource;
-    LabelPeriodo: TLabel;
+    Panel1: TPanel;
     DtIni: TDateTimePicker;
     DtFim: TDateTimePicker;
-    LabelFornecedor: TLabel;
     CbFornecedor: TComboBox;
     BtnAplicarFiltros: TButton;
+    LabelFornecedor: TLabel;
+    LabelPeriodo: TLabel;
     BtnNovo: TButton;
     BtnEditar: TButton;
     BtnExcluir: TButton;
@@ -51,9 +52,13 @@ uses
 procedure TfrmListagemPedido.FormShow(Sender: TObject);
 begin
   FController := TController.New;
+  FController.business.Pedido.LinkDataSourcePedido(DSPedidos);
+  FController.business.Pedido.LinkDataSourceItens(DSItens);
+
   FFornecedorIds := TList<Integer>.Create;
   GridPedidos.DataSource := DSPedidos;
   GridItens.DataSource := DSItens;
+
   DSPedidos.OnDataChange := DSPedidosDataChange;
   DtIni.Date := Now - 30;
   DtFim.Date := Now;
@@ -97,8 +102,8 @@ var
 begin
   filters := TDictionary<string, Variant>.Create;
   try
-    filters.Add('DT_EMISSAO_INI', DtIni.Date);
-    filters.Add('DT_EMISSAO_FIM', DtFim.Date);
+    filters.Add('DT_EMISSAO_INI', DtIni.DateTime);
+    filters.Add('DT_EMISSAO_FIM', DtFim.DateTime);
     if SelectedFornecedorId > 0 then
       filters.Add('COD_CLIFOR', SelectedFornecedorId);
 
@@ -153,7 +158,8 @@ end;
 procedure TfrmListagemPedido.BtnExcluirClick(Sender: TObject);
 begin
   FController.business.Pedido
-    .Abrir(DSPedidos.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger, CbFornecedor)
+    .Abrir(DSPedidos.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger,
+      CbFornecedor)
     .ExcluirPedido;
   BtnAplicarFiltrosClick(nil);
 end;

@@ -43,8 +43,6 @@ end;
 constructor TModelDAOPedidoCompra.Create;
 begin
   FQuery := TModelResourceQueryFD.New;
-  FDataSource := TDataSource.Create(nil);
-  FDataSource.DataSet := FQuery.DataSet;
   FEntity := TModelEntityPedidoCompra.Create(Self);
 end;
 
@@ -117,7 +115,6 @@ begin
   end;
 
   FQuery.open;
-  FDataSource.DataSet := FQuery.DataSet;
 end;
 
 function TModelDAOPedidoCompra.GetbyId(AValue: integer): iModelDAOEntity<TModelEntityPedidoCompra>;

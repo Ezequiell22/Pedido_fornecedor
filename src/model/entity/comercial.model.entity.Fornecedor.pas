@@ -1,4 +1,4 @@
-{ copied from Cliente.pas with same unit name }
+﻿{ copied from Cliente.pas with same unit name }
 unit comercial.model.entity.Fornecedor;
 
 interface
@@ -17,7 +17,7 @@ type
     FFANTASIA: string;
     FCOD_ESTADO: string;
     FCOD_PAIS: string;
-    FFORNECEDOR: string;
+    FCLIENTE: string;
     FFORNEC: string;
     FACTIVE: Boolean;
   public
@@ -33,8 +33,8 @@ type
     function COD_ESTADO: string; overload;
     function COD_PAIS(aValue: string): TModelEntityFornecedor; overload;
     function COD_PAIS: string; overload;
-    function FORNECEDOR(aValue: string): TModelEntityFornecedor; overload;
-    function FORNECEDOR: string; overload;
+    function CLIENTE(aValue: string): TModelEntityFornecedor; overload;
+    function CLIENTE: string; overload;
     function FORNEC(aValue: string): TModelEntityFornecedor; overload;
     function FORNEC: string; overload;
     function ACTIVE(aValue: Boolean): TModelEntityFornecedor; overload;
@@ -129,15 +129,15 @@ begin
   Result := FCOD_PAIS;
 end;
 
-function TModelEntityFornecedor.FORNECEDOR(aValue: string): TModelEntityFornecedor;
+function TModelEntityFornecedor.CLIENTE(aValue: string): TModelEntityFornecedor;
 begin
   Result := Self;
-  FFORNECEDOR := aValue;
+  FCLIENTE := aValue;
 end;
 
-function TModelEntityFornecedor.FORNECEDOR: string;
+function TModelEntityFornecedor.CLIENTE: string;
 begin
-  Result := FFORNECEDOR;
+  Result := FCLIENTE;
 end;
 
 function TModelEntityFornecedor.FORNEC(aValue: string): TModelEntityFornecedor;

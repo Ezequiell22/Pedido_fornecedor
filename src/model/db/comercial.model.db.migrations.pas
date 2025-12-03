@@ -142,24 +142,13 @@ begin
     ExecDDL('create table PEDIDO_COMPRA ' + #13#10 +
             '(' + #13#10 +
             '  COD_PEDIDOCOMPRA integer not null,' + #13#10 +
-            '  COD_CLIFOR integer,' + #13#10 +
-            '  COD_USUARIO integer,' + #13#10 +
-            '  TOTAL numeric(18,4),' + #13#10 +
             '  COD_EMPRESA integer,' + #13#10 +
-            '  COD_FILIAL integer,' + #13#10 +
-            '  COD_DEPARTAMENTO integer,' + #13#10 +
-            '  COD_CENTRO_CUSTO integer,' + #13#10 +
+            '  COD_CLIFOR integer,' + #13#10 +
+            '  COD_MOEDA varchar(20),' + #13#10 +
             '  DT_EMISSAO date,' + #13#10 +
-            '  COD_CONDPAGTO integer,' + #13#10 +
-            '  ORDEM_COMPRA varchar(255),' + #13#10 +
-            '  VALOR_IMPOSTOS numeric(18,4),' + #13#10 +
-            '  COD_COMPRADOR integer,' + #13#10 +
-            '  PESO numeric(18,4),' + #13#10 +
-            '  VOLUME numeric(18,4),' + #13#10 +
-            '  COD_TIPOFRETE integer,' + #13#10 +
-            '  DATA_PREVISTA_ENTREGA date,' + #13#10 +
+            '  DT_PREVISTAENTREGA date,' + #13#10 +
             '  DT_ENTREGA date,' + #13#10 +
-            '  TIPO_COMPRA varchar(255),' + #13#10 +
+            '  TIPO_COMPRA varchar(255)' + #13#10 +
             '  constraint PK_PEDIDO_COMPRA primary key (COD_PEDIDOCOMPRA)' + #13#10 +
             ')');
 
@@ -172,24 +161,22 @@ begin
     ExecDDL('create table PEDCOMPRA_ITEM ' + #13#10 +
             '(' + #13#10 +
             '  COD_PEDIDOCOMPRA integer not null,' + #13#10 +
-            '  COD_PRODUTO integer,' + #13#10 +
-            '  QUANTIDADE numeric(18,4),' + #13#10 +
-            '  VL_UNITARIO numeric(18,4),' + #13#10 +
-            '  VL_TOTAL numeric(18,4),' + #13#10 +
-            '  COD_EMPRESA integer,' + #13#10 +
-            '  COD_FILIAL integer,' + #13#10 +
-            '  COD_DEPARTAMENTO integer,' + #13#10 +
-            '  COD_CENTRO_CUSTO integer,' + #13#10 +
-            '  DESCONTO numeric(18,4),' + #13#10 +
-            '  ACRESCIMO numeric(18,4),' + #13#10 +
-            '  IPI numeric(18,4),' + #13#10 +
-            '  VALOR_IPI numeric(18,4),' + #13#10 +
-            '  PESO numeric(18,4),' + #13#10 +
-            '  VOLUME numeric(18,4),' + #13#10 +
-            '  SEQUENCIA integer not null,' + #13#10 +
-            '  DT_INCLUSAO date,' + #13#10 +
-            '  DT_SOLICITADA date,' + #13#10 +
-            '  DT_RECEBIDA date,' + #13#10 +
+             '  COD_EMPRESA integer,' + #13#10 +
+             '  SEQUENCIA integer not null,' + #13#10 +
+             '  COD_Item integer,' + #13#10 +
+             '  COD_unidadecompra varchar(20),' + #13#10 +
+             '  QTDE_PEDIDA numeric(18,4),' + #13#10 +
+             '  QTDE_RECEBIDA numeric(18,4),' + #13#10 +
+             '  DESCRICAO VARCHAR(255),' + #13#10 +
+             '  PRECO_UNITARIO numeric(18,4),' + #13#10 +
+             '  PERC_DESCTO numeric(18,4),' + #13#10 +
+             '  VALOR_DESCTO numeric(18,4),' + #13#10 +
+             '  PERC_FINANC numeric(18,4),' + #13#10 +
+             '  VALOR_TOTAL numeric(18,4),' + #13#10 +
+             '  DT_INCLUSAO DATE,' + #13#10 +
+             '  DT_SOLICITADA DATE,' + #13#10 +
+             '  DT_RECEBIDA DATE' + #13#10 +
+
             '  constraint PK_PEDCOMPRA_ITEM primary key (COD_PEDIDOCOMPRA, SEQUENCIA)' + #13#10 +
             ')');
 

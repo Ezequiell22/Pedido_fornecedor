@@ -130,7 +130,7 @@ begin
       .addParam('COD_ESTADO', FEntity.COD_ESTADO)
       .addParam('FANTASIA', FEntity.FANTASIA)
       .addParam('COD_PAIS', FEntity.COD_PAIS)
-      .addParam('CLIENTE', FEntity.FORNECEDOR)
+      .addParam('CLIENTE', FEntity.CLIENTE)
       .addParam('FORNEC', FEntity.FORNEC)
       .execSql;
   except
@@ -163,7 +163,7 @@ begin
       .addParam('COD_ESTADO', FEntity.COD_ESTADO)
       .addParam('FANTASIA', FEntity.FANTASIA)
       .addParam('COD_PAIS', FEntity.COD_PAIS)
-      .addParam('CLIENTE', FEntity.FORNECEDOR)
+      .addParam('CLIENTE', FEntity.CLIENTE)
       .addParam('FORNEC', FEntity.FORNEC)
       .execSql;
   except

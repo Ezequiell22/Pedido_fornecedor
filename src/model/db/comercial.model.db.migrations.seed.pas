@@ -39,108 +39,7 @@ begin
     ApplyFromXlsx(AExcelPath);
     Exit;
   end;
-  if DirectoryExists(AExcelPath) then
-    folder := AExcelPath
-  else
-    folder := ExtractFilePath(AExcelPath);
-  Q := TModelResourceQueryFD.New;
-  SL := TStringList.Create;
-  try
-    fn := IncludeTrailingPathDelimiter(folder) + 'FORNECEDORES.csv';
-    if FileExists(fn) then
-    begin
-      SL.LoadFromFile(fn);
-      for i := 1 to SL.Count - 1 do
-      begin
-        L := SplitString(SL[i], ';');
-        if Length(L) = 1 then
-          L := SplitString(SL[i], ',');
-        if Length(L) >= 7 then
-          Q.active(False).sqlClear
-            .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC) values (:COD_CLIFOR, :RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)')
-            .addParam('COD_CLIFOR', L[0])
-            .addParam('RAZAO', L[1])
-            .addParam('COD_ESTADO', L[2])
-            .addParam('FANTASIA', L[3])
-            .addParam('COD_PAIS', L[4])
-            .addParam('CLIENTE', L[5])
-            .addParam('FORNEC', L[6])
-            .execSql;
-      end;
-    end;
 
-    fn := IncludeTrailingPathDelimiter(folder) + 'PEDIDO_COMPRA.csv';
-    if FileExists(fn) then
-    begin
-      SL.LoadFromFile(fn);
-      for i := 1 to SL.Count - 1 do
-      begin
-        L := SplitString(SL[i], ';');
-        if Length(L) = 1 then
-          L := SplitString(SL[i], ',');
-        if Length(L) >= 19 then
-          Q.active(False).sqlClear
-            .sqlAdd('insert into PEDIDO_COMPRA (COD_PEDIDOCOMPRA, COD_CLIFOR, COD_USUARIO, TOTAL, COD_EMPRESA, COD_FILIAL, COD_DEPARTAMENTO, COD_CENTRO_CUSTO, DT_EMISSAO, COD_CONDPAGTO, ORDEM_COMPRA, VALOR_IMPOSTOS, COD_COMPRADOR, PESO, VOLUME, COD_TIPOFRETE, DATA_PREVISTA_ENTREGA, DT_ENTREGA, TIPO_COMPRA) values (:COD_PEDIDOCOMPRA, :COD_CLIFOR, :COD_USUARIO, :TOTAL, :COD_EMPRESA, :COD_FILIAL, :COD_DEPARTAMENTO, :COD_CENTRO_CUSTO, :DT_EMISSAO, :COD_CONDPAGTO, :ORDEM_COMPRA, :VALOR_IMPOSTOS, :COD_COMPRADOR, :PESO, :VOLUME, :COD_TIPOFRETE, :DATA_PREVISTA_ENTREGA, :DT_ENTREGA, :TIPO_COMPRA)')
-            .addParam('COD_PEDIDOCOMPRA', L[0])
-            .addParam('COD_CLIFOR', L[1])
-            .addParam('COD_USUARIO', L[2])
-            .addParam('TOTAL', L[3])
-            .addParam('COD_EMPRESA', L[4])
-            .addParam('COD_FILIAL', L[5])
-            .addParam('COD_DEPARTAMENTO', L[6])
-            .addParam('COD_CENTRO_CUSTO', L[7])
-            .addParam('DT_EMISSAO', L[8])
-            .addParam('COD_CONDPAGTO', L[9])
-            .addParam('ORDEM_COMPRA', L[10])
-            .addParam('VALOR_IMPOSTOS', L[11])
-            .addParam('COD_COMPRADOR', L[12])
-            .addParam('PESO', L[13])
-            .addParam('VOLUME', L[14])
-            .addParam('COD_TIPOFRETE', L[15])
-            .addParam('DATA_PREVISTA_ENTREGA', L[16])
-            .addParam('DT_ENTREGA', L[17])
-            .addParam('TIPO_COMPRA', L[18])
-            .execSql;
-      end;
-    end;
-
-    fn := IncludeTrailingPathDelimiter(folder) + 'PEDCOMPRA_ITEM.csv';
-    if FileExists(fn) then
-    begin
-      SL.LoadFromFile(fn);
-      for i := 1 to SL.Count - 1 do
-      begin
-        L := SplitString(SL[i], ';');
-        if Length(L) = 1 then
-          L := SplitString(SL[i], ',');
-        if Length(L) >= 19 then
-          Q.active(False).sqlClear
-            .sqlAdd('insert into PEDCOMPRA_ITEM (COD_PEDIDOCOMPRA, COD_PRODUTO, QUANTIDADE, VL_UNITARIO, VL_TOTAL, COD_EMPRESA, COD_FILIAL, COD_DEPARTAMENTO, COD_CENTRO_CUSTO, DESCONTO, ACRESCIMO, IPI, VALOR_IPI, PESO, VOLUME, SEQUENCIA, DT_INCLUSAO, DT_SOLICITADA, DT_RECEBIDA) values (:COD_PEDIDOCOMPRA, :COD_PRODUTO, :QUANTIDADE, :VL_UNITARIO, :VL_TOTAL, :COD_EMPRESA, :COD_FILIAL, :COD_DEPARTAMENTO, :COD_CENTRO_CUSTO, :DESCONTO, :ACRESCIMO, :IPI, :VALOR_IPI, :PESO, :VOLUME, :SEQUENCIA, :DT_INCLUSAO, :DT_SOLICITADA, :DT_RECEBIDA)')
-            .addParam('COD_PEDIDOCOMPRA', L[0])
-            .addParam('COD_PRODUTO', L[1])
-            .addParam('QUANTIDADE', L[2])
-            .addParam('VL_UNITARIO', L[3])
-            .addParam('VL_TOTAL', L[4])
-            .addParam('COD_EMPRESA', L[5])
-            .addParam('COD_FILIAL', L[6])
-            .addParam('COD_DEPARTAMENTO', L[7])
-            .addParam('COD_CENTRO_CUSTO', L[8])
-            .addParam('DESCONTO', L[9])
-            .addParam('ACRESCIMO', L[10])
-            .addParam('IPI', L[11])
-            .addParam('VALOR_IPI', L[12])
-            .addParam('PESO', L[13])
-            .addParam('VOLUME', L[14])
-            .addParam('SEQUENCIA', L[15])
-            .addParam('DT_INCLUSAO', L[16])
-            .addParam('DT_SOLICITADA', L[17])
-            .addParam('DT_RECEBIDA', L[18])
-            .execSql;
-      end;
-    end;
-  finally
-    SL.Free;
-  end;
 end;
 function ColIndex(const Ref: string): Integer;
 var
@@ -319,6 +218,51 @@ begin
   end;
 end;
 
+function VStr(const S: string): Variant;
+begin
+  if Trim(S) = '' then
+    Result := Null
+  else
+    Result := S;
+end;
+
+function VInt(const S: string): Variant;
+var
+  v: Integer;
+begin
+  if TryStrToInt(Trim(S), v) then
+    Result := v
+  else
+    Result := Null;
+end;
+
+function VFloat(const S: string): Variant;
+var
+  f: Double;
+begin
+  if TryStrToFloat(Trim(S), f) then
+    Result := f
+  else
+    Result := Null;
+end;
+
+function VDate(const S: string): Variant;
+var
+  f: Double;
+  d: TDateTime;
+begin
+  if TryStrToFloat(Trim(S), f) then
+  begin
+    d := f;
+    Result := VarFromDateTime(d);
+    Exit;
+  end;
+  if TryStrToDate(Trim(S), d) then
+    Result := VarFromDateTime(d)
+  else
+    Result := Null;
+end;
+
 procedure TDbMigrationsSeed.ApplyFromXlsx(const AFilePath: string);
 var
   Zip: TZipFile;
@@ -333,70 +277,65 @@ begin
     Shared := ReadSharedStrings(Zip);
     Q := TModelResourceQueryFD.New;
 
+    Q.active(False).sqlClear.sqlAdd('delete from fornecedores')
+    .execSql();
+
     Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet1.xml', Shared);
     for i := 0 to Length(Rows) - 1 do
       if Length(Rows[i]) >= 7 then
         Q.active(False).sqlClear
           .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC) values (:COD_CLIFOR, :RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)')
-          .addParam('COD_CLIFOR', Rows[i][0])
-          .addParam('RAZAO', Rows[i][1])
-          .addParam('COD_ESTADO', Rows[i][2])
-          .addParam('FANTASIA', Rows[i][3])
-          .addParam('COD_PAIS', Rows[i][4])
-          .addParam('CLIENTE', Rows[i][5])
-          .addParam('FORNEC', Rows[i][6])
+          .addParam('COD_CLIFOR', VInt(Rows[i][0]))
+          .addParam('RAZAO', VStr(Rows[i][1]))
+          .addParam('COD_ESTADO', VStr(Rows[i][2]))
+          .addParam('FANTASIA', VStr(Rows[i][3]))
+          .addParam('COD_PAIS', VStr(Rows[i][4]))
+          .addParam('CLIENTE', VStr(Rows[i][5]))
+          .addParam('FORNEC', VStr(Rows[i][6]))
           .execSql;
+
+    Q.active(False).sqlClear.sqlAdd('delete from PEDIDO_COMPRA')
+    .execSql();
 
     Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet3.xml', Shared);
     for i := 0 to Length(Rows) - 1 do
-      if Length(Rows[i]) >= 19 then
+    begin
         Q.active(False).sqlClear
           .sqlAdd('insert into PEDIDO_COMPRA (COD_PEDIDOCOMPRA, COD_CLIFOR, COD_USUARIO, TOTAL, COD_EMPRESA, COD_FILIAL, COD_DEPARTAMENTO, COD_CENTRO_CUSTO, DT_EMISSAO, COD_CONDPAGTO, ORDEM_COMPRA, VALOR_IMPOSTOS, COD_COMPRADOR, PESO, VOLUME, COD_TIPOFRETE, DATA_PREVISTA_ENTREGA, DT_ENTREGA, TIPO_COMPRA) values (:COD_PEDIDOCOMPRA, :COD_CLIFOR, :COD_USUARIO, :TOTAL, :COD_EMPRESA, :COD_FILIAL, :COD_DEPARTAMENTO, :COD_CENTRO_CUSTO, :DT_EMISSAO, :COD_CONDPAGTO, :ORDEM_COMPRA, :VALOR_IMPOSTOS, :COD_COMPRADOR, :PESO, :VOLUME, :COD_TIPOFRETE, :DATA_PREVISTA_ENTREGA, :DT_ENTREGA, :TIPO_COMPRA)')
-          .addParam('COD_PEDIDOCOMPRA', Rows[i][0])
-          .addParam('COD_CLIFOR', Rows[i][1])
-          .addParam('COD_USUARIO', Rows[i][2])
-          .addParam('TOTAL', Rows[i][3])
-          .addParam('COD_EMPRESA', Rows[i][4])
-          .addParam('COD_FILIAL', Rows[i][5])
-          .addParam('COD_DEPARTAMENTO', Rows[i][6])
-          .addParam('COD_CENTRO_CUSTO', Rows[i][7])
-          .addParam('DT_EMISSAO', Rows[i][8])
-          .addParam('COD_CONDPAGTO', Rows[i][9])
-          .addParam('ORDEM_COMPRA', Rows[i][10])
-          .addParam('VALOR_IMPOSTOS', Rows[i][11])
-          .addParam('COD_COMPRADOR', Rows[i][12])
-          .addParam('PESO', Rows[i][13])
-          .addParam('VOLUME', Rows[i][14])
-          .addParam('COD_TIPOFRETE', Rows[i][15])
-          .addParam('DATA_PREVISTA_ENTREGA', Rows[i][16])
-          .addParam('DT_ENTREGA', Rows[i][17])
-          .addParam('TIPO_COMPRA', Rows[i][18])
+          .addParam('COD_PEDIDOCOMPRA', VInt(Rows[i][0]))
+          .addParam('COD_CLIFOR', VInt(Rows[i][1]))
+          .addParam('COD_USUARIO', VInt(Rows[i][2]))
+          .addParam('TOTAL', VFloat(Rows[i][3]))
+          .addParam('COD_EMPRESA', VInt(Rows[i][4]))
+          .addParam('COD_FILIAL', VInt(Rows[i][5]))
+          .addParam('COD_DEPARTAMENTO', VInt(Rows[i][6]))
+          .addParam('COD_CENTRO_CUSTO', VInt(Rows[i][7]))
+          .addParam('DT_EMISSAO', VDate(Rows[i][8]))
+          .addParam('COD_CONDPAGTO', VInt(Rows[i][9]))
+          .addParam('ORDEM_COMPRA', VStr(Rows[i][10]))
+          .addParam('VALOR_IMPOSTOS', VFloat(Rows[i][11]))
+          .addParam('COD_COMPRADOR', VInt(Rows[i][12]))
+          .addParam('PESO', VFloat(Rows[i][13]))
+          .addParam('VOLUME', VFloat(Rows[i][14]))
+          .addParam('COD_TIPOFRETE', VInt(Rows[i][15]))
+          .addParam('DATA_PREVISTA_ENTREGA', VDate(Rows[i][16]))
+          .addParam('DT_ENTREGA', VDate(Rows[i][17]))
+          .addParam('TIPO_COMPRA', VStr(Rows[i][18]))
           .execSql;
+    end;
 
+    Q.active(False).sqlClear.sqlAdd('delete from PEDCOMPRA_ITEM')
+    .execSql();
     Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet2.xml', Shared);
     for i := 0 to Length(Rows) - 1 do
-      if Length(Rows[i]) >= 19 then
+      if Length(Rows[i]) >= 5 then
         Q.active(False).sqlClear
-          .sqlAdd('insert into PEDCOMPRA_ITEM (COD_PEDIDOCOMPRA, COD_PRODUTO, QUANTIDADE, VL_UNITARIO, VL_TOTAL, COD_EMPRESA, COD_FILIAL, COD_DEPARTAMENTO, COD_CENTRO_CUSTO, DESCONTO, ACRESCIMO, IPI, VALOR_IPI, PESO, VOLUME, SEQUENCIA, DT_INCLUSAO, DT_SOLICITADA, DT_RECEBIDA) values (:COD_PEDIDOCOMPRA, :COD_PRODUTO, :QUANTIDADE, :VL_UNITARIO, :VL_TOTAL, :COD_EMPRESA, :COD_FILIAL, :COD_DEPARTAMENTO, :COD_CENTRO_CUSTO, :DESCONTO, :ACRESCIMO, :IPI, :VALOR_IPI, :PESO, :VOLUME, :SEQUENCIA, :DT_INCLUSAO, :DT_SOLICITADA, :DT_RECEBIDA)')
-          .addParam('COD_PEDIDOCOMPRA', Rows[i][0])
-          .addParam('COD_PRODUTO', Rows[i][1])
-          .addParam('QUANTIDADE', Rows[i][2])
-          .addParam('VL_UNITARIO', Rows[i][3])
-          .addParam('VL_TOTAL', Rows[i][4])
-          .addParam('COD_EMPRESA', Rows[i][5])
-          .addParam('COD_FILIAL', Rows[i][6])
-          .addParam('COD_DEPARTAMENTO', Rows[i][7])
-          .addParam('COD_CENTRO_CUSTO', Rows[i][8])
-          .addParam('DESCONTO', Rows[i][9])
-          .addParam('ACRESCIMO', Rows[i][10])
-          .addParam('IPI', Rows[i][11])
-          .addParam('VALOR_IPI', Rows[i][12])
-          .addParam('PESO', Rows[i][13])
-          .addParam('VOLUME', Rows[i][14])
-          .addParam('SEQUENCIA', Rows[i][15])
-          .addParam('DT_INCLUSAO', Rows[i][16])
-          .addParam('DT_SOLICITADA', Rows[i][17])
-          .addParam('DT_RECEBIDA', Rows[i][18])
+          .sqlAdd('insert into PEDCOMPRA_ITEM (COD_PEDIDOCOMPRA, COD_PRODUTO, QUANTIDADE, VL_UNITARIO, VL_TOTAL) values (:COD_PEDIDOCOMPRA, :COD_PRODUTO, :QUANTIDADE, :VL_UNITARIO, :VL_TOTAL)')
+          .addParam('COD_PEDIDOCOMPRA', VInt(Rows[i][0]))
+          .addParam('COD_PRODUTO', VInt(Rows[i][1]))
+          .addParam('QUANTIDADE', VFloat(Rows[i][2]))
+          .addParam('VL_UNITARIO', VFloat(Rows[i][3]))
+          .addParam('VL_TOTAL', VFloat(Rows[i][4]))
           .execSql;
   finally
     Zip.Close;
