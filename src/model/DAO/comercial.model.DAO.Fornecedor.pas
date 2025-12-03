@@ -122,10 +122,23 @@ begin
   Result := Self;
   try
     FQuery.active(False)
-      .sqlClear
-      .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC)')
-      .sqlAdd('values ((select coalesce(max(COD_CLIFOR),0)+1 from FORNECEDORES),')
-      .sqlAdd(':RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)')
+      .sqlClear;
+
+    if FEntity.COD_CLIFOR > 0 then
+    begin
+      FQuery
+        .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC)')
+        .sqlAdd('values (:COD_CLIFOR, :RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)')
+        .addParam('COD_CLIFOR', FEntity.COD_CLIFOR);
+    end
+    else
+    begin
+      FQuery
+        .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC)')
+        .sqlAdd('values ((select coalesce(max(COD_CLIFOR),0)+1 from FORNECEDORES), :RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)');
+    end;
+
+    FQuery
       .addParam('RAZAO', FEntity.RAZAO)
       .addParam('COD_ESTADO', FEntity.COD_ESTADO)
       .addParam('FANTASIA', FEntity.FANTASIA)

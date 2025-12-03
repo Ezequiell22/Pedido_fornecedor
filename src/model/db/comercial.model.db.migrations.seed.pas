@@ -23,7 +23,13 @@ uses
   Xml.XMLIntf,
   Data.DB,
   comercial.model.resource.interfaces,
-  comercial.model.resource.impl.queryFD;
+  comercial.model.resource.impl.queryFD,
+  comercial.model.entity.Fornecedor,
+  comercial.model.entity.PedidoCompra,
+  comercial.model.entity.PedcompraItem,
+  comercial.model.DAO.Fornecedor,
+  comercial.model.DAO.PedidoCompra,
+  comercial.model.DAO.PedcompraItem;
 
 procedure TDbMigrationsSeed.Apply(const AExcelPath: string);
 var
@@ -218,6 +224,77 @@ begin
   end;
 end;
 
+function ReadSheetHeader(const Zip: TZipFile; const SheetPath: string; const Shared: TArray<string>): TArray<string>;
+var
+  doc: IXMLDocument;
+  worksheetNode, sheetData, rowNode, cellNode, vNode: IXMLNode;
+  maxCol, j, cIdx: Integer;
+  ref, tVal, vText: string;
+begin
+  SetLength(Result, 0);
+  doc := LoadXmlFromZip(Zip, SheetPath);
+  if (doc = nil) or (doc.DocumentElement = nil) then Exit;
+  worksheetNode := doc.DocumentElement;
+  sheetData := FindChildByLocalName(worksheetNode, 'sheetData');
+  if sheetData = nil then Exit;
+  if sheetData.ChildNodes.Count = 0 then Exit;
+  rowNode := sheetData.ChildNodes[0];
+  if not SameText(LocalName(rowNode.NodeName), 'row') then Exit;
+  maxCol := 0;
+  for j := 0 to rowNode.ChildNodes.Count - 1 do
+  begin
+    cellNode := rowNode.ChildNodes[j];
+    if not SameText(LocalName(cellNode.NodeName), 'c') then
+      Continue;
+    ref := VarToStr(cellNode.Attributes['r']);
+    cIdx := ColIndex(ref);
+    if cIdx > maxCol then maxCol := cIdx;
+  end;
+  SetLength(Result, maxCol + 1);
+  for j := 0 to rowNode.ChildNodes.Count - 1 do
+  begin
+    cellNode := rowNode.ChildNodes[j];
+    if not SameText(LocalName(cellNode.NodeName), 'c') then
+      Continue;
+    ref := VarToStr(cellNode.Attributes['r']);
+    cIdx := ColIndex(ref);
+    tVal := VarToStr(cellNode.Attributes['t']);
+    vNode := FindChildByLocalName(cellNode, 'v');
+    vText := '';
+    if vNode <> nil then
+      vText := vNode.Text;
+    if SameText(tVal, 's') then
+    begin
+      if (Length(Shared) > 0) and (vText <> '') then
+        vText := Shared[StrToIntDef(vText, 0)];
+    end;
+    Result[cIdx] := Trim(vText);
+  end;
+end;
+
+function IndexOfHeader(const Header: TArray<string>; const Name: string): Integer;
+var
+  i: Integer;
+begin
+  Result := -1;
+  for i := 0 to Length(Header) - 1 do
+    if SameText(Header[i], Name) then
+      Exit(i);
+end;
+
+function HasAllColumns(const Header: TArray<string>; const Names: array of string): Boolean;
+var
+  i: Integer;
+begin
+  Result := True;
+  for i := Low(Names) to High(Names) do
+    if IndexOfHeader(Header, Names[i]) < 0 then
+    begin
+      Result := False;
+      Exit;
+    end;
+end;
+
 function VStr(const S: string): Variant;
 begin
   if Trim(S) = '' then
@@ -270,73 +347,124 @@ var
   Rows: TArray<TArray<string>>;
   Q: iQuery;
   i: Integer;
+  daoF: iModelDAOEntity<TModelEntityFornecedor>;
+  daoP: iModelDAOEntity<TModelEntityPedidoCompra>;
+  daoI: iModelDAOEntity<TModelEntityPedcompraItem>;
 begin
   Zip := TZipFile.Create;
   try
     Zip.Open(AFilePath, zmRead);
     Shared := ReadSharedStrings(Zip);
     Q := TModelResourceQueryFD.New;
+    daoF := TModelDAOFornecedor.New;
+    daoP := TModelDAOPedidoCompra.New;
+    daoI := TModelDAOPedcompraItem.New;
 
     Q.active(False).sqlClear.sqlAdd('delete from fornecedores')
     .execSql();
 
-    Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet1.xml', Shared);
-    for i := 0 to Length(Rows) - 1 do
-      if Length(Rows[i]) >= 7 then
-        Q.active(False).sqlClear
-          .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC) values (:COD_CLIFOR, :RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)')
-          .addParam('COD_CLIFOR', VInt(Rows[i][0]))
-          .addParam('RAZAO', VStr(Rows[i][1]))
-          .addParam('COD_ESTADO', VStr(Rows[i][2]))
-          .addParam('FANTASIA', VStr(Rows[i][3]))
-          .addParam('COD_PAIS', VStr(Rows[i][4]))
-          .addParam('CLIENTE', VStr(Rows[i][5]))
-          .addParam('FORNEC', VStr(Rows[i][6]))
-          .execSql;
+    var H1 := ReadSheetHeader(Zip, 'xl/worksheets/sheet1.xml', Shared);
+    if HasAllColumns(H1, ['COD_CLIFOR','RAZAO','COD_ESTADO','FANTASIA','COD_PAIS','CLIENTE','FORNEC']) then
+    begin
+      var idxCOD_CLIFOR := IndexOfHeader(H1, 'COD_CLIFOR');
+      var idxRAZAO := IndexOfHeader(H1, 'RAZAO');
+      var idxCOD_ESTADO := IndexOfHeader(H1, 'COD_ESTADO');
+      var idxFANTASIA := IndexOfHeader(H1, 'FANTASIA');
+      var idxCOD_PAIS := IndexOfHeader(H1, 'COD_PAIS');
+      var idxCLIENTE := IndexOfHeader(H1, 'CLIENTE');
+      var idxFORNEC := IndexOfHeader(H1, 'FORNEC');
+      Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet1.xml', Shared);
+      for i := 0 to Length(Rows) - 1 do
+      begin
+        daoF.This
+          .COD_CLIFOR(VarAsType(VInt(Rows[i][idxCOD_CLIFOR]), varInteger))
+          .RAZAO(VarToStr(VStr(Rows[i][idxRAZAO])))
+          .COD_ESTADO(VarToStr(VStr(Rows[i][idxCOD_ESTADO])))
+          .FANTASIA(VarToStr(VStr(Rows[i][idxFANTASIA])))
+          .COD_PAIS(VarToStr(VStr(Rows[i][idxCOD_PAIS])))
+          .CLIENTE(VarToStr(VStr(Rows[i][idxCLIENTE])))
+          .FORNEC(VarToStr(VStr(Rows[i][idxFORNEC])))
+          .End
+          .Insert;
+      end;
+    end;
 
     Q.active(False).sqlClear.sqlAdd('delete from PEDIDO_COMPRA')
     .execSql();
 
-    Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet3.xml', Shared);
-    for i := 0 to Length(Rows) - 1 do
+    var H3 := ReadSheetHeader(Zip, 'xl/worksheets/sheet3.xml', Shared);
+    if HasAllColumns(H3, ['COD_PEDIDOCOMPRA','COD_EMPRESA','COD_CLIFOR','COD_MOEDA','DT_EMISSAO','DT_PREVISTAENTREGA','DT_ENTREGA','TIPO_COMPRA']) then
     begin
-        Q.active(False).sqlClear
-          .sqlAdd('insert into PEDIDO_COMPRA (COD_PEDIDOCOMPRA, COD_CLIFOR, COD_USUARIO, TOTAL, COD_EMPRESA, COD_FILIAL, COD_DEPARTAMENTO, COD_CENTRO_CUSTO, DT_EMISSAO, COD_CONDPAGTO, ORDEM_COMPRA, VALOR_IMPOSTOS, COD_COMPRADOR, PESO, VOLUME, COD_TIPOFRETE, DATA_PREVISTA_ENTREGA, DT_ENTREGA, TIPO_COMPRA) values (:COD_PEDIDOCOMPRA, :COD_CLIFOR, :COD_USUARIO, :TOTAL, :COD_EMPRESA, :COD_FILIAL, :COD_DEPARTAMENTO, :COD_CENTRO_CUSTO, :DT_EMISSAO, :COD_CONDPAGTO, :ORDEM_COMPRA, :VALOR_IMPOSTOS, :COD_COMPRADOR, :PESO, :VOLUME, :COD_TIPOFRETE, :DATA_PREVISTA_ENTREGA, :DT_ENTREGA, :TIPO_COMPRA)')
-          .addParam('COD_PEDIDOCOMPRA', VInt(Rows[i][0]))
-          .addParam('COD_CLIFOR', VInt(Rows[i][1]))
-          .addParam('COD_USUARIO', VInt(Rows[i][2]))
-          .addParam('TOTAL', VFloat(Rows[i][3]))
-          .addParam('COD_EMPRESA', VInt(Rows[i][4]))
-          .addParam('COD_FILIAL', VInt(Rows[i][5]))
-          .addParam('COD_DEPARTAMENTO', VInt(Rows[i][6]))
-          .addParam('COD_CENTRO_CUSTO', VInt(Rows[i][7]))
-          .addParam('DT_EMISSAO', VDate(Rows[i][8]))
-          .addParam('COD_CONDPAGTO', VInt(Rows[i][9]))
-          .addParam('ORDEM_COMPRA', VStr(Rows[i][10]))
-          .addParam('VALOR_IMPOSTOS', VFloat(Rows[i][11]))
-          .addParam('COD_COMPRADOR', VInt(Rows[i][12]))
-          .addParam('PESO', VFloat(Rows[i][13]))
-          .addParam('VOLUME', VFloat(Rows[i][14]))
-          .addParam('COD_TIPOFRETE', VInt(Rows[i][15]))
-          .addParam('DATA_PREVISTA_ENTREGA', VDate(Rows[i][16]))
-          .addParam('DT_ENTREGA', VDate(Rows[i][17]))
-          .addParam('TIPO_COMPRA', VStr(Rows[i][18]))
-          .execSql;
+      var iCOD_PEDIDOCOMPRA := IndexOfHeader(H3, 'COD_PEDIDOCOMPRA');
+      var iCOD_EMPRESA := IndexOfHeader(H3, 'COD_EMPRESA');
+      var iCOD_CLIFOR := IndexOfHeader(H3, 'COD_CLIFOR');
+      var iCOD_MOEDA := IndexOfHeader(H3, 'COD_MOEDA');
+      var iDT_EMISSAO := IndexOfHeader(H3, 'DT_EMISSAO');
+      var iDT_PREVISTA := IndexOfHeader(H3, 'DT_PREVISTAENTREGA');
+      var iDT_ENTREGA := IndexOfHeader(H3, 'DT_ENTREGA');
+      var iTIPO := IndexOfHeader(H3, 'TIPO_COMPRA');
+      Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet3.xml', Shared);
+      for i := 0 to Length(Rows) - 1 do
+      begin
+        daoP.This
+          .COD_PEDIDOCOMPRA(VarAsType(VInt(Rows[i][iCOD_PEDIDOCOMPRA]), varInteger))
+          .COD_EMPRESA(VarAsType(VInt(Rows[i][iCOD_EMPRESA]), varInteger))
+          .COD_CLIFOR(VarAsType(VInt(Rows[i][iCOD_CLIFOR]), varInteger))
+          .COD_MOEDA(VarToStr(VStr(Rows[i][iCOD_MOEDA])))
+          .DT_EMISSAO(VarToDateTime(VDate(Rows[i][iDT_EMISSAO])))
+          .DT_PREVISTAENTREGA(VarToDateTime(VDate(Rows[i][iDT_PREVISTA])))
+          .DT_ENTREGA(VarToDateTime(VDate(Rows[i][iDT_ENTREGA])))
+          .TIPO_COMPRA(VarToStr(VStr(Rows[i][iTIPO])))
+          .End
+          .Insert;
+      end;
     end;
 
     Q.active(False).sqlClear.sqlAdd('delete from PEDCOMPRA_ITEM')
     .execSql();
-    Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet2.xml', Shared);
-    for i := 0 to Length(Rows) - 1 do
-      if Length(Rows[i]) >= 5 then
-        Q.active(False).sqlClear
-          .sqlAdd('insert into PEDCOMPRA_ITEM (COD_PEDIDOCOMPRA, COD_PRODUTO, QUANTIDADE, VL_UNITARIO, VL_TOTAL) values (:COD_PEDIDOCOMPRA, :COD_PRODUTO, :QUANTIDADE, :VL_UNITARIO, :VL_TOTAL)')
-          .addParam('COD_PEDIDOCOMPRA', VInt(Rows[i][0]))
-          .addParam('COD_PRODUTO', VInt(Rows[i][1]))
-          .addParam('QUANTIDADE', VFloat(Rows[i][2]))
-          .addParam('VL_UNITARIO', VFloat(Rows[i][3]))
-          .addParam('VL_TOTAL', VFloat(Rows[i][4]))
-          .execSql;
+    var H2 := ReadSheetHeader(Zip, 'xl/worksheets/sheet2.xml', Shared);
+    if HasAllColumns(H2, ['COD_PEDIDOCOMPRA','COD_EMPRESA','SEQUENCIA','COD_Item','COD_unidadecompra','QTDE_PEDIDA','QTDE_RECEBIDA','DESCRICAO','PRECO_UNITARIO','PERC_DESCTO','VALOR_DESCTO','PERC_FINANC','VALOR_TOTAL','DT_INCLUSAO','DT_SOLICITADA','DT_RECEBIDA']) then
+    begin
+      var iCOD_PED := IndexOfHeader(H2, 'COD_PEDIDOCOMPRA');
+      var iCOD_EMP := IndexOfHeader(H2, 'COD_EMPRESA');
+      var iSEQ := IndexOfHeader(H2, 'SEQUENCIA');
+      var iCOD_ITEM := IndexOfHeader(H2, 'COD_Item');
+      var iCOD_UN := IndexOfHeader(H2, 'COD_unidadecompra');
+      var iQTDE_PED := IndexOfHeader(H2, 'QTDE_PEDIDA');
+      var iQTDE_REC := IndexOfHeader(H2, 'QTDE_RECEBIDA');
+      var iDESC := IndexOfHeader(H2, 'DESCRICAO');
+      var iPRECO := IndexOfHeader(H2, 'PRECO_UNITARIO');
+      var iPERC_DESC := IndexOfHeader(H2, 'PERC_DESCTO');
+      var iVAL_DESC := IndexOfHeader(H2, 'VALOR_DESCTO');
+      var iPERC_FIN := IndexOfHeader(H2, 'PERC_FINANC');
+      var iVAL_TOTAL := IndexOfHeader(H2, 'VALOR_TOTAL');
+      var iDT_INC := IndexOfHeader(H2, 'DT_INCLUSAO');
+      var iDT_SOL := IndexOfHeader(H2, 'DT_SOLICITADA');
+      var iDT_REC := IndexOfHeader(H2, 'DT_RECEBIDA');
+      Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet2.xml', Shared);
+      for i := 0 to Length(Rows) - 1 do
+      begin
+        daoI.This
+          .COD_PEDIDOCOMPRA(VarAsType(VInt(Rows[i][iCOD_PED]), varInteger))
+          .COD_EMPRESA(VarAsType(VInt(Rows[i][iCOD_EMP]), varInteger))
+          .SEQUENCIA(VarAsType(VInt(Rows[i][iSEQ]), varInteger))
+          .COD_Item(VarAsType(VInt(Rows[i][iCOD_ITEM]), varInteger))
+          .COD_unidadecompra(VarToStr(VStr(Rows[i][iCOD_UN])))
+          .QTDE_PEDIDA(VarAsType(VFloat(Rows[i][iQTDE_PED]), varDouble))
+          .QTDE_RECEBIDA(VarAsType(VFloat(Rows[i][iQTDE_REC]), varDouble))
+          .DESCRICAO(VarToStr(VStr(Rows[i][iDESC])))
+          .PRECO_UNITARIO(VarAsType(VFloat(Rows[i][iPRECO]), varDouble))
+          .PERC_DESCTO(VarAsType(VFloat(Rows[i][iPERC_DESC]), varDouble))
+          .VALOR_DESCTO(VarAsType(VFloat(Rows[i][iVAL_DESC]), varDouble))
+          .PERC_FINANC(VarAsType(VFloat(Rows[i][iPERC_FIN]), varDouble))
+          .VALOR_TOTAL(VarAsType(VFloat(Rows[i][iVAL_TOTAL]), varDouble))
+          .DT_INCLUSAO(VarToDateTime(VDate(Rows[i][iDT_INC])))
+          .DT_SOLICITADA(VarToDateTime(VDate(Rows[i][iDT_SOL])))
+          .DT_RECEBIDA(VarToDateTime(VDate(Rows[i][iDT_REC])))
+          .End
+          .Insert;
+      end;
+    end;
   finally
     Zip.Close;
     Zip.Free;
@@ -344,4 +472,3 @@ begin
 end;
 
 end.
-

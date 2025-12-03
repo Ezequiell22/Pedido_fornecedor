@@ -12,21 +12,18 @@ type
     [weak]
     FParent: iModelDAOEntity<TModelEntityPedcompraItem>;
     FCOD_PEDIDOCOMPRA: Integer;
-    FCOD_PRODUTO: Integer;
-    FQUANTIDADE: Double;
-    FVL_UNITARIO: Double;
-    FVL_TOTAL: Double;
     FCOD_EMPRESA: Integer;
-    FCOD_FILIAL: Integer;
-    FCOD_DEPARTAMENTO: Integer;
-    FCOD_CENTRO_CUSTO: Integer;
-    FDESCONTO: Double;
-    FACRESCIMO: Double;
-    FIPI: Double;
-    FVALOR_IPI: Double;
-    FPESO: Double;
-    FVOLUME: Double;
     FSEQUENCIA: Integer;
+    FCOD_Item: Integer;
+    FCOD_unidadecompra: string;
+    FQTDE_PEDIDA: Double;
+    FQTDE_RECEBIDA: Double;
+    FDESCRICAO: string;
+    FPRECO_UNITARIO: Double;
+    FPERC_DESCTO: Double;
+    FVALOR_DESCTO: Double;
+    FPERC_FINANC: Double;
+    FVALOR_TOTAL: Double;
     FDT_INCLUSAO: TDateTime;
     FDT_SOLICITADA: TDateTime;
     FDT_RECEBIDA: TDateTime;
@@ -35,36 +32,30 @@ type
     destructor Destroy; override;
     function COD_PEDIDOCOMPRA(aValue: Integer): TModelEntityPedcompraItem; overload;
     function COD_PEDIDOCOMPRA: Integer; overload;
-    function COD_PRODUTO(aValue: Integer): TModelEntityPedcompraItem; overload;
-    function COD_PRODUTO: Integer; overload;
-    function QUANTIDADE(aValue: Double): TModelEntityPedcompraItem; overload;
-    function QUANTIDADE: Double; overload;
-    function VL_UNITARIO(aValue: Double): TModelEntityPedcompraItem; overload;
-    function VL_UNITARIO: Double; overload;
-    function VL_TOTAL(aValue: Double): TModelEntityPedcompraItem; overload;
-    function VL_TOTAL: Double; overload;
     function COD_EMPRESA(aValue: Integer): TModelEntityPedcompraItem; overload;
     function COD_EMPRESA: Integer; overload;
-    function COD_FILIAL(aValue: Integer): TModelEntityPedcompraItem; overload;
-    function COD_FILIAL: Integer; overload;
-    function COD_DEPARTAMENTO(aValue: Integer): TModelEntityPedcompraItem; overload;
-    function COD_DEPARTAMENTO: Integer; overload;
-    function COD_CENTRO_CUSTO(aValue: Integer): TModelEntityPedcompraItem; overload;
-    function COD_CENTRO_CUSTO: Integer; overload;
-    function DESCONTO(aValue: Double): TModelEntityPedcompraItem; overload;
-    function DESCONTO: Double; overload;
-    function ACRESCIMO(aValue: Double): TModelEntityPedcompraItem; overload;
-    function ACRESCIMO: Double; overload;
-    function IPI(aValue: Double): TModelEntityPedcompraItem; overload;
-    function IPI: Double; overload;
-    function VALOR_IPI(aValue: Double): TModelEntityPedcompraItem; overload;
-    function VALOR_IPI: Double; overload;
-    function PESO(aValue: Double): TModelEntityPedcompraItem; overload;
-    function PESO: Double; overload;
-    function VOLUME(aValue: Double): TModelEntityPedcompraItem; overload;
-    function VOLUME: Double; overload;
     function SEQUENCIA(aValue: Integer): TModelEntityPedcompraItem; overload;
     function SEQUENCIA: Integer; overload;
+    function COD_Item(aValue: Integer): TModelEntityPedcompraItem; overload;
+    function COD_Item: Integer; overload;
+    function COD_unidadecompra(aValue: string): TModelEntityPedcompraItem; overload;
+    function COD_unidadecompra: string; overload;
+    function QTDE_PEDIDA(aValue: Double): TModelEntityPedcompraItem; overload;
+    function QTDE_PEDIDA: Double; overload;
+    function QTDE_RECEBIDA(aValue: Double): TModelEntityPedcompraItem; overload;
+    function QTDE_RECEBIDA: Double; overload;
+    function DESCRICAO(aValue: string): TModelEntityPedcompraItem; overload;
+    function DESCRICAO: string; overload;
+    function PRECO_UNITARIO(aValue: Double): TModelEntityPedcompraItem; overload;
+    function PRECO_UNITARIO: Double; overload;
+    function PERC_DESCTO(aValue: Double): TModelEntityPedcompraItem; overload;
+    function PERC_DESCTO: Double; overload;
+    function VALOR_DESCTO(aValue: Double): TModelEntityPedcompraItem; overload;
+    function VALOR_DESCTO: Double; overload;
+    function PERC_FINANC(aValue: Double): TModelEntityPedcompraItem; overload;
+    function PERC_FINANC: Double; overload;
+    function VALOR_TOTAL(aValue: Double): TModelEntityPedcompraItem; overload;
+    function VALOR_TOTAL: Double; overload;
     function DT_INCLUSAO(aValue: TDateTime): TModelEntityPedcompraItem; overload;
     function DT_INCLUSAO: TDateTime; overload;
     function DT_SOLICITADA(aValue: TDateTime): TModelEntityPedcompraItem; overload;
@@ -106,50 +97,6 @@ begin
   Result := FCOD_PEDIDOCOMPRA;
 end;
 
-function TModelEntityPedcompraItem.COD_PRODUTO(aValue: Integer): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FCOD_PRODUTO := aValue;
-end;
-
-function TModelEntityPedcompraItem.COD_PRODUTO: Integer;
-begin
-  Result := FCOD_PRODUTO;
-end;
-
-function TModelEntityPedcompraItem.QUANTIDADE(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FQUANTIDADE := aValue;
-end;
-
-function TModelEntityPedcompraItem.QUANTIDADE: Double;
-begin
-  Result := FQUANTIDADE;
-end;
-
-function TModelEntityPedcompraItem.VL_UNITARIO(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FVL_UNITARIO := aValue;
-end;
-
-function TModelEntityPedcompraItem.VL_UNITARIO: Double;
-begin
-  Result := FVL_UNITARIO;
-end;
-
-function TModelEntityPedcompraItem.VL_TOTAL(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FVL_TOTAL := aValue;
-end;
-
-function TModelEntityPedcompraItem.VL_TOTAL: Double;
-begin
-  Result := FVL_TOTAL;
-end;
-
 function TModelEntityPedcompraItem.COD_EMPRESA(aValue: Integer): TModelEntityPedcompraItem;
 begin
   Result := Self;
@@ -159,105 +106,6 @@ end;
 function TModelEntityPedcompraItem.COD_EMPRESA: Integer;
 begin
   Result := FCOD_EMPRESA;
-end;
-
-function TModelEntityPedcompraItem.COD_FILIAL(aValue: Integer): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FCOD_FILIAL := aValue;
-end;
-
-function TModelEntityPedcompraItem.COD_FILIAL: Integer;
-begin
-  Result := FCOD_FILIAL;
-end;
-
-function TModelEntityPedcompraItem.COD_DEPARTAMENTO(aValue: Integer): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FCOD_DEPARTAMENTO := aValue;
-end;
-
-function TModelEntityPedcompraItem.COD_DEPARTAMENTO: Integer;
-begin
-  Result := FCOD_DEPARTAMENTO;
-end;
-
-function TModelEntityPedcompraItem.COD_CENTRO_CUSTO(aValue: Integer): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FCOD_CENTRO_CUSTO := aValue;
-end;
-
-function TModelEntityPedcompraItem.COD_CENTRO_CUSTO: Integer;
-begin
-  Result := FCOD_CENTRO_CUSTO;
-end;
-
-function TModelEntityPedcompraItem.DESCONTO(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FDESCONTO := aValue;
-end;
-
-function TModelEntityPedcompraItem.DESCONTO: Double;
-begin
-  Result := FDESCONTO;
-end;
-
-function TModelEntityPedcompraItem.ACRESCIMO(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FACRESCIMO := aValue;
-end;
-
-function TModelEntityPedcompraItem.ACRESCIMO: Double;
-begin
-  Result := FACRESCIMO;
-end;
-
-function TModelEntityPedcompraItem.IPI(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FIPI := aValue;
-end;
-
-function TModelEntityPedcompraItem.IPI: Double;
-begin
-  Result := FIPI;
-end;
-
-function TModelEntityPedcompraItem.VALOR_IPI(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FVALOR_IPI := aValue;
-end;
-
-function TModelEntityPedcompraItem.VALOR_IPI: Double;
-begin
-  Result := FVALOR_IPI;
-end;
-
-function TModelEntityPedcompraItem.PESO(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FPESO := aValue;
-end;
-
-function TModelEntityPedcompraItem.PESO: Double;
-begin
-  Result := FPESO;
-end;
-
-function TModelEntityPedcompraItem.VOLUME(aValue: Double): TModelEntityPedcompraItem;
-begin
-  Result := Self;
-  FVOLUME := aValue;
-end;
-
-function TModelEntityPedcompraItem.VOLUME: Double;
-begin
-  Result := FVOLUME;
 end;
 
 function TModelEntityPedcompraItem.SEQUENCIA(aValue: Integer): TModelEntityPedcompraItem;
@@ -270,6 +118,117 @@ function TModelEntityPedcompraItem.SEQUENCIA: Integer;
 begin
   Result := FSEQUENCIA;
 end;
+
+function TModelEntityPedcompraItem.COD_Item(aValue: Integer): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FCOD_Item := aValue;
+end;
+
+function TModelEntityPedcompraItem.COD_Item: Integer;
+begin
+  Result := FCOD_Item;
+end;
+
+function TModelEntityPedcompraItem.COD_unidadecompra(aValue: string): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FCOD_unidadecompra := aValue;
+end;
+
+function TModelEntityPedcompraItem.COD_unidadecompra: string;
+begin
+  Result := FCOD_unidadecompra;
+end;
+
+function TModelEntityPedcompraItem.QTDE_PEDIDA(aValue: Double): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FQTDE_PEDIDA := aValue;
+end;
+
+function TModelEntityPedcompraItem.QTDE_PEDIDA: Double;
+begin
+  Result := FQTDE_PEDIDA;
+end;
+
+function TModelEntityPedcompraItem.QTDE_RECEBIDA(aValue: Double): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FQTDE_RECEBIDA := aValue;
+end;
+
+function TModelEntityPedcompraItem.QTDE_RECEBIDA: Double;
+begin
+  Result := FQTDE_RECEBIDA;
+end;
+
+function TModelEntityPedcompraItem.DESCRICAO(aValue: string): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FDESCRICAO := aValue;
+end;
+
+function TModelEntityPedcompraItem.DESCRICAO: string;
+begin
+  Result := FDESCRICAO;
+end;
+
+function TModelEntityPedcompraItem.PRECO_UNITARIO(aValue: Double): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FPRECO_UNITARIO := aValue;
+end;
+
+function TModelEntityPedcompraItem.PRECO_UNITARIO: Double;
+begin
+  Result := FPRECO_UNITARIO;
+end;
+
+function TModelEntityPedcompraItem.PERC_DESCTO(aValue: Double): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FPERC_DESCTO := aValue;
+end;
+
+function TModelEntityPedcompraItem.PERC_DESCTO: Double;
+begin
+  Result := FPERC_DESCTO;
+end;
+
+function TModelEntityPedcompraItem.VALOR_DESCTO(aValue: Double): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FVALOR_DESCTO := aValue;
+end;
+
+function TModelEntityPedcompraItem.VALOR_DESCTO: Double;
+begin
+  Result := FVALOR_DESCTO;
+end;
+
+function TModelEntityPedcompraItem.PERC_FINANC(aValue: Double): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FPERC_FINANC := aValue;
+end;
+
+function TModelEntityPedcompraItem.PERC_FINANC: Double;
+begin
+  Result := FPERC_FINANC;
+end;
+
+function TModelEntityPedcompraItem.VALOR_TOTAL(aValue: Double): TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FVALOR_TOTAL := aValue;
+end;
+
+function TModelEntityPedcompraItem.VALOR_TOTAL: Double;
+begin
+  Result := FVALOR_TOTAL;
+end;
+
 
 function TModelEntityPedcompraItem.DT_INCLUSAO(aValue: TDateTime): TModelEntityPedcompraItem;
 begin

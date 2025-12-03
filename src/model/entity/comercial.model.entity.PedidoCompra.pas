@@ -12,22 +12,11 @@ type
     [weak]
     FParent: iModelDAOEntity<TModelEntityPedidoCompra>;
     FCOD_PEDIDOCOMPRA: Integer;
-    FCOD_CLIFOR: Integer;
-    FCOD_USUARIO: Integer;
-    FTOTAL: Double;
     FCOD_EMPRESA: Integer;
-    FCOD_FILIAL: Integer;
-    FCOD_DEPARTAMENTO: Integer;
-    FCOD_CENTRO_CUSTO: Integer;
+    FCOD_CLIFOR: Integer;
+    FCOD_MOEDA: string;
     FDT_EMISSAO: TDateTime;
-    FCOD_CONDPAGTO: Integer;
-    FORDEM_COMPRA: string;
-    FVALOR_IMPOSTOS: Double;
-    FCOD_COMPRADOR: Integer;
-    FPESO: Double;
-    FVOLUME: Double;
-    FCOD_TIPOFRETE: Integer;
-    FDATA_PREVISTA_ENTREGA: TDateTime;
+    FDT_PREVISTAENTREGA: TDateTime;
     FDT_ENTREGA: TDateTime;
     FTIPO_COMPRA: string;
   public
@@ -35,38 +24,16 @@ type
     destructor Destroy; override;
     function COD_PEDIDOCOMPRA(aValue: Integer): TModelEntityPedidoCompra; overload;
     function COD_PEDIDOCOMPRA: Integer; overload;
-    function COD_CLIFOR(aValue: Integer): TModelEntityPedidoCompra; overload;
-    function COD_CLIFOR: Integer; overload;
-    function COD_USUARIO(aValue: Integer): TModelEntityPedidoCompra; overload;
-    function COD_USUARIO: Integer; overload;
-    function TOTAL(aValue: Double): TModelEntityPedidoCompra; overload;
-    function TOTAL: Double; overload;
     function COD_EMPRESA(aValue: Integer): TModelEntityPedidoCompra; overload;
     function COD_EMPRESA: Integer; overload;
-    function COD_FILIAL(aValue: Integer): TModelEntityPedidoCompra; overload;
-    function COD_FILIAL: Integer; overload;
-    function COD_DEPARTAMENTO(aValue: Integer): TModelEntityPedidoCompra; overload;
-    function COD_DEPARTAMENTO: Integer; overload;
-    function COD_CENTRO_CUSTO(aValue: Integer): TModelEntityPedidoCompra; overload;
-    function COD_CENTRO_CUSTO: Integer; overload;
+    function COD_CLIFOR(aValue: Integer): TModelEntityPedidoCompra; overload;
+    function COD_CLIFOR: Integer; overload;
+    function COD_MOEDA(aValue: string): TModelEntityPedidoCompra; overload;
+    function COD_MOEDA: string; overload;
     function DT_EMISSAO(aValue: TDateTime): TModelEntityPedidoCompra; overload;
     function DT_EMISSAO: TDateTime; overload;
-    function COD_CONDPAGTO(aValue: Integer): TModelEntityPedidoCompra; overload;
-    function COD_CONDPAGTO: Integer; overload;
-    function ORDEM_COMPRA(aValue: string): TModelEntityPedidoCompra; overload;
-    function ORDEM_COMPRA: string; overload;
-    function VALOR_IMPOSTOS(aValue: Double): TModelEntityPedidoCompra; overload;
-    function VALOR_IMPOSTOS: Double; overload;
-    function COD_COMPRADOR(aValue: Integer): TModelEntityPedidoCompra; overload;
-    function COD_COMPRADOR: Integer; overload;
-    function PESO(aValue: Double): TModelEntityPedidoCompra; overload;
-    function PESO: Double; overload;
-    function VOLUME(aValue: Double): TModelEntityPedidoCompra; overload;
-    function VOLUME: Double; overload;
-    function COD_TIPOFRETE(aValue: Integer): TModelEntityPedidoCompra; overload;
-    function COD_TIPOFRETE: Integer; overload;
-    function DATA_PREVISTA_ENTREGA(aValue: TDateTime): TModelEntityPedidoCompra; overload;
-    function DATA_PREVISTA_ENTREGA: TDateTime; overload;
+    function DT_PREVISTAENTREGA(aValue: TDateTime): TModelEntityPedidoCompra; overload;
+    function DT_PREVISTAENTREGA: TDateTime; overload;
     function DT_ENTREGA(aValue: TDateTime): TModelEntityPedidoCompra; overload;
     function DT_ENTREGA: TDateTime; overload;
     function TIPO_COMPRA(aValue: string): TModelEntityPedidoCompra; overload;
@@ -117,28 +84,6 @@ begin
   Result := FCOD_CLIFOR;
 end;
 
-function TModelEntityPedidoCompra.COD_USUARIO(aValue: Integer): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FCOD_USUARIO := aValue;
-end;
-
-function TModelEntityPedidoCompra.COD_USUARIO: Integer;
-begin
-  Result := FCOD_USUARIO;
-end;
-
-function TModelEntityPedidoCompra.TOTAL(aValue: Double): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FTOTAL := aValue;
-end;
-
-function TModelEntityPedidoCompra.TOTAL: Double;
-begin
-  Result := FTOTAL;
-end;
-
 function TModelEntityPedidoCompra.COD_EMPRESA(aValue: Integer): TModelEntityPedidoCompra;
 begin
   Result := Self;
@@ -150,37 +95,15 @@ begin
   Result := FCOD_EMPRESA;
 end;
 
-function TModelEntityPedidoCompra.COD_FILIAL(aValue: Integer): TModelEntityPedidoCompra;
+function TModelEntityPedidoCompra.COD_MOEDA(aValue: string): TModelEntityPedidoCompra;
 begin
   Result := Self;
-  FCOD_FILIAL := aValue;
+  FCOD_MOEDA := aValue;
 end;
 
-function TModelEntityPedidoCompra.COD_FILIAL: Integer;
+function TModelEntityPedidoCompra.COD_MOEDA: string;
 begin
-  Result := FCOD_FILIAL;
-end;
-
-function TModelEntityPedidoCompra.COD_DEPARTAMENTO(aValue: Integer): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FCOD_DEPARTAMENTO := aValue;
-end;
-
-function TModelEntityPedidoCompra.COD_DEPARTAMENTO: Integer;
-begin
-  Result := FCOD_DEPARTAMENTO;
-end;
-
-function TModelEntityPedidoCompra.COD_CENTRO_CUSTO(aValue: Integer): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FCOD_CENTRO_CUSTO := aValue;
-end;
-
-function TModelEntityPedidoCompra.COD_CENTRO_CUSTO: Integer;
-begin
-  Result := FCOD_CENTRO_CUSTO;
+  Result := FCOD_MOEDA;
 end;
 
 function TModelEntityPedidoCompra.DT_EMISSAO(aValue: TDateTime): TModelEntityPedidoCompra;
@@ -194,92 +117,15 @@ begin
   Result := FDT_EMISSAO;
 end;
 
-function TModelEntityPedidoCompra.COD_CONDPAGTO(aValue: Integer): TModelEntityPedidoCompra;
+function TModelEntityPedidoCompra.DT_PREVISTAENTREGA(aValue: TDateTime): TModelEntityPedidoCompra;
 begin
   Result := Self;
-  FCOD_CONDPAGTO := aValue;
+  FDT_PREVISTAENTREGA := aValue;
 end;
 
-function TModelEntityPedidoCompra.COD_CONDPAGTO: Integer;
+function TModelEntityPedidoCompra.DT_PREVISTAENTREGA: TDateTime;
 begin
-  Result := FCOD_CONDPAGTO;
-end;
-
-function TModelEntityPedidoCompra.ORDEM_COMPRA(aValue: string): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FORDEM_COMPRA := aValue;
-end;
-
-function TModelEntityPedidoCompra.ORDEM_COMPRA: string;
-begin
-  Result := FORDEM_COMPRA;
-end;
-
-function TModelEntityPedidoCompra.VALOR_IMPOSTOS(aValue: Double): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FVALOR_IMPOSTOS := aValue;
-end;
-
-function TModelEntityPedidoCompra.VALOR_IMPOSTOS: Double;
-begin
-  Result := FVALOR_IMPOSTOS;
-end;
-
-function TModelEntityPedidoCompra.COD_COMPRADOR(aValue: Integer): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FCOD_COMPRADOR := aValue;
-end;
-
-function TModelEntityPedidoCompra.COD_COMPRADOR: Integer;
-begin
-  Result := FCOD_COMPRADOR;
-end;
-
-function TModelEntityPedidoCompra.PESO(aValue: Double): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FPESO := aValue;
-end;
-
-function TModelEntityPedidoCompra.PESO: Double;
-begin
-  Result := FPESO;
-end;
-
-function TModelEntityPedidoCompra.VOLUME(aValue: Double): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FVOLUME := aValue;
-end;
-
-function TModelEntityPedidoCompra.VOLUME: Double;
-begin
-  Result := FVOLUME;
-end;
-
-function TModelEntityPedidoCompra.COD_TIPOFRETE(aValue: Integer): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FCOD_TIPOFRETE := aValue;
-end;
-
-function TModelEntityPedidoCompra.COD_TIPOFRETE: Integer;
-begin
-  Result := FCOD_TIPOFRETE;
-end;
-
-function TModelEntityPedidoCompra.DATA_PREVISTA_ENTREGA(aValue: TDateTime): TModelEntityPedidoCompra;
-begin
-  Result := Self;
-  FDATA_PREVISTA_ENTREGA := aValue;
-end;
-
-function TModelEntityPedidoCompra.DATA_PREVISTA_ENTREGA: TDateTime;
-begin
-  Result := FDATA_PREVISTA_ENTREGA;
+  Result := FDT_PREVISTAENTREGA;
 end;
 
 function TModelEntityPedidoCompra.DT_ENTREGA(aValue: TDateTime): TModelEntityPedidoCompra;
