@@ -154,13 +154,17 @@ end;
 procedure TfrmListagemPedido.BtnEditarClick(Sender: TObject);
 var frm : TfrmPedido;
 begin
+  if DSPedidos.DataSet.IsEmpty then
+    exit;
+
   frm := TfrmPedido.Create(self);
 
   try
     frm.Caption := 'Editar Pedido';
     frm.edtIdPedido.Text := DSPedidos.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsString;
     frm.FIDEMPRESA := DSPedidos.DataSet.FieldByName('COD_EMPRESA').AsInteger;
-    frm.edtIdPedidoExit(nil);
+    frm.btnCriarPedido.Visible := false;
+    frm.ComboBoxFornecedor.Enabled := false;
     frm.ShowModal;
   finally
     frm.Free;

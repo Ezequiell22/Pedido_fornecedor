@@ -18,8 +18,7 @@ type
     ['{6E2D3C1A-8E5A-4A6F-8B71-2E6C8146E1C2}']
     function Novo: iModelBusinessPedido;
     function Get: iModelBusinessPedido;
-    function Abrir(aIdPedido: Integer; AcomboBoxFornecedor: TComboBox)
-      : iModelBusinessPedido;
+    function Abrir(AcomboBoxFornecedor: TComboBox): iModelBusinessPedido;
     function AdicionarItem(aCodItem: Integer; aValor: Double;
       aQuantidade: Double): iModelBusinessPedido;
 
@@ -34,7 +33,7 @@ type
     function EditarItem(aSequencia: Integer; aValor: Double;
       aQuantidade: Double): iModelBusinessPedido;
     function ExcluirPedido: iModelBusinessPedido;
-    function GetItems : iModelBusinessPedido;
+    function GetItems: iModelBusinessPedido;
     function loadPedidos(AFieldsWhere: TDictionary<string, Variant>)
       : iModelBusinessPedido;
   end;

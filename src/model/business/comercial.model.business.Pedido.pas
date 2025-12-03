@@ -30,25 +30,19 @@ type
     class function New: iModelBusinessPedido;
     function Novo : iModelBusinessPedido;
     function Get: iModelBusinessPedido;
-    function Abrir(aIdPedido: Integer;
+    function Abrir(
     AcomboBoxFornecedor : TComboBox): iModelBusinessPedido;
     function AdicionarItem(aCodItem : integer; aValor: Double; aQuantidade: Double): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
     function EditarItem(aSequencia: Integer; aValor: Double; aQuantidade: Double): iModelBusinessPedido;
-
     function ExcluirPedido : iModelBusinessPedido;
     function LinkDataSourcePedido(aDataSource: TDataSource): iModelBusinessPedido;
     function LinkDataSourceItens(aDataSource: TDataSource): iModelBusinessPedido;
-    //    function DAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
-//    function DAOItens: iModelDAOEntity<TModelEntityPedcompraItem>;
     function GetItems : iModelBusinessPedido;
     function setIdPedido(aValue : integer) : iModelBusinessPedido;
     function setIdEmpresa(aValue : integer) : iModelBusinessPedido;
     function setIdFornecedor(aValue : integer) : iModelBusinessPedido;
-
     function loadPedidos(AFieldsWhere: TDictionary<string, Variant>) : iModelBusinessPedido;
-//    function EntityPedido : TModelEntityPedidoCompra;
-//    function EntityItemPedido : TModelEntityPedcompraItem;
   end;
 
 implementation
@@ -64,15 +58,14 @@ begin
   FDAOItem := TModelDAOPedcompraItem.New;
 end;
 
-function TModelBusinessPedido.Abrir(aIdPedido: Integer;
+function TModelBusinessPedido.Abrir(
   AcomboBoxFornecedor : TComboBox): iModelBusinessPedido;
 var idFornecedor : integer;
 begin
   Result := Self;
 
   try
-    FDAOPedido.GetbyId(aIdPedido);
-    FDAOItem.Get;
+    FDAOPedido.GetbyId(FDAOPedido.this.COD_PEDIDOCOMPRA);
 
     idFornecedor := FDAOPedido.GetDataSet.FieldByName('COD_CLIFOR').AsInteger;
 
@@ -149,7 +142,7 @@ begin
 
     FQueryLookup.active(False)
       .sqlClear
-      .sqlAdd('select (coalesce(max(COD_PEDIDOCOMPRA),0)) idn from PEDIDO_COMPRA')
+      .sqlAdd('select (coalesce(max(COD_PEDIDOCOMPRA),0)) + 1 idn from PEDIDO_COMPRA')
       .open;
 
     idPedido := FQueryLookup.DataSet.FieldByName('idn').AsInteger;
@@ -267,6 +260,7 @@ begin
 
   Fdaoitem
     .this
+    .SEQUENCIA(aSequencia)
     .PRECO_UNITARIO(VUnit)
     .VALOR_TOTAL(VTotalItem)
     .QTD_PEDIDA(aQuantidade)

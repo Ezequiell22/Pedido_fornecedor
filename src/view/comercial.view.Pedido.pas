@@ -35,7 +35,7 @@ type
     GridItens: TDBGrid;
     Label8: TLabel;
     ComboBoxFornecedor: TComboBox;
-    btnNovo: TButton;
+    btnCriarPedido: TButton;
     edtCodItem: TEdit;
     btnEditarItem: TButton;
     btnRemoverItem: TButton;
@@ -43,9 +43,10 @@ type
     procedure ComboBoxFornecedorSelect(Sender: TObject);
 
     procedure edtIdPedidoExit(Sender: TObject);
-    procedure btnNovoClick(Sender: TObject);
+    procedure btnCriarPedidoClick(Sender: TObject);
     procedure btnRemoverItemClick(Sender: TObject);
     procedure btnEditarItemClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FController: iController;
     function ValidatePedidoItem: Boolean;
@@ -69,7 +70,8 @@ begin
   inherited;
   FController := TController.New;
 
-  FController.business.Pedido
+  FController.business
+    .Pedido
     .LinkDataSourcePedido(DSPedido)
     .LinkDataSourceItens(DSItens);
 
@@ -86,9 +88,23 @@ end;
 procedure TfrmPedido.edtIdPedidoExit(Sender: TObject);
 begin
 
-  FController.business.Pedido.Abrir(strTointDef(edtIdPedido.Text, 0),
-    ComboBoxFornecedor)
+  if strTointDef(edtIdPedido.Text, 0) > 0 then
+    FController
+      .business
+      .Pedido
+      .setIdPedido(strTointDef(edtIdPedido.Text, 0))
+      .Abrir(ComboBoxFornecedor)
+      .GetItems;
 
+end;
+
+procedure TfrmPedido.FormShow(Sender: TObject);
+begin
+     FController.business
+    .Pedido
+    .setIdEmpresa(FIDEMPRESA);
+
+    edtIdPedidoExit(nil);
 end;
 
 procedure TfrmPedido.LoadComboboxFornecedor;
@@ -148,6 +164,7 @@ procedure TfrmPedido.BtnAddItemClick(Sender: TObject);
 begin
   if not ValidatePedidoItem then
     Exit;
+
   FController.business
     .Pedido
     .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
@@ -155,13 +172,16 @@ begin
     .AdicionarItem(
                   strTointDef(edtCodItem.Text, 0),
                   StrToFloatDef(edtValor.Text, 0),
-                  StrToFloatDef(edtQuantidade.Text, 0));
+                  StrToFloatDef(edtQuantidade.Text, 0))
+    .GetItems;
 end;
 
-procedure TfrmPedido.btnNovoClick(Sender: TObject);
+procedure TfrmPedido.btnCriarPedidoClick(Sender: TObject);
 begin
-   FController.business
-    .Pedido.novo;
+   FController
+    .business
+    .Pedido
+    .novo;
 end;
 
 procedure TfrmPedido.btnRemoverItemClick(Sender: TObject);
@@ -174,7 +194,8 @@ begin
     FController.business.Pedido
     .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
     .setIdEmpresa(DSPedido.DataSet.FieldByName('COD_EMPRESA').AsInteger)
-    .RemoverItem(seq);
+    .RemoverItem(seq)
+    .GetItems;
   end;
 end;
 
@@ -192,7 +213,8 @@ begin
     .Pedido
     .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
     .setIdEmpresa(DSPedido.DataSet.FieldByName('COD_EMPRESA').AsInteger)
-    .EditarItem(seq, valor, quantidade);
+    .EditarItem(seq, valor, quantidade)
+    .GetItems;
   end;
 end;
 
@@ -200,7 +222,9 @@ procedure TfrmPedido.ComboBoxFornecedorSelect(Sender: TObject);
 begin
   if Assigned(DSFornecedores.DataSet) then
   begin
-    FController.business.Pedido.
+    FController
+      .business
+      .Pedido.
       setIdFornecedor(
         DSFornecedores.DataSet.FieldByName('COD_CLIFOR').AsInteger);
   end;

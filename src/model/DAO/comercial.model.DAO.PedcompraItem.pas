@@ -169,15 +169,17 @@ begin
     .active(False)
     .sqlClear
       .sqlAdd('update PEDCOMPRA_ITEM set ' +
-              'COD_EMPRESA = :COD_EMPRESA, COD_Item = :COD_Item, COD_unidadecompra = :COD_unidadecompra, ' +
-              'QTDE_PEDIDA = :QTDE_PEDIDA, QTDE_RECEBIDA = :QTDE_RECEBIDA, DESCRICAO = :DESCRICAO, ' +
+              ' COD_Item = :COD_Item, COD_unidadecompra = :COD_unidadecompra, ' +
+              'QTD_PEDIDA = :QTD_PEDIDA, QTD_RECEBIDA = :QTD_RECEBIDA, DESCRICAO = :DESCRICAO, ' +
               'PRECO_UNITARIO = :PRECO_UNITARIO, PERC_DESCTO = :PERC_DESCTO, VALOR_DESCTO = :VALOR_DESCTO, ' +
               'PERC_FINANC = :PERC_FINANC, '+
               'VALOR_FINANC = :VALOR_FINANC, '+
               'VALOR_TOTAL = :VALOR_TOTAL, '+
               'DT_INCLUSAO = :DT_INCLUSAO, ' +
               'DT_SOLICITADA = :DT_SOLICITADA, DT_RECEBIDA = :DT_RECEBIDA')
-      .sqlAdd(' where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA and SEQUENCIA = :SEQUENCIA')
+      .sqlAdd(' where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA ')
+      .sqlAdd(' and SEQUENCIA = :SEQUENCIA')
+      .sqlAdd(' and COD_EMPRESA = :COD_EMPRESA')
       .addParam('COD_PEDIDOCOMPRA', FEntity.COD_PEDIDOCOMPRA)
       .addParam('SEQUENCIA', FEntity.SEQUENCIA)
       .addParam('COD_EMPRESA', FEntity.COD_EMPRESA)

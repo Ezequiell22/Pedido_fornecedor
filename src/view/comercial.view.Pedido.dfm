@@ -11,6 +11,7 @@ object frmPedido: TfrmPedido
   Font.Name = 'Tahoma'
   Font.Style = []
   Position = poScreenCenter
+  OnShow = FormShow
   TextHeight = 13
   object GridItens: TDBGrid
     Left = 0
@@ -142,14 +143,14 @@ object frmPedido: TfrmPedido
       TabOrder = 1
       OnSelect = ComboBoxFornecedorSelect
     end
-    object btnNovo: TButton
+    object btnCriarPedido: TButton
       Left = 764
       Top = 25
       Width = 75
       Height = 25
       Caption = 'Criar Pedido'
       TabOrder = 2
-      OnClick = btnNovoClick
+      OnClick = btnCriarPedidoClick
     end
   end
   object DSPedido: TDataSource
