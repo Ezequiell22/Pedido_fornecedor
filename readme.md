@@ -1,97 +1,62 @@
-\# criar banco de dados
+# Pedido Fornecedor
 
+Aplicação de compras (Delphi VCL) para gestão de pedidos de compra, fornecedores e itens, com listagem, filtros por período/fornecedor, geração de relatórios HTML e migrações/seed de banco alinhados ao DDL.
 
+## Visão Geral
+- Foco em pedidos de compra (`PEDIDO_COMPRA`), fornecedores (`FORNECEDORES`) e itens de pedido (`PEDCOMPRA_ITEM`).
+- Camadas separadas: DAO (acesso a dados), Business (regras), View (VCL), Utils (HTML, logs), DB (migrações/seed).
+- Banco Firebird; consultas através de `FireDAC` (implementação `comercial.model.resource.impl.queryFD`).
 
-CREATE DATABASE 'localhost:C:\\ga\_teste\\win32\\debug\\dados.fdb'
+## Funcionalidades
+- Cadastro/listagem de fornecedores e pedidos.
+- Filtros de pedidos por período e por fornecedor (tela de listagem).
+- Itens vinculados ao pedido com totalizações por item.
+- Relatórios HTML:
+  - Compras por Fornecedor: soma do valor total dos itens por fornecedor.
+  - Compras por Produto: preço médio, quantidade total e valor total por `COD_Item` e descrição.
 
-USER 'sysdba' PASSWORD 'masterkey';
+## Banco de Dados (DDL)
+- Tabelas principais criadas por migrações:
+  - `FORNECEDORES(COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC)`
+  - `PEDIDO_COMPRA(COD_PEDIDOCOMPRA, COD_EMPRESA, COD_CLIFOR, COD_MOEDA, DT_EMISSAO, DT_PREVISTAENTREGA, DT_ENTREGA, TIPO_COMPRA)`
+  - `PEDCOMPRA_ITEM(COD_PEDIDOCOMPRA, COD_EMPRESA, SEQUENCIA, COD_Item, COD_unidadecompra, QTDE_PEDIDA, QTDE_RECEBIDA, DESCRICAO, PRECO_UNITARIO, PERC_DESCTO, VALOR_DESCTO, PERC_FINANC, VALOR_TOTAL, DT_INCLUSAO, DT_SOLICITADA, DT_RECEBIDA)`
+- Índices e FKs: FK de `PEDIDO_COMPRA(COD_CLIFOR)` para `FORNECEDORES(COD_CLIFOR)` e FK de `PEDCOMPRA_ITEM(COD_PEDIDOCOMPRA)` para `PEDIDO_COMPRA(COD_PEDIDOCOMPRA)`.
 
+## Migrações e Seed
+- Migrações em `src/model/db/comercial.model.db.migrations.pas` (DDL manual, não alterar nomes/colunas).
+- Seed em `src/model/db/comercial.model.db.migrations.seed.pas` lê `.xlsx` e insere via DAOs com mapeamento por cabeçalhos (compatível com ordem variável de colunas no Excel).
 
-
-\# criar procedure do relatorio
-isql "C:\ga_teste\win32\debug\dados.fdb" -user sysdba -password masterkey
-
-
-
-SET TERM ^ ;
-
-CREATE OR ALTER PROCEDURE SP_TOP_PRODUTOS_VENDIDOS (
-  DTINI DATE,
-  DTFIM DATE
-)
-RETURNS (
-  IDPRODUTO INTEGER,
-  DESCRICAO VARCHAR(150),
-  QTD NUMERIC(15,3)
-)
-AS
-BEGIN
-  FOR
-    SELECT 
-           i.IDPRODUTO,
-           p.DESCRICAO,
-           SUM(i.QUANTIDADE) AS QTD
-      FROM PEDIDO_ITENS i
-      JOIN PRODUTO p ON p.IDPRODUTO = i.IDPRODUTO
-      JOIN PEDIDO d ON d.IDPEDIDO = i.IDPEDIDO
-     WHERE d.DTEMISSAO BETWEEN :DTINI AND :DTFIM
-     GROUP BY i.IDPRODUTO, p.DESCRICAO
-     ORDER BY QTD DESC
-     ROWS 2
-     INTO :IDPRODUTO, :DESCRICAO, :QTD
-  DO
-  BEGIN
-    SUSPEND;
-  END
-END^
-
-SET TERM ; ^
-
-
-
-## Configuração da Aplicação
-
-- Arquivo `comercial.ini` (no mesmo diretório do executável) define conexão Firebird:
+## Configuração
+- Arquivo `comercial.ini` (no diretório do executável):
   - `[Database]`
   - `Path`: caminho do banco (ex.: `C:\ga_teste\Win32\Debug\dados.fdb`)
   - `User`: usuário (ex.: `SYSDBA`)
   - `Password`: senha (ex.: `masterkey`)
 
-## Conexão e Transações (IBX)
-
-- Conexão única compartilhada (`TIBDatabase`) reutilizada por todas as queries.
-- Cada query cria sua própria `TIBTransaction` para isolamento transacional.
-- Parâmetros de transação: `read_committed`, `rec_version`, `nowait`.
-
-## Estrutura de Projeto
-
-- `src/model/resource/impl`: conexão IBX, factory, query.
-- `src/model/db`: migrações de banco.
-- `src/model/business`: regras de negócio (Cliente, Produto, Pedido, Relatórios).
-- `src/model/DAO`: operações CRUD e binding de `DataSource`.
-- `src/model/entity`: validações de entidades.
-- `src/utils`: logs e impressão HTML.
-- `src/view`: telas VCL com MVC chamando apenas controllers.
-
-## Testes (DUnitX)
-
-- Projeto de testes: `tests/comercial.dunitx.tests.dproj`.
-- Runner console: `tests/comercial.dunitx.tests.dpr`.
-- Suites:
-  - Migrações: valida tabelas, índices, triggers, procedure.
-  - Cliente: CRUD e trigger de telefone obrigatório.
-  - Produto: CRUD e índice único de descrição.
-  - Pedido: criação, itens, totalização.
-  - Relatório HTML: geração de Top Produtos.
-
-## Relatórios
-
-- HTML de Pedido e Top Produtos gerados em `reports/` próximo ao executável.
-- Procedure `SP_TOP_PRODUTOS_VENDIDOS` retorna os dois mais vendidos no período.
-
 ## Build e Execução
+- Abrir `comercial.dproj` e compilar em `Win32/Debug` (Delphi).
+- Garantir `comercial.ini` com caminho/credenciais válidos do Firebird.
+- Executar a aplicação e usar a tela “Listagem de Pedidos” para consultar e filtrar.
 
-- Abrir `comercial.dproj` e compilar em `Win32/Debug`.
-- Garantir `comercial.ini` com Path/credenciais válidas.
-- Rodar testes compilando `tests/comercial.dunitx.tests.dproj` e executando o console.
+## Relatórios HTML
+- Implementados em `src/utils/comercial.util.printhtml.pas`:
+  - Compras por Fornecedor: agrupa `PEDIDO_COMPRA` + `PEDCOMPRA_ITEM` por fornecedor e soma `i.VALOR_TOTAL`.
+  - Compras por Produto: agrupa somente `PEDCOMPRA_ITEM` por `COD_Item` e `DESCRICAO`, calculando `avg(PRECO_UNITARIO)`, `sum(QTDE_PEDIDA)` e `sum(VALOR_TOTAL)`.
+- Saída gravada em diretório `reports/` junto ao executável.
 
+## Arquitetura
+- `src/model/DAO`: DAOs de Fornecedor, Pedido e Item com CRUD e binding de `DataSource`.
+- `src/model/business`: Orquestra DAOs, fluxos de tela, filtros e relatórios.
+- `src/model/db`: migrações DDL e seed (Excel → DAOs).
+- `src/model/entity`: entidades com validações simples.
+- `src/view`: forms VCL (listagem, edição).
+- `src/utils`: impressão HTML, logs.
+
+## Observações
+- Entidades/DAOs seguem estritamente os nomes e tipos do DDL manual.
+- Seed usa DAOs; antes de inserir, limpa tabelas de destino com `delete` simples para evitar duplicidades.
+
+## Requisitos
+- Delphi (versão compatível com FireDAC).
+- Firebird 3+.
+- Acesso ao arquivo `dados.fdb` definido no `comercial.ini`.
