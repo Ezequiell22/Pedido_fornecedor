@@ -1,4 +1,4 @@
-unit comercial.model.entity.PedidoCompra;
+﻿unit comercial.model.entity.PedidoCompra;
 
 interface
 
@@ -16,7 +16,7 @@ type
     FCOD_CLIFOR: Integer;
     FCOD_MOEDA: string;
     FDT_EMISSAO: TDateTime;
-    FDT_PREVISTAENTREGA: TDateTime;
+    FDT_PREVISAOENTREGA: TDateTime;
     FDT_ENTREGA: TDateTime;
     FTIPO_COMPRA: string;
   public
@@ -32,8 +32,8 @@ type
     function COD_MOEDA: string; overload;
     function DT_EMISSAO(aValue: TDateTime): TModelEntityPedidoCompra; overload;
     function DT_EMISSAO: TDateTime; overload;
-    function DT_PREVISTAENTREGA(aValue: TDateTime): TModelEntityPedidoCompra; overload;
-    function DT_PREVISTAENTREGA: TDateTime; overload;
+    function DT_PREVISAOENTREGA(aValue: TDateTime): TModelEntityPedidoCompra; overload;
+    function DT_PREVISAOENTREGA: TDateTime; overload;
     function DT_ENTREGA(aValue: TDateTime): TModelEntityPedidoCompra; overload;
     function DT_ENTREGA: TDateTime; overload;
     function TIPO_COMPRA(aValue: string): TModelEntityPedidoCompra; overload;
@@ -117,15 +117,15 @@ begin
   Result := FDT_EMISSAO;
 end;
 
-function TModelEntityPedidoCompra.DT_PREVISTAENTREGA(aValue: TDateTime): TModelEntityPedidoCompra;
+function TModelEntityPedidoCompra.DT_PREVISAOENTREGA(aValue: TDateTime): TModelEntityPedidoCompra;
 begin
   Result := Self;
-  FDT_PREVISTAENTREGA := aValue;
+  FDT_PREVISAOENTREGA := aValue;
 end;
 
-function TModelEntityPedidoCompra.DT_PREVISTAENTREGA: TDateTime;
+function TModelEntityPedidoCompra.DT_PREVISAOENTREGA: TDateTime;
 begin
-  Result := FDT_PREVISTAENTREGA;
+  Result := FDT_PREVISAOENTREGA;
 end;
 
 function TModelEntityPedidoCompra.DT_ENTREGA(aValue: TDateTime): TModelEntityPedidoCompra;

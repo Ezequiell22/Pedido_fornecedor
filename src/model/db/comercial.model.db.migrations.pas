@@ -146,10 +146,10 @@ begin
             '  COD_CLIFOR integer,' + #13#10 +
             '  COD_MOEDA varchar(20),' + #13#10 +
             '  DT_EMISSAO date,' + #13#10 +
-            '  DT_PREVISTAENTREGA date,' + #13#10 +
+            '  DT_PREVISAOENTREGA date,' + #13#10 +
             '  DT_ENTREGA date,' + #13#10 +
-            '  TIPO_COMPRA varchar(255)' + #13#10 +
-            '  constraint PK_PEDIDO_COMPRA primary key (COD_PEDIDOCOMPRA)' + #13#10 +
+            '  TIPO_COMPRA varchar(255),' + #13#10 +
+            '  constraint PK_PEDIDO_COMPRA primary key (COD_PEDIDOCOMPRA, COD_EMPRESA)' + #13#10 +
             ')');
 
   if MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name=''PEDIDO_COMPRA''') then
@@ -165,19 +165,19 @@ begin
              '  SEQUENCIA integer not null,' + #13#10 +
              '  COD_Item integer,' + #13#10 +
              '  COD_unidadecompra varchar(20),' + #13#10 +
-             '  QTDE_PEDIDA numeric(18,4),' + #13#10 +
-             '  QTDE_RECEBIDA numeric(18,4),' + #13#10 +
+             '  QTD_PEDIDA numeric(18,4),' + #13#10 +
+             '  QTD_RECEBIDA numeric(18,4),' + #13#10 +
              '  DESCRICAO VARCHAR(255),' + #13#10 +
              '  PRECO_UNITARIO numeric(18,4),' + #13#10 +
              '  PERC_DESCTO numeric(18,4),' + #13#10 +
              '  VALOR_DESCTO numeric(18,4),' + #13#10 +
              '  PERC_FINANC numeric(18,4),' + #13#10 +
+             '  VALOR_FINANC numeric(18,4),' + #13#10 +
              '  VALOR_TOTAL numeric(18,4),' + #13#10 +
              '  DT_INCLUSAO DATE,' + #13#10 +
              '  DT_SOLICITADA DATE,' + #13#10 +
-             '  DT_RECEBIDA DATE' + #13#10 +
-
-            '  constraint PK_PEDCOMPRA_ITEM primary key (COD_PEDIDOCOMPRA, SEQUENCIA)' + #13#10 +
+             '  DT_RECEBIDA DATE,' + #13#10 +
+            '  constraint PK_PEDCOMPRA_ITEM primary key (COD_PEDIDOCOMPRA, COD_EMPRESA, SEQUENCIA)' + #13#10 +
             ')');
 
   SanitizeData;
@@ -185,7 +185,7 @@ begin
   if MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name=''PEDCOMPRA_ITEM''') then
     if not MetadataExists('select rc.rdb$constraint_name from rdb$relation_constraints rc where rc.rdb$constraint_name = ''FK_ITEM_PED''') then
       if not HasOrphansItem then
-        ExecDDL('alter table PEDCOMPRA_ITEM add constraint FK_ITEM_PED foreign key (COD_PEDIDOCOMPRA) references PEDIDO_COMPRA(COD_PEDIDOCOMPRA)');
+        ExecDDL('alter table PEDCOMPRA_ITEM add constraint FK_ITEM_PED foreign key (COD_PEDIDOCOMPRA, COD_EMPRESA) references PEDIDO_COMPRA(COD_PEDIDOCOMPRA, COD_EMPRESA)');
 
   if not MetadataExists('select rdb$index_name from rdb$indices where rdb$index_name = ''IDX_PEDIDO_COMPRA_CLIFOR''') then
     ExecDDL('create index IDX_PEDIDO_COMPRA_CLIFOR on PEDIDO_COMPRA (COD_CLIFOR)');

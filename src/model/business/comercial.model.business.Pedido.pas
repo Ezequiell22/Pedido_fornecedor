@@ -147,12 +147,6 @@ begin
 
   FTotal := 0;
   try
-    FDAOPedido
-      .This
-        .COD_CLIFOR(FIdFornecedor)
-        .TOTAL(FTotal)
-        .&End
-      .Insert;
 
     FQueryLookup.active(False)
       .sqlClear
@@ -192,27 +186,16 @@ var
 begin
   Result := Self;
   try
-    VUnit := aValor;
-    if VUnit <= 0 then
-    begin
-      FQueryLookup.active(False)
-        .sqlClear
-        .sqlAdd('select PRECO from PRODUTO where IDPRODUTO = :IDPRODUTO')
-        .addParam('IDPRODUTO', FIdProduto)
-        .Open;
-      if not FQueryLookup.DataSet.IsEmpty then
-        VUnit := FQueryLookup.DataSet.FieldByName('PRECO').AsFloat;
-    end;
 
     VTotalItem := VUnit * aQuantidade;
     FTotal := FTotal + VTotalItem;
     FDAOItem
       .This
         .COD_PEDIDOCOMPRA(FIdPedido)
-        .COD_PRODUTO(FIdProduto)
-        .QUANTIDADE(aQuantidade)
-        .VL_UNITARIO(VUnit)
-        .VL_TOTAL(VTotalItem)
+        .COD_ITEM(FIdProduto)
+        .QTD_PEDIDA(aQuantidade)
+        .QTD_RECEBIDA(aQuantidade)
+        .VALOR_TOTAL(FTotal)
         .&End
       .Insert;
 

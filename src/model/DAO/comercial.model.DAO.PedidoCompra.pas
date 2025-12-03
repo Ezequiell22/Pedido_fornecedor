@@ -141,16 +141,16 @@ begin
     .active(False)
     .sqlClear
       .sqlAdd('insert into PEDIDO_COMPRA (' +
-              'COD_PEDIDOCOMPRA, COD_EMPRESA, COD_CLIFOR, COD_MOEDA, DT_EMISSAO, DT_PREVISTAENTREGA, DT_ENTREGA, TIPO_COMPRA)')
+              'COD_PEDIDOCOMPRA, COD_EMPRESA, COD_CLIFOR, COD_MOEDA, DT_EMISSAO, DT_PREVISAOENTREGA, DT_ENTREGA, TIPO_COMPRA)')
       .sqlAdd('values (' +
               'case when :COD_PEDIDOCOMPRA > 0 then :COD_PEDIDOCOMPRA else (select coalesce(max(COD_PEDIDOCOMPRA),0)+1 from PEDIDO_COMPRA) end, ' +
-              ':COD_EMPRESA, :COD_CLIFOR, :COD_MOEDA, :DT_EMISSAO, :DT_PREVISTAENTREGA, :DT_ENTREGA, :TIPO_COMPRA)')
+              ':COD_EMPRESA, :COD_CLIFOR, :COD_MOEDA, :DT_EMISSAO, :DT_PREVISAOENTREGA, :DT_ENTREGA, :TIPO_COMPRA)')
       .addParam('COD_PEDIDOCOMPRA', FEntity.COD_PEDIDOCOMPRA)
       .addParam('COD_EMPRESA', FEntity.COD_EMPRESA)
       .addParam('COD_CLIFOR', FEntity.COD_CLIFOR)
       .addParam('COD_MOEDA', FEntity.COD_MOEDA)
       .addParam('DT_EMISSAO', FEntity.DT_EMISSAO)
-      .addParam('DT_PREVISTAENTREGA', FEntity.DT_PREVISTAENTREGA)
+      .addParam('DT_PREVISAOENTREGA', FEntity.DT_PREVISAOENTREGA)
       .addParam('DT_ENTREGA', FEntity.DT_ENTREGA)
       .addParam('TIPO_COMPRA', FEntity.TIPO_COMPRA)
       .execSql;
@@ -174,7 +174,7 @@ begin
     .sqlClear
       .sqlAdd('update PEDIDO_COMPRA set ' +
               'COD_EMPRESA = :COD_EMPRESA, COD_CLIFOR = :COD_CLIFOR, COD_MOEDA = :COD_MOEDA, ' +
-              'DT_EMISSAO = :DT_EMISSAO, DT_PREVISTAENTREGA = :DT_PREVISTAENTREGA, DT_ENTREGA = :DT_ENTREGA, ' +
+              'DT_EMISSAO = :DT_EMISSAO, DT_PREVISAOENTREGA = :DT_PREVISAOENTREGA, DT_ENTREGA = :DT_ENTREGA, ' +
               'TIPO_COMPRA = :TIPO_COMPRA')
       .sqlAdd(' where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
       .addParam('COD_PEDIDOCOMPRA', FEntity.COD_PEDIDOCOMPRA)
@@ -182,7 +182,7 @@ begin
       .addParam('COD_CLIFOR', FEntity.COD_CLIFOR)
       .addParam('COD_MOEDA', FEntity.COD_MOEDA)
       .addParam('DT_EMISSAO', FEntity.DT_EMISSAO)
-      .addParam('DT_PREVISTAENTREGA', FEntity.DT_PREVISTAENTREGA)
+      .addParam('DT_PREVISAOENTREGA', FEntity.DT_PREVISAOENTREGA)
       .addParam('DT_ENTREGA', FEntity.DT_ENTREGA)
       .addParam('TIPO_COMPRA', FEntity.TIPO_COMPRA)
       .execSql;

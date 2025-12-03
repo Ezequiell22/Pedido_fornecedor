@@ -1,4 +1,4 @@
-unit comercial.model.entity.PedcompraItem;
+﻿unit comercial.model.entity.PedcompraItem;
 
 interface
 
@@ -16,13 +16,14 @@ type
     FSEQUENCIA: Integer;
     FCOD_Item: Integer;
     FCOD_unidadecompra: string;
-    FQTDE_PEDIDA: Double;
-    FQTDE_RECEBIDA: Double;
+    FQTD_PEDIDA: Double;
+    FQTD_RECEBIDA: Double;
     FDESCRICAO: string;
     FPRECO_UNITARIO: Double;
     FPERC_DESCTO: Double;
     FVALOR_DESCTO: Double;
     FPERC_FINANC: Double;
+    FVALOR_FINANC: Double;
     FVALOR_TOTAL: Double;
     FDT_INCLUSAO: TDateTime;
     FDT_SOLICITADA: TDateTime;
@@ -30,7 +31,8 @@ type
   public
     constructor Create(aParent: iModelDAOEntity<TModelEntityPedcompraItem>);
     destructor Destroy; override;
-    function COD_PEDIDOCOMPRA(aValue: Integer): TModelEntityPedcompraItem; overload;
+    function COD_PEDIDOCOMPRA(aValue: Integer)
+      : TModelEntityPedcompraItem; overload;
     function COD_PEDIDOCOMPRA: Integer; overload;
     function COD_EMPRESA(aValue: Integer): TModelEntityPedcompraItem; overload;
     function COD_EMPRESA: Integer; overload;
@@ -38,15 +40,17 @@ type
     function SEQUENCIA: Integer; overload;
     function COD_Item(aValue: Integer): TModelEntityPedcompraItem; overload;
     function COD_Item: Integer; overload;
-    function COD_unidadecompra(aValue: string): TModelEntityPedcompraItem; overload;
+    function COD_unidadecompra(aValue: string)
+      : TModelEntityPedcompraItem; overload;
     function COD_unidadecompra: string; overload;
-    function QTDE_PEDIDA(aValue: Double): TModelEntityPedcompraItem; overload;
-    function QTDE_PEDIDA: Double; overload;
-    function QTDE_RECEBIDA(aValue: Double): TModelEntityPedcompraItem; overload;
-    function QTDE_RECEBIDA: Double; overload;
+    function QTD_PEDIDA(aValue: Double): TModelEntityPedcompraItem; overload;
+    function QTD_PEDIDA: Double; overload;
+    function QTD_RECEBIDA(aValue: Double): TModelEntityPedcompraItem; overload;
+    function QTD_RECEBIDA: Double; overload;
     function DESCRICAO(aValue: string): TModelEntityPedcompraItem; overload;
     function DESCRICAO: string; overload;
-    function PRECO_UNITARIO(aValue: Double): TModelEntityPedcompraItem; overload;
+    function PRECO_UNITARIO(aValue: Double): TModelEntityPedcompraItem;
+      overload;
     function PRECO_UNITARIO: Double; overload;
     function PERC_DESCTO(aValue: Double): TModelEntityPedcompraItem; overload;
     function PERC_DESCTO: Double; overload;
@@ -54,13 +58,18 @@ type
     function VALOR_DESCTO: Double; overload;
     function PERC_FINANC(aValue: Double): TModelEntityPedcompraItem; overload;
     function PERC_FINANC: Double; overload;
+    function VALOR_FINANC(aValue: Double): TModelEntityPedcompraItem; overload;
+    function VALOR_FINANC: Double; overload;
     function VALOR_TOTAL(aValue: Double): TModelEntityPedcompraItem; overload;
     function VALOR_TOTAL: Double; overload;
-    function DT_INCLUSAO(aValue: TDateTime): TModelEntityPedcompraItem; overload;
+    function DT_INCLUSAO(aValue: TDateTime): TModelEntityPedcompraItem;
+      overload;
     function DT_INCLUSAO: TDateTime; overload;
-    function DT_SOLICITADA(aValue: TDateTime): TModelEntityPedcompraItem; overload;
+    function DT_SOLICITADA(aValue: TDateTime)
+      : TModelEntityPedcompraItem; overload;
     function DT_SOLICITADA: TDateTime; overload;
-    function DT_RECEBIDA(aValue: TDateTime): TModelEntityPedcompraItem; overload;
+    function DT_RECEBIDA(aValue: TDateTime): TModelEntityPedcompraItem;
+      overload;
     function DT_RECEBIDA: TDateTime; overload;
     function &End: iModelDAOEntity<TModelEntityPedcompraItem>;
   end;
@@ -69,7 +78,8 @@ implementation
 
 uses System.SysUtils;
 
-constructor TModelEntityPedcompraItem.Create(aParent: iModelDAOEntity<TModelEntityPedcompraItem>);
+constructor TModelEntityPedcompraItem.Create
+  (aParent: iModelDAOEntity<TModelEntityPedcompraItem>);
 begin
   FParent := aParent;
 end;
@@ -79,12 +89,14 @@ begin
   inherited;
 end;
 
-function TModelEntityPedcompraItem.&End: iModelDAOEntity<TModelEntityPedcompraItem>;
+function TModelEntityPedcompraItem.&End
+  : iModelDAOEntity<TModelEntityPedcompraItem>;
 begin
   Result := FParent;
 end;
 
-function TModelEntityPedcompraItem.COD_PEDIDOCOMPRA(aValue: Integer): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.COD_PEDIDOCOMPRA(aValue: Integer)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FCOD_PEDIDOCOMPRA := aValue;
@@ -97,7 +109,8 @@ begin
   Result := FCOD_PEDIDOCOMPRA;
 end;
 
-function TModelEntityPedcompraItem.COD_EMPRESA(aValue: Integer): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.COD_EMPRESA(aValue: Integer)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FCOD_EMPRESA := aValue;
@@ -108,7 +121,8 @@ begin
   Result := FCOD_EMPRESA;
 end;
 
-function TModelEntityPedcompraItem.SEQUENCIA(aValue: Integer): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.SEQUENCIA(aValue: Integer)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FSEQUENCIA := aValue;
@@ -119,7 +133,8 @@ begin
   Result := FSEQUENCIA;
 end;
 
-function TModelEntityPedcompraItem.COD_Item(aValue: Integer): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.COD_Item(aValue: Integer)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FCOD_Item := aValue;
@@ -130,7 +145,8 @@ begin
   Result := FCOD_Item;
 end;
 
-function TModelEntityPedcompraItem.COD_unidadecompra(aValue: string): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.COD_unidadecompra(aValue: string)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FCOD_unidadecompra := aValue;
@@ -141,29 +157,32 @@ begin
   Result := FCOD_unidadecompra;
 end;
 
-function TModelEntityPedcompraItem.QTDE_PEDIDA(aValue: Double): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.QTD_PEDIDA(aValue: Double)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
-  FQTDE_PEDIDA := aValue;
+  FQTD_PEDIDA := aValue;
 end;
 
-function TModelEntityPedcompraItem.QTDE_PEDIDA: Double;
+function TModelEntityPedcompraItem.QTD_PEDIDA: Double;
 begin
-  Result := FQTDE_PEDIDA;
+  Result := FQTD_PEDIDA;
 end;
 
-function TModelEntityPedcompraItem.QTDE_RECEBIDA(aValue: Double): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.QTD_RECEBIDA(aValue: Double)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
-  FQTDE_RECEBIDA := aValue;
+  FQTD_RECEBIDA := aValue;
 end;
 
-function TModelEntityPedcompraItem.QTDE_RECEBIDA: Double;
+function TModelEntityPedcompraItem.QTD_RECEBIDA: Double;
 begin
-  Result := FQTDE_RECEBIDA;
+  Result := FQTD_RECEBIDA;
 end;
 
-function TModelEntityPedcompraItem.DESCRICAO(aValue: string): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.DESCRICAO(aValue: string)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FDESCRICAO := aValue;
@@ -174,7 +193,8 @@ begin
   Result := FDESCRICAO;
 end;
 
-function TModelEntityPedcompraItem.PRECO_UNITARIO(aValue: Double): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.PRECO_UNITARIO(aValue: Double)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FPRECO_UNITARIO := aValue;
@@ -185,7 +205,8 @@ begin
   Result := FPRECO_UNITARIO;
 end;
 
-function TModelEntityPedcompraItem.PERC_DESCTO(aValue: Double): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.PERC_DESCTO(aValue: Double)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FPERC_DESCTO := aValue;
@@ -196,7 +217,8 @@ begin
   Result := FPERC_DESCTO;
 end;
 
-function TModelEntityPedcompraItem.VALOR_DESCTO(aValue: Double): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.VALOR_DESCTO(aValue: Double)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FVALOR_DESCTO := aValue;
@@ -207,7 +229,20 @@ begin
   Result := FVALOR_DESCTO;
 end;
 
-function TModelEntityPedcompraItem.PERC_FINANC(aValue: Double): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.VALOR_FINANC: Double;
+begin
+  Result := FVALOR_FINANC
+end;
+
+function TModelEntityPedcompraItem.VALOR_FINANC(aValue: Double)
+  : TModelEntityPedcompraItem;
+begin
+  Result := Self;
+  FVALOR_FINANC := aValue
+end;
+
+function TModelEntityPedcompraItem.PERC_FINANC(aValue: Double)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FPERC_FINANC := aValue;
@@ -218,7 +253,8 @@ begin
   Result := FPERC_FINANC;
 end;
 
-function TModelEntityPedcompraItem.VALOR_TOTAL(aValue: Double): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.VALOR_TOTAL(aValue: Double)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FVALOR_TOTAL := aValue;
@@ -229,8 +265,8 @@ begin
   Result := FVALOR_TOTAL;
 end;
 
-
-function TModelEntityPedcompraItem.DT_INCLUSAO(aValue: TDateTime): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.DT_INCLUSAO(aValue: TDateTime)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FDT_INCLUSAO := aValue;
@@ -241,7 +277,8 @@ begin
   Result := FDT_INCLUSAO;
 end;
 
-function TModelEntityPedcompraItem.DT_SOLICITADA(aValue: TDateTime): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.DT_SOLICITADA(aValue: TDateTime)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FDT_SOLICITADA := aValue;
@@ -252,7 +289,8 @@ begin
   Result := FDT_SOLICITADA;
 end;
 
-function TModelEntityPedcompraItem.DT_RECEBIDA(aValue: TDateTime): TModelEntityPedcompraItem;
+function TModelEntityPedcompraItem.DT_RECEBIDA(aValue: TDateTime)
+  : TModelEntityPedcompraItem;
 begin
   Result := Self;
   FDT_RECEBIDA := aValue;
