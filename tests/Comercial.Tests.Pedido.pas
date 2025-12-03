@@ -8,7 +8,6 @@ uses
   comercial.model.business.interfaces,
   comercial.model.business.Pedido,
   comercial.model.business.Fornecedor,
-  comercial.model.business.Produto,
   comercial.model.resource.interfaces,
   comercial.model.resource.impl.queryFD;
 
@@ -19,7 +18,7 @@ type
     [Setup]
     procedure Setup;
     [Test]
-    procedure CreatePedidoAddItemAndFinalizeTotal;
+    procedure CreatePedidoAddItem;
   end;
 
 implementation
@@ -31,38 +30,35 @@ procedure TTestPedido.Setup;
 begin
 end;
 
-procedure TTestPedido.CreatePedidoAddItemAndFinalizeTotal;
+procedure TTestPedido.CreatePedidoAddItem;
 var
   BFornecedor: iModelBusinessFornecedor;
-  BProduto: iModelBusinessProduto;
   BPedido: iModelBusinessPedido;
   Q: iQuery;
-  FornecedorId, ProdutoId, PedidoId: Integer;
-  Desc: string;
+  FornecedorId, PedidoId: Integer;
 begin
   BFornecedor := TModelBusinessFornecedor.New;
-  BProduto := TModelBusinessProduto.New;
 
-  BFornecedor.Salvar('Fornecedor UT', 'Razao UT', '12.345.678/0001-95', 'End', '999');
+  BFornecedor.Salvar(0, 'Razao UT', 'SP', 'Fantasia UT', 'BR', True, True);
   Q := TModelResourceQueryFD.New;
-  Q.active(False).sqlClear.sqlAdd('select max(IDFORNECEDOR) as ID from FORNECEDOR').open;
+  Q.active(False).sqlClear.sqlAdd('select max(COD_CLIFOR) as ID from FORNECEDORES where ACTIVE = 1').open;
   FornecedorId := Q.DataSet.FieldByName('ID').AsInteger;
 
-  Desc := 'Produto UT ' + FormatDateTime('yyyymmdd_hhnnss', Now);
-  BProduto.Salvar(Desc, 'Marca', 20.0);
-  Q.active(False).sqlClear.sqlAdd('select max(IDPRODUTO) as ID from PRODUTO').open;
-  ProdutoId := Q.DataSet.FieldByName('ID').AsInteger;
-
   BPedido := TModelBusinessPedido.New;
-  BPedido.setIdFornecedor(FornecedorId).Novo;
-  Q.active(False).sqlClear.sqlAdd('select max(IDPEDIDO) as ID from PEDIDO').open;
+  BPedido.Novo;
+  Q.active(False).sqlClear.sqlAdd('select max(COD_PEDIDOCOMPRA) as ID from PEDIDO_COMPRA').open;
   PedidoId := Q.DataSet.FieldByName('ID').AsInteger;
   Assert.IsTrue(PedidoId > 0);
+  BPedido.setIdPedido(PedidoId).setIdEmpresa(1).setIdFornecedor(FornecedorId);
+  BPedido.AdicionarItem(123, 10.0, 2.0);
 
-  BPedido.setIdproduto(ProdutoId).AdicionarItem(0, 2.0).Finalizar;
-
-  Q.active(False).sqlClear.sqlAdd('select VALOR_TOTAL from PEDIDO where IDPEDIDO = :ID').addParam('ID', PedidoId).open;
-  Assert.AreEqual(Double(40.0), Q.DataSet.FieldByName('VALOR_TOTAL').AsFloat);
+  Q.active(False).sqlClear
+    .sqlAdd('select top 1 COD_Item, QTD_PEDIDA from PEDCOMPRA_ITEM where COD_PEDIDOCOMPRA = :ID and COD_EMPRESA = :EMP')
+    .addParam('ID', PedidoId)
+    .addParam('EMP', 1)
+    .open;
+  Assert.AreEqual(123, Q.DataSet.FieldByName('COD_Item').AsInteger);
+  Assert.AreEqual(Double(2.0), Q.DataSet.FieldByName('QTD_PEDIDA').AsFloat);
 end;
 
 end.

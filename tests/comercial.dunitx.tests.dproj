@@ -24,7 +24,6 @@
         </DelphiCompile>
         <DCCReference Include="Comercial.Tests.Migrations.pas"/>
         <DCCReference Include="Comercial.Tests.Cliente.pas"/>
-        <DCCReference Include="Comercial.Tests.Produto.pas"/>
         <DCCReference Include="Comercial.Tests.Pedido.pas"/>
         <DCCReference Include="Comercial.Tests.RelatorioHTML.pas"/>
         <DCCReference Include="..\src\model\db\comercial.model.db.migrations.pas"/>
@@ -36,13 +35,9 @@
         <DCCReference Include="..\src\model\business\comercial.model.business.Fornecedor.pas"/>
         <DCCReference Include="..\src\model\business\comercial.model.business.interfaces.pas"/>
         <DCCReference Include="..\src\model\business\comercial.model.business.Pedido.pas"/>
-        <DCCReference Include="..\src\model\business\comercial.model.business.Produto.pas"/>
-        <DCCReference Include="..\src\model\business\comercial.model.business.RelatorioProdutos.pas"/>
         <DCCReference Include="..\src\model\DAO\comercial.model.DAO.Fornecedor.pas"/>
         <DCCReference Include="..\src\model\DAO\comercial.model.DAO.interfaces.pas"/>
-        <DCCReference Include="..\src\model\DAO\comercial.model.DAO.Produto.pas"/>
         <DCCReference Include="..\src\model\entity\comercial.model.entity.Fornecedor.pas"/>
-        <DCCReference Include="..\src\model\entity\comercial.model.entity.Produto.pas"/>
         <DCCReference Include="..\src\model\comercial.model.validation.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>

@@ -11,8 +11,8 @@ uses
   FireDAC.Stan.Option,
   FireDAC.Stan.Pool,
   FireDAC.Phys,
-  FireDAC.Phys.FB,
-  FireDAC.Phys.FBDef,
+  FireDAC.Phys.MSSQL,
+  FireDAC.Phys.MSSQLDef,
   FireDAC.UI.Intf,
   FireDAC.VCLUI.Wait,
   System.IniFiles,
@@ -39,15 +39,18 @@ begin
   var iniPath := ExtractFilePath(ParamStr(0)) + 'comercial.ini';
   var ini := TIniFile.Create(iniPath);
   try
-    var dbPath := ini.ReadString('Database', 'Path', 'C:\testeEmpresa\DADOS.FDB');
-    var dbUser := ini.ReadString('Database', 'User', 'SYSDBA');
-    var dbPass := ini.ReadString('Database', 'Password', 'masterkey');
+    var server := ini.ReadString('Database', 'Server', 'localhost');
+    var database := ini.ReadString('Database', 'Database', 'PedidoFornecedor');
+    var dbUser := ini.ReadString('Database', 'User', 'sa');
+    var dbPass := ini.ReadString('Database', 'Password', '');
 
     FConn.Params.Clear;
-    FConn.Params.Values['DriverID'] := 'FB';
-    FConn.Params.Values['Database'] := dbPath;
+    FConn.Params.Values['DriverID'] := 'MSSQL';
+    FConn.Params.Values['Server'] := server;
+    FConn.Params.Values['Database'] := database;
     FConn.Params.Values['User_Name'] := dbUser;
     FConn.Params.Values['Password'] := dbPass;
+    FConn.Params.Values['OSAuthent'] := IfThen((dbUser = '') and (dbPass = ''), 'Yes', 'No');
     FConn.LoginPrompt := False;
   finally
     ini.Free;

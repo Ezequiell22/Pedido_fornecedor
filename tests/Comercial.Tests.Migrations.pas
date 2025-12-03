@@ -19,11 +19,7 @@ type
     [Test]
     procedure ShouldCreateTables;
     [Test]
-    procedure ShouldCreateTriggerAndException;
-    [Test]
-    procedure ShouldCreateUniqueIndexProdutoDescricao;
-    [Test]
-    procedure ProcedureTopProdutosExists;
+    procedure ShouldCreateIndexes;
   end;
 
 implementation
@@ -47,26 +43,17 @@ end;
 
 procedure TTestMigrations.ShouldCreateTables;
 begin
-  Assert.IsTrue(Exists('select rdb$relation_name from rdb$relations where rdb$relation_name = ''FORNECEDOR'''));
-  Assert.IsTrue(Exists('select rdb$relation_name from rdb$relations where rdb$relation_name = ''PRODUTO'''));
-  Assert.IsTrue(Exists('select rdb$relation_name from rdb$relations where rdb$relation_name = ''PEDIDO'''));
-  Assert.IsTrue(Exists('select rdb$relation_name from rdb$relations where rdb$relation_name = ''PEDIDO_ITENS'''));
+  Assert.IsTrue(Exists('select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME = ''FORNECEDORES'''));
+  Assert.IsTrue(Exists('select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME = ''PEDIDO_COMPRA'''));
+  Assert.IsTrue(Exists('select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_NAME = ''PEDCOMPRA_ITEM'''));
 end;
 
-procedure TTestMigrations.ShouldCreateTriggerAndException;
+procedure TTestMigrations.ShouldCreateIndexes;
 begin
-  Assert.IsTrue(Exists('select rdb$exception_name from rdb$exceptions where rdb$exception_name = ''EX_TELEFONE_OBRIGATORIO'''));
-  Assert.IsTrue(Exists('select rdb$trigger_name from rdb$triggers where rdb$trigger_name = ''TRG_FORNECEDOR_TELEFONE'''));
+  Assert.IsTrue(Exists('select name from sys.indexes where name = ''IDX_PEDIDO_COMPRA_CLIFOR'''));
+  Assert.IsTrue(Exists('select name from sys.indexes where name = ''IDX_PEDCOMPRA_ITEM_PED'''));
 end;
 
-procedure TTestMigrations.ShouldCreateUniqueIndexProdutoDescricao;
-begin
-  Assert.IsTrue(Exists('select rdb$index_name from rdb$indices where rdb$index_name = ''IDX_PRODUTO_DESCRICAO_UNICO'''));
-end;
-
-procedure TTestMigrations.ProcedureTopProdutosExists;
-begin
-  Assert.IsTrue(Exists('select rdb$procedure_name from rdb$procedures where rdb$procedure_name = ''SP_TOP_PRODUTOS_VENDIDOS'''));
-end;
+// removed legacy tests for triggers/procedure/unique index from previous project
 
 end.

@@ -19,9 +19,7 @@ type
     [Setup]
     procedure Setup;
     [Test]
-    procedure InsertUpdateDeleteFornecedor;
-    [Test]
-    procedure ShouldEnforceTelefoneTrigger;
+    procedure InsertUpdateSoftDeleteFornecedor;
   end;
 
 implementation
@@ -34,7 +32,7 @@ begin
 
 end;
 
-procedure TTestFornecedor.InsertUpdateDeleteFornecedor;
+procedure TTestFornecedor.InsertUpdateSoftDeleteFornecedor;
 var
   B: iModelBusinessFornecedor;
   id: Integer;
@@ -45,44 +43,31 @@ begin
   Q := TModelResourceQueryFD.New;
   B := TModelBusinessFornecedor.New;
 
-  {}
-  B.Salvar('Fantasia UT', 'Razao UT', '12.345.678/0001-95', 'End UT', '999');
+  // insert
+  B.Salvar(0, 'Razao UT', 'SP', 'Fantasia UT', 'BR', True, False);
 
   Q.active(False).sqlClear
-  .sqlAdd('select max(IDFORNECEDOR) as ID from FORNECEDOR')
+  .sqlAdd('select max(COD_CLIFOR) as ID from FORNECEDORES where ACTIVE = 1')
   .open;
   id := Q.DataSet.FieldByName('ID').AsInteger;
 
   Assert.IsTrue(id > 0);
 
-  {}
-  B.Editar(id, 'Fantasia UP', 'Razao UP', '12.345.678/0001-95', 'End UP', '888');
+  // update via Salvar
+  B.Salvar(id, 'Razao UP', 'RJ', 'Fantasia UP', 'BR', False, True);
   Q.active(False).sqlClear
-  .sqlAdd('select * from FORNECEDOR where IDFORNECEDOR = :ID')
+  .sqlAdd('select * from FORNECEDORES where COD_CLIFOR = :ID')
   .addParam('ID', id).open;
-  Assert.AreEqual('Fantasia UP', Q.DataSet.FieldByName('NM_FANTASIA').AsString);
-  Assert.AreEqual('888', Q.DataSet.FieldByName('TELEFONE').AsString);
+  Assert.AreEqual('Fantasia UP', Q.DataSet.FieldByName('FANTASIA').AsString);
+  Assert.AreEqual('S', Q.DataSet.FieldByName('FORNEC').AsString);
+  Assert.AreEqual('N', Q.DataSet.FieldByName('CLIENTE').AsString);
 
-  {}
+  // soft delete sets ACTIVE = 0
   B.Excluir(id);
-  Q.active(False).sqlClear.sqlAdd('select 1 from FORNECEDOR where IDFORNECEDOR = :ID').addParam('ID', id).open;
-  Assert.IsTrue(Q.DataSet.IsEmpty);
-end;
-
-procedure TTestFornecedor.ShouldEnforceTelefoneTrigger;
-var
-  Q: iQuery;
-begin
-  Q := TModelResourceQueryFD.New;
-  Assert.WillRaise(
-    procedure
-    begin
-      Q.active(False).sqlClear
-        .sqlAdd('insert into FORNECEDOR (IDFORNECEDOR, NM_FANTASIA, RAZAO_SOCIAL, CNPJ, ENDERECO, TELEFONE)')
-        .sqlAdd('values ((select coalesce(max(IDFORNECEDOR),0)+1 from FORNECEDOR), ''X'', ''Y'', ''12.345.678/0001-95'', ''Z'', '''')')
-        .execSql;
-    end
-  );
+  Q.active(False).sqlClear
+    .sqlAdd('select ACTIVE from FORNECEDORES where COD_CLIFOR = :ID')
+    .addParam('ID', id).open;
+  Assert.AreEqual(0, Q.DataSet.FieldByName('ACTIVE').AsInteger);
 end;
 
 end.

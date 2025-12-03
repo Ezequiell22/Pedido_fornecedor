@@ -5,7 +5,7 @@ Aplicação de compras (Delphi VCL) para gestão de pedidos de compra, fornecedo
 ## Visão Geral
 - Foco em pedidos de compra (`PEDIDO_COMPRA`), fornecedores (`FORNECEDORES`) e itens de pedido (`PEDCOMPRA_ITEM`).
 - Camadas separadas: DAO (acesso a dados), Business (regras), View (VCL), Utils (HTML, logs), DB (migrações/seed).
-- Banco Firebird; consultas através de `FireDAC` (implementação `comercial.model.resource.impl.queryFD`).
+- Banco SQL Server via `FireDAC` (DriverID `MSSQL`) usando `comercial.model.resource.impl.queryFD`.
 
 ## Funcionalidades
 - Cadastro/listagem de fornecedores e pedidos.
@@ -29,13 +29,14 @@ Aplicação de compras (Delphi VCL) para gestão de pedidos de compra, fornecedo
 ## Configuração
 - Arquivo `comercial.ini` (no diretório do executável):
   - `[Database]`
-  - `Path`: caminho do banco (ex.: `C:\ga_teste\Win32\Debug\dados.fdb`)
-  - `User`: usuário (ex.: `SYSDBA`)
-  - `Password`: senha (ex.: `masterkey`)
+  - `Server`: host do SQL Server (ex.: `localhost`)
+  - `Database`: nome do banco (ex.: `PedidoFornecedor`)
+  - `User`: usuário (ex.: `sa`) — deixe vazio para autenticação do Windows
+  - `Password`: senha — deixe vazio para autenticação do Windows
 
 ## Build e Execução
 - Abrir `comercial.dproj` e compilar em `Win32/Debug` (Delphi).
-- Garantir `comercial.ini` com caminho/credenciais válidos do Firebird.
+- Garantir `comercial.ini` com servidor/banco/credenciais válidos do SQL Server.
 - Executar a aplicação e usar a tela “Listagem de Pedidos” para consultar e filtrar.
 
 ## Relatórios HTML
@@ -56,7 +57,19 @@ Aplicação de compras (Delphi VCL) para gestão de pedidos de compra, fornecedo
 - Entidades/DAOs seguem estritamente os nomes e tipos do DDL manual.
 - Seed usa DAOs; antes de inserir, limpa tabelas de destino com `delete` simples para evitar duplicidades.
 
+## Testes (DUnitX)
+- Projeto de testes: `tests/comercial.dunitx.tests.dproj` (console).
+- Como executar:
+  - Compilar em `Win32`.
+  - Garantir `comercial.ini` configurado (conexão SQL Server).
+  - Executar `comercial.dunitx.tests.exe` e verificar saída do console (exit code 0 indica sucesso).
+- Suites:
+  - Migrações: valida criação de `FORNECEDORES`, `PEDIDO_COMPRA`, `PEDCOMPRA_ITEM` e índices `IDX_PEDIDO_COMPRA_CLIFOR`, `IDX_PEDCOMPRA_ITEM_PED`.
+  - Fornecedor: insere, atualiza e realiza soft delete (`ACTIVE = 0`).
+  - Pedido: cria pedido de compra, associa fornecedor/empresa e adiciona item.
+  - Relatório HTML: gera “Compras por Produto” e “Compras por Fornecedor”.
+
 ## Requisitos
 - Delphi (versão compatível com FireDAC).
-- Firebird 3+.
-- Acesso ao arquivo `dados.fdb` definido no `comercial.ini`.
+- SQL Server 2016+.
+- Acesso ao servidor e base definidos no `comercial.ini`.
