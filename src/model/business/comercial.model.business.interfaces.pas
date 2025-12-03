@@ -30,8 +30,8 @@ type
     function setIdproduto(aValue: Integer): iModelBusinessPedido;
     function setIdFornecedor(aValue: Integer): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
-    function EditarItem(aSequencia: Integer; aValor: Double; aQuantidade: Double)
-      : iModelBusinessPedido;
+    function EditarItem(aSequencia: Integer; aValor: Double;
+      aQuantidade: Double): iModelBusinessPedido;
     function ExcluirPedido: iModelBusinessPedido;
     function DAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
     function DAOItens: iModelDAOEntity<TModelEntityPedcompraItem>;
@@ -39,8 +39,10 @@ type
 
   iModelBusinessRelatorioProdutos = interface
     ['{BFD1E2A4-1F1C-4C76-AE2B-8D6B6A1B1D3C}']
-    function GerarPorProduto(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
-    function GerarPorFornecedor(aDtIni, aDtFim: TDateTime): iModelBusinessRelatorioProdutos;
+    function GerarPorProduto(aDtIni, aDtFim: TDateTime)
+      : iModelBusinessRelatorioProdutos;
+    function GerarPorFornecedor(aDtIni, aDtFim: TDateTime)
+      : iModelBusinessRelatorioProdutos;
     function LinkDataSource(aDataSource: TDataSource)
       : iModelBusinessRelatorioProdutos;
   end;
@@ -50,10 +52,9 @@ type
     function Bind(aDataSource: TDataSource): iModelBusinessFornecedor;
     function Get: iModelBusinessFornecedor;
     function GetById(aId: Integer): iModelBusinessFornecedor;
-    function Salvar(aFantasia, aRazao, aCnpj, aEndereco, aTelefone: string)
-      : iModelBusinessFornecedor;
-    function Editar(aId: Integer; aFantasia, aRazao, aCnpj, aEndereco,
-      aTelefone: string): iModelBusinessFornecedor;
+    function Salvar(aCOD_CLIFOR: Integer; aRAZAO,
+     aCOD_ESTADO, aFANTASIA,
+      aCOD_PAIS : string; aCLIENTE, aFORNEC: boolean): iModelBusinessFornecedor;
     function Excluir(aId: Integer): iModelBusinessFornecedor;
   end;
 

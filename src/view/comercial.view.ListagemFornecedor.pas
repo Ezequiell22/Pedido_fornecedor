@@ -56,7 +56,8 @@ begin
   with TfrmFornecedor.Create(self) do
     try
       Caption := 'Editar Fornecedor';
-      edtId.Text := DS.DataSet.FieldByName('COD_CLIFOR').AsString;
+      edtCod_clifor.Text := DS.DataSet.FieldByName('COD_CLIFOR').AsString;
+      edtCod_clifor.ReadOnly := True;
       ShowModal;
     finally
       Free;

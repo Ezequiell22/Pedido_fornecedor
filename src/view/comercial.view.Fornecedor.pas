@@ -1,4 +1,3 @@
-{ copied from comercial.view.Cliente.pas }
 unit comercial.view.Fornecedor;
 
 interface
@@ -17,14 +16,14 @@ type
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
-    Label6: TLabel;
-    edtId: TEdit;
+    edtCod_clifor: TEdit;
     edtFantasia: TEdit;
     edtRazao: TEdit;
-    edtCnpj: TEdit;
-    edtEndereco: TEdit;
-    edtTelefone: TEdit;
+    edtCodEstado: TEdit;
+    edtCodPais: TEdit;
     dts2: TDataSource;
+    CheckBoxcliente: TCheckBox;
+    CheckBoxFornec: TCheckBox;
     procedure FormShow(Sender: TObject);
   published
     FController: iController;
@@ -40,6 +39,7 @@ type
 implementation
 
 uses
+  system.StrUtils,
   Vcl.Dialogs;
 
 {$R *.dfm}
@@ -58,7 +58,8 @@ end;
 
 procedure TfrmFornecedor.FormShow(Sender: TObject);
 begin
-  FController.business.Fornecedor.GetById(strTointdef(edtId.Text, 0));
+  FController.business.Fornecedor
+  .GetById(strTointdef(edtCod_clifor.Text, 0));
   LoadData;
   edtFantasia.SetFocus;
 end;
@@ -67,12 +68,13 @@ procedure TfrmFornecedor.LoadData;
 begin
   if not dts2.DataSet.Active then
     Exit;
-  edtId.Text := dts2.DataSet.FieldByName('IDFORNECEDOR').AsString;
-  edtFantasia.Text := dts2.DataSet.FieldByName('NM_FANTASIA').AsString;
-  edtRazao.Text := dts2.DataSet.FieldByName('RAZAO_SOCIAL').AsString;
-  edtCnpj.Text := dts2.DataSet.FieldByName('CNPJ').AsString;
-  edtEndereco.Text := dts2.DataSet.FieldByName('ENDERECO').AsString;
-  edtTelefone.Text := dts2.DataSet.FieldByName('TELEFONE').AsString;
+  edtCod_clifor.Text := dts2.DataSet.FieldByName('COD_CLIFOR').AsString;
+  edtRazao.Text := dts2.DataSet.FieldByName('RAZAO').AsString;
+  edtCodEstado.Text := dts2.DataSet.FieldByName('COD_ESTADO').AsString;
+  edtFantasia.Text := dts2.DataSet.FieldByName('FANTASIA').AsString;
+  edtCodPais.Text := dts2.DataSet.FieldByName('COD_PAIS').AsString;
+  CheckBoxcliente.Checked := dts2.DataSet.FieldByName('CLIENTE').AsString = 'S';
+  CheckBoxFornec.Checked := dts2.DataSet.FieldByName('FORNEC').AsString = 'S';
 end;
 
 function ValidateFornecedorInputs(AOwner: TfrmFornecedor): Boolean;
@@ -88,11 +90,7 @@ begin
     ShowMessage('Razao social obrigatoria');
     Exit;
   end;
-  if Trim(AOwner.edtTelefone.Text) = '' then
-  begin
-    ShowMessage('Telefone obrigatorio');
-    Exit;
-  end;
+
   Result := True;
 end;
 
@@ -101,15 +99,17 @@ begin
   if not ValidateFornecedorInputs(Self) then
     Exit;
 
-  if Trim(edtId.Text) = EmptyStr then
-  begin
-    FController.business.Fornecedor.Salvar( edtFantasia.Text, edtRazao.Text,
-      edtCnpj.Text, edtEndereco.Text, edtTelefone.Text);
-  end
-  else
-    FController.business.Fornecedor.Editar(dts2.DataSet.FieldByName('IDFORNECEDOR')
-      .AsInteger, edtFantasia.Text, edtRazao.Text, edtCnpj.Text,
-      edtEndereco.Text, edtTelefone.Text);
+    FController.business
+    .Fornecedor
+      .Salvar(
+        strTointDef(edtCod_clifor.Text, 0),
+        edtRazao.Text,
+        edtCodEstado.Text,
+        edtFantasia.Text,
+        edtCodPais.Text,
+        CheckBoxcliente.Checked,
+        CheckBoxFornec.Checked);
+
 
   Close;
 end;

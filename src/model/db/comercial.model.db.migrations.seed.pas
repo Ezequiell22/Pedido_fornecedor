@@ -414,6 +414,9 @@ begin
           .GetDataSet.FieldByName('COD_CLIFOR').AsInteger <= 0 then
             continue;
 
+        if VarAsType(VInt(Rows[i][iCOD_EMPRESA]), varInteger) <> 200 then
+        continue;
+
         daoP.This
           .COD_PEDIDOCOMPRA(VarAsType(VInt(Rows[i][iCOD_PEDIDOCOMPRA]), varInteger))
           .COD_EMPRESA(VarAsType(VInt(Rows[i][iCOD_EMPRESA]), varInteger))
@@ -436,6 +439,9 @@ begin
     'PERC_DESCTO','VALOR_DESCTO','PERC_FINANC',
     'VALOR_TOTAL','DT_INCLUSAO','DT_SOLICITADA','DT_RECEBIDA']) then
     begin
+
+
+
       var iCOD_PED := IndexOfHeader(H2, 'COD_PEDIDOCOMPRA');
       var iCOD_EMP := IndexOfHeader(H2, 'COD_EMPRESA');
       var iSEQ := IndexOfHeader(H2, 'SEQUENCIA');
@@ -456,6 +462,10 @@ begin
       Rows := ReadSheetRows(Zip, 'xl/worksheets/sheet3.xml', Shared);
       for i := 0 to Length(Rows) - 1 do
       begin
+
+        if VarAsType(VInt(Rows[i][iCOD_EMP]), varInteger) <> 200 then
+         continue;
+        try
         daoI.This
           .COD_PEDIDOCOMPRA(VarAsType(VInt(Rows[i][iCOD_PED]), varInteger))
           .COD_EMPRESA(VarAsType(VInt(Rows[i][iCOD_EMP]), varInteger))
@@ -476,6 +486,9 @@ begin
           .DT_RECEBIDA(VarToDateTime(VDate(Rows[i][iDT_REC])))
           .&End
           .Insert;
+        except
+//       rever tratamento por causa da chave
+        end;
       end;
     end;
   finally

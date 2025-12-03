@@ -19,7 +19,7 @@ type
     FCOD_PAIS: string;
     FCLIENTE: string;
     FFORNEC: string;
-    FACTIVE: Boolean;
+    FACTIVE: Integer;
   public
     constructor Create(aParent: iModelDAOEntity<TModelEntityFornecedor>);
     destructor Destroy; override;
@@ -37,8 +37,8 @@ type
     function CLIENTE: string; overload;
     function FORNEC(aValue: string): TModelEntityFornecedor; overload;
     function FORNEC: string; overload;
-    function ACTIVE(aValue: Boolean): TModelEntityFornecedor; overload;
-    function ACTIVE: Boolean; overload;
+    function ACTIVE(aValue: Integer): TModelEntityFornecedor; overload;
+    function ACTIVE: Integer; overload;
     function &End: iModelDAOEntity<TModelEntityFornecedor>;
   end;
 
@@ -96,12 +96,12 @@ begin
   Result := FRAZAO;
 end;
 
-function TModelEntityFornecedor.ACTIVE: Boolean;
+function TModelEntityFornecedor.ACTIVE: Integer;
 begin
   Result := FACTIVE;
 end;
 
-function TModelEntityFornecedor.ACTIVE(aValue: Boolean): TModelEntityFornecedor;
+function TModelEntityFornecedor.ACTIVE(aValue: Integer): TModelEntityFornecedor;
 begin
   Result := Self;
   FACTIVE := aValue;

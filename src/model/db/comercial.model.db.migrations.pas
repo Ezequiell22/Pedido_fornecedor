@@ -122,11 +122,12 @@ begin
             '(' + #13#10 +
             '  COD_CLIFOR integer,' + #13#10 +
             '  RAZAO varchar(255),' + #13#10 +
-            '  COD_ESTADO varchar(255),' + #13#10 +
+            '  COD_ESTADO varchar(5),' + #13#10 +
             '  FANTASIA varchar(255),' + #13#10 +
-            '  COD_PAIS varchar(255),' + #13#10 +
-            '  CLIENTE varchar(255),' + #13#10 +
-            '  FORNEC varchar(255)' + #13#10 +
+            '  COD_PAIS varchar(7),' + #13#10 +
+            '  CLIENTE varchar(1),' + #13#10 +
+            '  FORNEC varchar(1),' + #13#10 +
+            '  ACTIVE integer' + #13#10 +
             ')');
 
   SanitizeData;

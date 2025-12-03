@@ -5,7 +5,7 @@ object frmIndex: TfrmIndex
   BorderStyle = bsSingle
   Caption = 'M'#243'dulo Comercial'
   ClientHeight = 157
-  ClientWidth = 402
+  ClientWidth = 456
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

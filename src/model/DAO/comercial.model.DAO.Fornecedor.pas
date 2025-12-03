@@ -61,7 +61,8 @@ begin
   try
     FQuery.active(False)
       .sqlClear
-      .sqlAdd('delete from FORNECEDORES where COD_CLIFOR = :COD_CLIFOR')
+      .sqlAdd('UPDATE FORNECEDORES SET ACTIVE = 0 ')
+      .sqlAdd('where COD_CLIFOR = :COD_CLIFOR')
       .addParam('COD_CLIFOR', FEntity.COD_CLIFOR)
       .execSql;
   except
@@ -82,7 +83,7 @@ begin
   try
     FQuery.active(False)
       .sqlClear
-      .sqlAdd('select * from FORNECEDORES')
+      .sqlAdd('select * from FORNECEDORES WHERE ACTIVE = 1')
       .Open;
     FQuery.DataSet.First;
   except
@@ -124,19 +125,12 @@ begin
     FQuery.active(False)
       .sqlClear;
 
-    if FEntity.COD_CLIFOR > 0 then
-    begin
-      FQuery
-        .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC)')
-        .sqlAdd('values (:COD_CLIFOR, :RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)')
-        .addParam('COD_CLIFOR', FEntity.COD_CLIFOR);
-    end
-    else
-    begin
-      FQuery
-        .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO, COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC)')
-        .sqlAdd('values ((select coalesce(max(COD_CLIFOR),0)+1 from FORNECEDORES), :RAZAO, :COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC)');
-    end;
+
+    FQuery
+      .sqlAdd('insert into FORNECEDORES (COD_CLIFOR, RAZAO,')
+      .sqlAdd('COD_ESTADO, FANTASIA, COD_PAIS, CLIENTE, FORNEC, ACTIVE)')
+      .sqlAdd('values ((select coalesce(max(COD_CLIFOR),0)+1 from FORNECEDORES), :RAZAO, ')
+      .sqlAdd(':COD_ESTADO, :FANTASIA, :COD_PAIS, :CLIENTE, :FORNEC, :ACTIVE)');
 
     FQuery
       .addParam('RAZAO', FEntity.RAZAO)
@@ -145,6 +139,7 @@ begin
       .addParam('COD_PAIS', FEntity.COD_PAIS)
       .addParam('CLIENTE', FEntity.CLIENTE)
       .addParam('FORNEC', FEntity.FORNEC)
+      .addParam('ACTIVE', 1)
       .execSql;
   except
     on E: Exception do
@@ -169,7 +164,8 @@ begin
     FQuery.active(False)
       .sqlClear
       .sqlAdd('update FORNECEDORES set RAZAO = :RAZAO, COD_ESTADO = :COD_ESTADO,')
-      .sqlAdd(' FANTASIA = :FANTASIA, COD_PAIS = :COD_PAIS, CLIENTE = :CLIENTE, FORNEC = :FORNEC')
+      .sqlAdd(' FANTASIA = :FANTASIA, COD_PAIS = :COD_PAIS, CLIENTE = :CLIENTE, ')
+      .sqlAdd(' FORNEC = :FORNEC, ACTIVE = :ACTIVE')
       .sqlAdd(' where COD_CLIFOR = :COD_CLIFOR')
       .addParam('COD_CLIFOR', FEntity.COD_CLIFOR)
       .addParam('RAZAO', FEntity.RAZAO)
@@ -178,6 +174,7 @@ begin
       .addParam('COD_PAIS', FEntity.COD_PAIS)
       .addParam('CLIENTE', FEntity.CLIENTE)
       .addParam('FORNEC', FEntity.FORNEC)
+      .addParam('ACTIVE', 1)
       .execSql;
   except
     on E: Exception do

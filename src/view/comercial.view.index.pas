@@ -51,8 +51,8 @@ uses
   comercial.view.Fornecedor,
   comercial.view.Pedido,
   comercial.view.ListagemFornecedor,
-
-  comercial.util.printhtml, comercial.view.ListagemPedido;
+  comercial.util.printhtml,
+  comercial.view.ListagemPedido;
 
 procedure TfrmIndex.ButtonFornecedoresClick(Sender: TObject);
 begin

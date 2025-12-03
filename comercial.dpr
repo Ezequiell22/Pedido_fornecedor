@@ -61,13 +61,13 @@ begin
   finally
     Mig.Free;
   end;
-
-//  Var MigData := TDbMigrationsSeed.Create;
-//  try
-//    MigData.Apply('C:\Pedido_fornecedor\Base_Teste_Vaga_Delphi.xlsx');
-//  finally
-//    MigData.Free;
-//  end;
+//
+  Var MigData := TDbMigrationsSeed.Create;
+  try
+    MigData.Apply('C:\Pedido_fornecedor\Base_Teste_Vaga_Delphi.xlsx');
+  finally
+    MigData.Free;
+  end;
 
   Application.Initialize;
   Application.MainFormOnTaskbar := True;

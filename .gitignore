@@ -25,6 +25,7 @@ __recovery/
 *.html
 *.DS_Store  
 *.xlsx
+*.FDB
 
 # Unit test reports
 TEST*.xml
