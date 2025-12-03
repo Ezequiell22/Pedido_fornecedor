@@ -156,13 +156,12 @@ begin
   Q := TModelResourceQueryFD.New;
   Q.active(False)
     .sqlClear
-    .sqlAdd('select p.IDPRODUTO, p.DESCRICAO,')
-    .sqlAdd('       avg(i.VL_UNITARIO) as PRECO_MEDIO,')
-    .sqlAdd('       sum(i.QUANTIDADE) as QTD_TOTAL,')
-    .sqlAdd('       sum(i.VL_TOTAL) as VALOR_TOTAL')
+    .sqlAdd('select i.COD_Item as IDPRODUTO, i.DESCRICAO,')
+    .sqlAdd('       avg(i.PRECO_UNITARIO) as PRECO_MEDIO,')
+    .sqlAdd('       sum(i.QTD_PEDIDA) as QTD_TOTAL,')
+    .sqlAdd('       sum(i.VALOR_TOTAL) as VALOR_TOTAL')
     .sqlAdd('  from PEDCOMPRA_ITEM i')
-    .sqlAdd('  left join PRODUTO p on p.IDPRODUTO = i.COD_PRODUTO')
-    .sqlAdd(' group by p.IDPRODUTO, p.DESCRICAO')
+    .sqlAdd(' group by i.COD_Item, i.DESCRICAO')
     .open;
 
   SB := TStringBuilder.Create;
@@ -249,9 +248,10 @@ begin
   Q := TModelResourceQueryFD.New;
   Q.active(False)
     .sqlClear
-    .sqlAdd('select f.COD_CLIFOR, f.FANTASIA, sum(d.TOTAL) as VALOR_TOTAL')
+    .sqlAdd('select f.COD_CLIFOR, f.FANTASIA, sum(i.VALOR_TOTAL) as VALOR_TOTAL')
     .sqlAdd('  from PEDIDO_COMPRA d')
     .sqlAdd('  left join FORNECEDORES f on f.COD_CLIFOR = d.COD_CLIFOR')
+    .sqlAdd('  left join PEDCOMPRA_ITEM i on i.COD_PEDIDOCOMPRA = d.COD_PEDIDOCOMPRA')
     .sqlAdd(' group by f.COD_CLIFOR, f.FANTASIA')
     .open;
 
@@ -330,3 +330,4 @@ end;
 
 
 end.
+
