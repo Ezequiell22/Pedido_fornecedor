@@ -120,6 +120,7 @@ begin
     FController
     .business
     .Pedido
+    .setIdEmpresa(FIDEMPRESA)
     .loadPedidos(filters);
 
   finally

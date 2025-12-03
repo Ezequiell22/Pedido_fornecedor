@@ -90,7 +90,16 @@ end;
 function TModelDAOPedcompraItem.GetbyId(AValue: integer): iModelDAOEntity<TModelEntityPedcompraItem>;
 begin
   Result := Self;
+
+  if AValue <=0 then
+  begin
     FQuery
+    .active(False)
+    .sqlClear;
+    exit;
+  end;
+
+  FQuery
     .active(False)
     .sqlClear
       .sqlAdd(' select * from PEDCOMPRA_ITEM ')

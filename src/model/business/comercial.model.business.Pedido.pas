@@ -102,9 +102,15 @@ begin
 end;
 
 function TModelBusinessPedido.GetItems: iModelBusinessPedido;
+var idPedido : integer;
 begin
-  var idPedido := FdaoPEdido.this.COD_PEDIDOCOMPRA;
   result := Self;
+
+  if FdaoPEdido.GetDataSet.IsEmpty then
+    idPedido := -1
+  else
+    idPedido := FdaoPEdido.this.COD_PEDIDOCOMPRA;
+
   FDAOItem
     .GetbyId(idPedido);
 end;
