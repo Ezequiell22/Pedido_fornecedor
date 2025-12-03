@@ -32,22 +32,18 @@ type
     DSPedido: TDataSource;
     DSItens: TDataSource;
     DSFornecedores: TDataSource;
-    btnFinalizar: TButton;
     GridItens: TDBGrid;
     Label8: TLabel;
     ComboBoxFornecedor: TComboBox;
     btnNovo: TButton;
-    btnExcluirPedido: TButton;
-    btnRemoverItem: TButton;
+    edtCodItem: TEdit;
     btnEditarItem: TButton;
-    Edit1: TEdit;
+    btnRemoverItem: TButton;
     procedure BtnAddItemClick(Sender: TObject);
-    procedure BtnFinalizarClick(Sender: TObject);
     procedure ComboBoxFornecedorSelect(Sender: TObject);
 
     procedure edtIdPedidoExit(Sender: TObject);
     procedure btnNovoClick(Sender: TObject);
-    procedure btnExcluirPedidoClick(Sender: TObject);
     procedure btnRemoverItemClick(Sender: TObject);
     procedure btnEditarItemClick(Sender: TObject);
   private
@@ -56,6 +52,7 @@ type
     function ValidatePedidoCab: Boolean;
     procedure LoadComboboxFornecedor;
   public
+    FIDEMPRESA : INTEGER;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   end;
@@ -151,39 +148,20 @@ procedure TfrmPedido.BtnAddItemClick(Sender: TObject);
 begin
   if not ValidatePedidoItem then
     Exit;
-  FController.business.Pedido
+  FController.business
+    .Pedido
+    .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
+    .setIdEmpresa(DSPedido.DataSet.FieldByName('COD_EMPRESA').AsInteger)
     .AdicionarItem(
-          StrToFloatDef(edtValor.Text, 0),
-          StrToFloatDef(edtQuantidade.Text, 0));
-end;
-
-procedure TfrmPedido.BtnFinalizarClick(Sender: TObject);
-begin
-  if not ValidatePedidoCab then
-    Exit;
-  FController.business.Pedido.Finalizar;
-
-  if MessageDlg('Deseja imprimir o pedido?',
-    mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-  begin
-
-    TPrintHtmlPedido.GerarHtmlPedido(StrToIntDef(edtIdPedido.Text, 0),
-                                        GetCurrentDir());
-    showMessage('Perido salvo em '+GetCurrentDir());
-  end
+                  strTointDef(edtCodItem.Text, 0),
+                  StrToFloatDef(edtValor.Text, 0),
+                  StrToFloatDef(edtQuantidade.Text, 0));
 end;
 
 procedure TfrmPedido.btnNovoClick(Sender: TObject);
 begin
    FController.business
     .Pedido.novo;
-end;
-
-procedure TfrmPedido.btnExcluirPedidoClick(Sender: TObject);
-begin
-  FController.business.Pedido.ExcluirPedido;
-  DSPedido.DataSet := FController.business.Pedido.DAOPedido.GetDataSet;
-  DSItens.DataSet := FController.business.Pedido.DAOItens.GetDataSet;
 end;
 
 procedure TfrmPedido.btnRemoverItemClick(Sender: TObject);
@@ -193,23 +171,28 @@ begin
   if Assigned(DSItens.DataSet) and not DSItens.DataSet.IsEmpty then
   begin
     seq := DSItens.DataSet.FieldByName('SEQUENCIA').AsInteger;
-    FController.business.Pedido.RemoverItem(seq);
-    DSItens.DataSet := FController.business.Pedido.DAOItens.GetDataSet;
+    FController.business.Pedido
+    .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
+    .setIdEmpresa(DSPedido.DataSet.FieldByName('COD_EMPRESA').AsInteger)
+    .RemoverItem(seq);
   end;
 end;
 
 procedure TfrmPedido.btnEditarItemClick(Sender: TObject);
 var
   seq: Integer;
-  v, q: Double;
+  valor, quantidade : Double;
 begin
   if Assigned(DSItens.DataSet) and not DSItens.DataSet.IsEmpty then
   begin
     seq := DSItens.DataSet.FieldByName('SEQUENCIA').AsInteger;
-    v := StrToFloatDef(edtValor.Text, 0);
-    q := StrToFloatDef(edtQuantidade.Text, 1);
-    FController.business.Pedido.EditarItem(seq, v, q);
-    DSItens.DataSet := FController.business.Pedido.DAOItens.GetDataSet;
+    valor := StrToFloatDef(edtValor.Text, 0);
+    quantidade := StrToFloatDef(edtQuantidade.Text, 1);
+    FController.business
+    .Pedido
+    .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
+    .setIdEmpresa(DSPedido.DataSet.FieldByName('COD_EMPRESA').AsInteger)
+    .EditarItem(seq, valor, quantidade);
   end;
 end;
 

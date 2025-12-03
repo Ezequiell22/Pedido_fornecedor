@@ -43,8 +43,6 @@ end;
 constructor TModelDAOPedcompraItem.Create;
 begin
   FQuery := TModelResourceQueryFD.New;
-  FDataSource := TDataSource.Create(nil);
-  FDataSource.DataSet := FQuery.DataSet;
   FEntity := TModelEntityPedcompraItem.Create(Self);
 end;
 
@@ -59,7 +57,6 @@ begin
   Result := Self;
   FDataSource := AValue;
   FDataSource.DataSet := FQuery.DataSet;
-  FQuery.DataSet.AfterScroll := AfterScroll;
 end;
 
 function TModelDAOPedcompraItem.Delete: iModelDAOEntity<TModelEntityPedcompraItem>;
@@ -68,38 +65,40 @@ begin
   FQuery
     .active(False)
     .sqlClear
-      .sqlAdd('delete from PEDCOMPRA_ITEM where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA and SEQUENCIA = :SEQUENCIA')
+      .sqlAdd('delete from PEDCOMPRA_ITEM ')
+      .sqlAdd('where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA ')
+      .sqlAdd('and SEQUENCIA = :SEQUENCIA')
+      .sqlAdd('and COD_EMPRESA = :COD_EMPRESA')
       .addParam('COD_PEDIDOCOMPRA', FEntity.COD_PEDIDOCOMPRA)
       .addParam('SEQUENCIA', FEntity.SEQUENCIA)
+      .addParam('COD_EMPRESA', FEntity.COD_EMPRESA)
       .execSql;
 end;
 
 function TModelDAOPedcompraItem.Get: iModelDAOEntity<TModelEntityPedcompraItem>;
 begin
   Result := Self;
-  FQuery
-    .active(False)
-    .sqlClear
-      .sqlAdd('select * from PEDCOMPRA_ITEM')
-      .open;
-  FDataSource.DataSet := FQuery.DataSet;
+
 end;
 
 function TModelDAOPedcompraItem.Get(AFieldsWhere: TDictionary<string, Variant>): iModelDAOEntity<TModelEntityPedcompraItem>;
 begin
-  Result := Get;
+  Result := Self;
+
 end;
 
 function TModelDAOPedcompraItem.GetbyId(AValue: integer): iModelDAOEntity<TModelEntityPedcompraItem>;
 begin
   Result := Self;
-  FQuery
+    FQuery
     .active(False)
     .sqlClear
-      .sqlAdd('select * from PEDCOMPRA_ITEM where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
-      .addParam('COD_PEDIDOCOMPRA', AValue)
+      .sqlAdd(' select * from PEDCOMPRA_ITEM ')
+      .sqlAdd(' where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
+      .sqlAdd(' and COD_EMPRESA = :COD_EMPRESA')
+      .addParam('COD_PEDIDOCOMPRA', aValue)
+      .addParam('COD_EMPRESA', FEntity.COD_EMPRESA)
       .open;
-  FDataSource.DataSet := FQuery.DataSet;
 end;
 
 function TModelDAOPedcompraItem.GetDataSet: TDataSet;

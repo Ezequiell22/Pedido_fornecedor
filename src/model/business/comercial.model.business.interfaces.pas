@@ -20,21 +20,23 @@ type
     function Get: iModelBusinessPedido;
     function Abrir(aIdPedido: Integer; AcomboBoxFornecedor: TComboBox)
       : iModelBusinessPedido;
-    function AdicionarItem(aValor: Double; aQuantidade: Double)
-      : iModelBusinessPedido;
-    function Finalizar: iModelBusinessPedido;
+    function AdicionarItem(aCodItem: Integer; aValor: Double;
+      aQuantidade: Double): iModelBusinessPedido;
+
     function LinkDataSourcePedido(aDataSource: TDataSource)
       : iModelBusinessPedido;
     function LinkDataSourceItens(aDataSource: TDataSource)
       : iModelBusinessPedido;
-    function setIdproduto(aValue: Integer): iModelBusinessPedido;
+    function setIdPedido(aValue: Integer): iModelBusinessPedido;
+    function setIdEmpresa(aValue: Integer): iModelBusinessPedido;
     function setIdFornecedor(aValue: Integer): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
     function EditarItem(aSequencia: Integer; aValor: Double;
       aQuantidade: Double): iModelBusinessPedido;
     function ExcluirPedido: iModelBusinessPedido;
-    function DAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
-    function DAOItens: iModelDAOEntity<TModelEntityPedcompraItem>;
+    function GetItems : iModelBusinessPedido;
+    function loadPedidos(AFieldsWhere: TDictionary<string, Variant>)
+      : iModelBusinessPedido;
   end;
 
   iModelBusinessRelatorioProdutos = interface
@@ -52,9 +54,8 @@ type
     function Bind(aDataSource: TDataSource): iModelBusinessFornecedor;
     function Get: iModelBusinessFornecedor;
     function GetById(aId: Integer): iModelBusinessFornecedor;
-    function Salvar(aCOD_CLIFOR: Integer; aRAZAO,
-     aCOD_ESTADO, aFANTASIA,
-      aCOD_PAIS : string; aCLIENTE, aFORNEC: boolean): iModelBusinessFornecedor;
+    function Salvar(aCOD_CLIFOR: Integer; aRAZAO, aCOD_ESTADO, aFANTASIA,
+      aCOD_PAIS: string; aCLIENTE, aFORNEC: boolean): iModelBusinessFornecedor;
     function Excluir(aId: Integer): iModelBusinessFornecedor;
   end;
 

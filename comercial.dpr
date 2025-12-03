@@ -52,22 +52,24 @@ end;
 var
   AppExceptionLogger: TAppExceptionLogger;
 begin
+  { COD EMPRESA 204}
+
   AppExceptionLogger := TAppExceptionLogger.Create;
   Application.OnException := AppExceptionLogger.Handle;
-  var
-  Mig := TDbMigrations.Create;
-  try
-    Mig.Apply;
-  finally
-    Mig.Free;
-  end;
+//  var
+//  Mig := TDbMigrations.Create;
+//  try
+//    Mig.Apply;
+//  finally
+//    Mig.Free;
+//  end;
 //
-  Var MigData := TDbMigrationsSeed.Create;
-  try
-    MigData.Apply('C:\Pedido_fornecedor\Base_Teste_Vaga_Delphi.xlsx');
-  finally
-    MigData.Free;
-  end;
+//  Var MigData := TDbMigrationsSeed.Create;
+//  try
+//    MigData.Apply('C:\Pedido_fornecedor\Base_Teste_Vaga_Delphi.xlsx');
+//  finally
+//    MigData.Free;
+//  end;
 
   Application.Initialize;
   Application.MainFormOnTaskbar := True;

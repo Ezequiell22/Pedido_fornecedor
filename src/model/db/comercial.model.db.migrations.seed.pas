@@ -32,13 +32,6 @@ uses
   comercial.model.DAO.PedcompraItem, comercial.model.DAO.interfaces;
 
 procedure TDbMigrationsSeed.Apply(const AExcelPath: string);
-var
-  Q: iQuery;
-  SL: TStringList;
-  i: Integer;
-  L: TArray<string>;
-  fn: string;
-  folder: string;
 begin
   if SameText(ExtractFileExt(AExcelPath), '.xlsx') and FileExists(AExcelPath) then
   begin
@@ -414,9 +407,10 @@ begin
           .GetDataSet.FieldByName('COD_CLIFOR').AsInteger <= 0 then
             continue;
 
-        if VarAsType(VInt(Rows[i][iCOD_EMPRESA]), varInteger) <> 200 then
-        continue;
+//        if VarAsType(VInt(Rows[i][iCOD_EMPRESA]), varInteger) <> 200 then
+//        continue;
 
+        try
         daoP.This
           .COD_PEDIDOCOMPRA(VarAsType(VInt(Rows[i][iCOD_PEDIDOCOMPRA]), varInteger))
           .COD_EMPRESA(VarAsType(VInt(Rows[i][iCOD_EMPRESA]), varInteger))
@@ -428,6 +422,9 @@ begin
           .TIPO_COMPRA(VarToStr(VStr(Rows[i][iTIPO])))
           .&End
           .Insert;
+        except
+
+        end;
       end;
     end;
 
@@ -463,8 +460,8 @@ begin
       for i := 0 to Length(Rows) - 1 do
       begin
 
-        if VarAsType(VInt(Rows[i][iCOD_EMP]), varInteger) <> 200 then
-         continue;
+//        if VarAsType(VInt(Rows[i][iCOD_EMP]), varInteger) <> 200 then
+//         continue;
         try
         daoI.This
           .COD_PEDIDOCOMPRA(VarAsType(VInt(Rows[i][iCOD_PED]), varInteger))

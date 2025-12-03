@@ -183,11 +183,6 @@ begin
 
   SanitizeData;
 
-  if MetadataExists('select rdb$relation_name from rdb$relations where rdb$relation_name=''PEDCOMPRA_ITEM''') then
-    if not MetadataExists('select rc.rdb$constraint_name from rdb$relation_constraints rc where rc.rdb$constraint_name = ''FK_ITEM_PED''') then
-      if not HasOrphansItem then
-        ExecDDL('alter table PEDCOMPRA_ITEM add constraint FK_ITEM_PED foreign key (COD_PEDIDOCOMPRA, COD_EMPRESA) references PEDIDO_COMPRA(COD_PEDIDOCOMPRA, COD_EMPRESA)');
-
   if not MetadataExists('select rdb$index_name from rdb$indices where rdb$index_name = ''IDX_PEDIDO_COMPRA_CLIFOR''') then
     ExecDDL('create index IDX_PEDIDO_COMPRA_CLIFOR on PEDIDO_COMPRA (COD_CLIFOR)');
 

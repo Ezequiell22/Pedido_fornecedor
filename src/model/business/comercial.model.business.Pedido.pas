@@ -4,6 +4,7 @@ interface
 
 uses
   Data.DB, Vcl.StdCtrls,
+  Generics.Collections,
   comercial.model.business.interfaces,
   comercial.model.resource.Interfaces,
   comercial.model.resource.impl.queryFD,
@@ -17,13 +18,9 @@ uses
 type
   TModelBusinessPedido = class(TInterfacedObject, iModelBusinessPedido)
   private
+    FQueryLookup : iQuery;
     FQuery: iQuery;
     FQueryItens: iQuery;
-    FQueryLookup : iQuery;
-    FIdPedido: Integer;
-    FIdFornecedor: Integer;
-    FTotal: Double;
-    FIdProduto : integer;
     FDAOFornecedor: iModelDAOEntity<TModelEntityFornecedor>;
     FDAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
     FDAOItem: iModelDAOEntity<TModelEntityPedcompraItem>;
@@ -35,17 +32,23 @@ type
     function Get: iModelBusinessPedido;
     function Abrir(aIdPedido: Integer;
     AcomboBoxFornecedor : TComboBox): iModelBusinessPedido;
-    function AdicionarItem(aValor: Double; aQuantidade: Double): iModelBusinessPedido;
+    function AdicionarItem(aCodItem : integer; aValor: Double; aQuantidade: Double): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
     function EditarItem(aSequencia: Integer; aValor: Double; aQuantidade: Double): iModelBusinessPedido;
-    function Finalizar: iModelBusinessPedido;
-    function ExcluirPedido: iModelBusinessPedido;
+
+    function ExcluirPedido : iModelBusinessPedido;
     function LinkDataSourcePedido(aDataSource: TDataSource): iModelBusinessPedido;
     function LinkDataSourceItens(aDataSource: TDataSource): iModelBusinessPedido;
-    function setIdproduto(aValue : integer) : iModelBusinessPedido;
+    //    function DAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
+//    function DAOItens: iModelDAOEntity<TModelEntityPedcompraItem>;
+    function GetItems : iModelBusinessPedido;
+    function setIdPedido(aValue : integer) : iModelBusinessPedido;
+    function setIdEmpresa(aValue : integer) : iModelBusinessPedido;
     function setIdFornecedor(aValue : integer) : iModelBusinessPedido;
-    function DAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
-    function DAOItens: iModelDAOEntity<TModelEntityPedcompraItem>;
+
+    function loadPedidos(AFieldsWhere: TDictionary<string, Variant>) : iModelBusinessPedido;
+//    function EntityPedido : TModelEntityPedidoCompra;
+//    function EntityItemPedido : TModelEntityPedcompraItem;
   end;
 
 implementation
@@ -63,17 +66,18 @@ end;
 
 function TModelBusinessPedido.Abrir(aIdPedido: Integer;
   AcomboBoxFornecedor : TComboBox): iModelBusinessPedido;
+var idFornecedor : integer;
 begin
   Result := Self;
-  FIdPedido := aIdPedido;
-  try
-    FDAOPedido.GetbyId(FIdPedido);
-    FDAOItem.GetbyId(FIdPedido);
 
-    FIdFornecedor := FDAOPedido.GetDataSet.FieldByName('COD_CLIFOR').AsInteger;
+  try
+    FDAOPedido.GetbyId(aIdPedido);
+    FDAOItem.Get;
+
+    idFornecedor := FDAOPedido.GetDataSet.FieldByName('COD_CLIFOR').AsInteger;
 
     FDAOFornecedor:= TModelDAOFornecedor.New;
-    FDAOFornecedor.GetbyId(FIdFornecedor);
+    FDAOFornecedor.GetbyId(idFornecedor);
 
     AcomboBoxFornecedor.Items.Clear;
     AcomboBoxFornecedor.Items.Add(FDAOFornecedor.GetDataSet
@@ -91,35 +95,18 @@ begin
   inherited;
 end;
 
-function TModelBusinessPedido.Finalizar: iModelBusinessPedido;
-begin
-  Result := Self;
-  try
-    FQueryLookup.active(False)
-      .sqlClear
-      .sqlAdd('select SUM(VL_TOTAL) vl from PEDCOMPRA_ITEM')
-      .sqlAdd('where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
-      .addParam('COD_PEDIDOCOMPRA', FIdPedido)
-      .open;
-
-    FTotal := FQueryLookup.DataSet.FieldByName('vl').AsFloat;
-
-    FQueryLookup.active(False)
-      .sqlClear
-      .sqlAdd('update PEDIDO_COMPRA set TOTAL = :TOTAL where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
-      .addParam('TOTAL', FTotal)
-      .addParam('COD_PEDIDOCOMPRA', FIdPedido)
-      .execSql;
-  except
-    on E: Exception do
-      raise Exception.Create(E.Message);
-  end;
-end;
-
 function TModelBusinessPedido.Get: iModelBusinessPedido;
 begin
   Result := Self;
   FDAOPedido.Get;
+end;
+
+function TModelBusinessPedido.GetItems: iModelBusinessPedido;
+begin
+  var idPedido := FdaoPEdido.this.COD_PEDIDOCOMPRA;
+  result := Self;
+  FDAOItem
+    .GetbyId(idPedido);
 end;
 
 function TModelBusinessPedido.LinkDataSourceItens(aDataSource: TDataSource): iModelBusinessPedido;
@@ -134,18 +121,24 @@ begin
   aDataSource.DataSet := FDAOPedido.GetDataSet;
 end;
 
+function TModelBusinessPedido.loadPedidos(
+  AFieldsWhere: TDictionary<string, Variant>): iModelBusinessPedido;
+begin
+  result := Self;
+  FDAOPedido
+    .Get(AFieldsWhere);
+
+end;
+
 class function TModelBusinessPedido.New: iModelBusinessPedido;
 begin
   Result := Self.Create;
 end;
 
 function TModelBusinessPedido.Novo: iModelBusinessPedido;
+var idPedido : integer;
 begin
   Result := Self;
-  if (FIdFornecedor <= 0)then
-      raise Exception.Create('Selecione um fornecedor');
-
-  FTotal := 0;
   try
 
     FQueryLookup.active(False)
@@ -153,53 +146,84 @@ begin
       .sqlAdd('select (coalesce(max(COD_PEDIDOCOMPRA),0)) idn from PEDIDO_COMPRA')
       .open;
 
-    FIdPedido := FQueryLookup.DataSet.FieldByName('idn').AsInteger;
+    idPedido := FQueryLookup.DataSet.FieldByName('idn').AsInteger;
 
-    FDAOPedido.GetbyId(FIdPedido);
+    fDAOPedido
+      .This
+        .COD_PEDIDOCOMPRA(idPedido)
+        .DT_EMISSAO(now)
+        .DT_PREVISAOENTREGA(now + 1)
+        .&end
+      .insert;
 
-    FDAOItem.GetbyId(FIdPedido);
+
+    FDAOPedido.GetbyId(idPedido);
+    FDAOItem.GetbyId(idPedido);
+
   except
     on E: Exception do
       raise Exception.Create(E.Message);
   end;
 end;
 
+function TModelBusinessPedido.setIdEmpresa(
+  aValue: integer): iModelBusinessPedido;
+begin
+  result := Self;
+
+  FDAOPedido
+    .This
+    .COD_EMPRESA(Avalue);
+
+  FDAOItem
+    .This
+    .COD_EMPRESA(aValue);
+end;
+
 function TModelBusinessPedido.setIdFornecedor(
   aValue: integer): iModelBusinessPedido;
 begin
   result := Self;
-  FIdFornecedor := aValue
+
+  FDAOPedido
+    .This
+    .COD_CLIFOR(Avalue);
+
 end;
 
-function TModelBusinessPedido.setIdproduto(
+function TModelBusinessPedido.setIdPedido(
   aValue: integer): iModelBusinessPedido;
 begin
- result := Self;
- FIdProduto := aValue;
+  result := Self;
+
+  FDAOPedido
+    .This
+    .COD_PEDIDOCOMPRA(Avalue);
+
+  FDAOItem
+    .This
+    .COD_PEDIDOCOMPRA(aValue);
 end;
 
-function TModelBusinessPedido.AdicionarItem(
+function TModelBusinessPedido.AdicionarItem( aCodItem : integer;
     aValor: Double; aQuantidade: Double): iModelBusinessPedido;
 var
-  VUnit: Double;
-  VTotalItem: Double;
+  VUnit, VTotalItem, FTotal: Double;
 begin
   Result := Self;
+
   try
 
     VTotalItem := VUnit * aQuantidade;
     FTotal := FTotal + VTotalItem;
     FDAOItem
       .This
-        .COD_PEDIDOCOMPRA(FIdPedido)
-        .COD_ITEM(FIdProduto)
+        .COD_ITEM(aCodItem)
         .QTD_PEDIDA(aQuantidade)
         .QTD_RECEBIDA(aQuantidade)
         .VALOR_TOTAL(FTotal)
         .&End
       .Insert;
-
-    FDAOItem.GetbyId(FIdPedido);
   except
     on E: Exception do
       raise Exception.Create(E.Message);
@@ -209,18 +233,16 @@ end;
 function TModelBusinessPedido.RemoverItem(aSequencia: Integer): iModelBusinessPedido;
 begin
   Result := Self;
-  FQueryItens.active(False)
-    .sqlClear
-    .sqlAdd('delete from PEDCOMPRA_ITEM where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA and SEQUENCIA = :SEQUENCIA')
-    .addParam('COD_PEDIDOCOMPRA', FIdPedido)
-    .addParam('SEQUENCIA', aSequencia)
-    .execSql;
 
-  FQueryItens.active(False)
-    .sqlClear
-    .sqlAdd('select * from PEDCOMPRA_ITEM where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA order by SEQUENCIA')
-    .addParam('COD_PEDIDOCOMPRA', FIdPedido)
-    .Open;
+  if aSequencia <= 0 then
+    raise Exception.Create('Id sequencia inválido');
+
+  FDAOItem
+    .This
+    .SEQUENCIA(aSequencia)
+    .&end
+    .delete;
+
 end;
 
 function TModelBusinessPedido.EditarItem(aSequencia: Integer; aValor: Double; aQuantidade: Double): iModelBusinessPedido;
@@ -228,53 +250,34 @@ var
   VUnit, VTotalItem: Double;
 begin
   Result := Self;
+
+  if aSequencia <= 0 then
+    raise Exception.Create('Id sequencia inválido');
+
   VUnit := aValor;
   if VUnit < 0 then VUnit := 0;
   if aQuantidade <= 0 then aQuantidade := 1;
   VTotalItem := VUnit * aQuantidade;
 
-  FQueryItens.active(False)
-    .sqlClear
-    .sqlAdd('update PEDCOMPRA_ITEM set QUANTIDADE = :QUANTIDADE, VL_UNITARIO = :VL_UNITARIO, VL_TOTAL = :VL_TOTAL')
-    .sqlAdd(' where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA and SEQUENCIA = :SEQUENCIA')
-    .addParam('COD_PEDIDOCOMPRA', FIdPedido)
-    .addParam('SEQUENCIA', aSequencia)
-    .addParam('QUANTIDADE', aQuantidade)
-    .addParam('VL_UNITARIO', VUnit)
-    .addParam('VL_TOTAL', VTotalItem)
-    .execSql;
-
-  FQueryItens.active(False)
-    .sqlClear
-    .sqlAdd('select * from PEDCOMPRA_ITEM where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA order by SEQUENCIA')
-    .addParam('COD_PEDIDOCOMPRA', FIdPedido)
-    .Open;
+  Fdaoitem
+    .this
+    .PRECO_UNITARIO(VUnit)
+    .VALOR_TOTAL(VTotalItem)
+    .QTD_PEDIDA(aQuantidade)
+    .QTD_RECEBIDA(aQuantidade)
+    .&end
+  .update;
 end;
 
-function TModelBusinessPedido.ExcluirPedido: iModelBusinessPedido;
+function TModelBusinessPedido.ExcluirPedido : iModelBusinessPedido;
 begin
   Result := Self;
-  FQueryItens.active(False)
-    .sqlClear
-    .sqlAdd('delete from PEDCOMPRA_ITEM where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
-    .addParam('COD_PEDIDOCOMPRA', FIdPedido)
-    .execSql;
 
-  FQuery.active(False)
-    .sqlClear
-    .sqlAdd('delete from PEDIDO_COMPRA where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
-    .addParam('COD_PEDIDOCOMPRA', FIdPedido)
-    .execSql;
-end;
+  Fdaoitem
+    .Delete;
 
-function TModelBusinessPedido.DAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
-begin
-  Result := FDAOPedido;
-end;
-
-function TModelBusinessPedido.DAOItens: iModelDAOEntity<TModelEntityPedcompraItem>;
-begin
-  Result := FDAOItem;
+  FDAOPedido
+    .Delete;
 end;
 
 end.

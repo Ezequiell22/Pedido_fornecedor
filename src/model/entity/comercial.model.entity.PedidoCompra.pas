@@ -81,6 +81,8 @@ end;
 
 function TModelEntityPedidoCompra.COD_CLIFOR: Integer;
 begin
+  if FCOD_EMPRESA <= 0 then
+    raise Exception.Create('id fornecedor inválido');
   Result := FCOD_CLIFOR;
 end;
 
@@ -92,6 +94,8 @@ end;
 
 function TModelEntityPedidoCompra.COD_EMPRESA: Integer;
 begin
+  if FCOD_EMPRESA <= 0 then
+    raise Exception.Create('id empresa inválido');
   Result := FCOD_EMPRESA;
 end;
 

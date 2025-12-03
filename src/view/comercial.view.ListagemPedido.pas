@@ -26,13 +26,15 @@ type
     BtnExcluir: TButton;
     procedure FormShow(Sender: TObject);
     procedure BtnAplicarFiltrosClick(Sender: TObject);
-    procedure DSPedidosDataChange(Sender: TObject; Field: TField);
     procedure BtnNovoClick(Sender: TObject);
     procedure BtnEditarClick(Sender: TObject);
     procedure BtnExcluirClick(Sender: TObject);
+    procedure DSPedidosDataChange(Sender: TObject; Field: TField);
+    procedure CbFornecedorSelect(Sender: TObject);
   private
     FController: iController;
     FFornecedorIds: TList<Integer>;
+    FIDEMPRESA : Integer;
     procedure LoadFornecedores;
     function SelectedFornecedorId: Integer;
   public
@@ -51,19 +53,26 @@ uses
 
 procedure TfrmListagemPedido.FormShow(Sender: TObject);
 begin
+  FIDEMPRESA := 200;
   FController := TController.New;
   FController.business.Pedido.LinkDataSourcePedido(DSPedidos);
   FController.business.Pedido.LinkDataSourceItens(DSItens);
 
   FFornecedorIds := TList<Integer>.Create;
+
   GridPedidos.DataSource := DSPedidos;
   GridItens.DataSource := DSItens;
 
-  DSPedidos.OnDataChange := DSPedidosDataChange;
+
   DtIni.Date := Now - 30;
   DtFim.Date := Now;
+
+  FController
+    .business
+    .Pedido
+    .setIdEmpresa(FIDEMPRESA);
+
   LoadFornecedores;
-  BtnAplicarFiltrosClick(nil);
 end;
 
 procedure TfrmListagemPedido.LoadFornecedores;
@@ -92,7 +101,8 @@ end;
 function TfrmListagemPedido.SelectedFornecedorId: Integer;
 begin
   Result := 0;
-  if (CbFornecedor.ItemIndex >= 0) and (CbFornecedor.ItemIndex < FFornecedorIds.Count) then
+  if (CbFornecedor.ItemIndex >= 0)
+    and (CbFornecedor.ItemIndex < FFornecedorIds.Count) then
     Result := FFornecedorIds[CbFornecedor.ItemIndex];
 end;
 
@@ -107,60 +117,63 @@ begin
     if SelectedFornecedorId > 0 then
       filters.Add('COD_CLIFOR', SelectedFornecedorId);
 
-    FController.business.Pedido.DAOPedido.Get(filters);
-    DSPedidos.DataSet := FController.business.Pedido.DAOPedido.GetDataSet;
-    DSPedidosDataChange(nil, nil);
+    FController
+    .business
+    .Pedido
+    .loadPedidos(filters);
+
   finally
     filters.Free;
   end;
 end;
 
-procedure TfrmListagemPedido.DSPedidosDataChange(Sender: TObject; Field: TField);
-var
-  id: Integer;
-begin
-  if Assigned(DSPedidos.DataSet) and not DSPedidos.DataSet.IsEmpty then
-  begin
-    id := DSPedidos.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger;
-    FController.business.Pedido.DAOItens.GetbyId(id);
-    DSItens.DataSet := FController.business.Pedido.DAOItens.GetDataSet;
-  end
-  else
-    DSItens.DataSet := nil;
-end;
-
 procedure TfrmListagemPedido.BtnNovoClick(Sender: TObject);
+var frm : TfrmPedido;
 begin
-  with TfrmPedido.Create(self) do
-    try
-      Caption := 'Novo Pedido';
-      ShowModal;
-    finally
-      Free;
-    end;
+  frm:= TfrmPedido.Create(self);
+  try
+    frm.Caption := 'Novo Pedido';
+    frm.FIDEMPRESA := FidEmpresa;
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
+
   BtnAplicarFiltrosClick(nil);
 end;
 
-procedure TfrmListagemPedido.BtnEditarClick(Sender: TObject);
+procedure TfrmListagemPedido.CbFornecedorSelect(Sender: TObject);
 begin
-  with TfrmPedido.Create(self) do
-    try
-      Caption := 'Editar Pedido';
-      edtIdPedido.Text := DSPedidos.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsString;
-      edtIdPedidoExit(nil);
-      ShowModal;
-    finally
-      Free;
-    end;
+   Fcontroller
+    .business
+      .Pedido
+        .setIdFornecedor(SelectedFornecedorId);
+end;
+
+procedure TfrmListagemPedido.BtnEditarClick(Sender: TObject);
+var frm : TfrmPedido;
+begin
+  frm := TfrmPedido.Create(self);
+
+  try
+    frm.Caption := 'Editar Pedido';
+    frm.edtIdPedido.Text := DSPedidos.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsString;
+    frm.FIDEMPRESA := DSPedidos.DataSet.FieldByName('COD_EMPRESA').AsInteger;
+    frm.edtIdPedidoExit(nil);
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
   BtnAplicarFiltrosClick(nil);
 end;
 
 procedure TfrmListagemPedido.BtnExcluirClick(Sender: TObject);
 begin
-  FController.business.Pedido
-    .Abrir(DSPedidos.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger,
-      CbFornecedor)
-    .ExcluirPedido;
+  FController
+    .business
+      .Pedido
+      .ExcluirPedido;
+
   BtnAplicarFiltrosClick(nil);
 end;
 
@@ -168,6 +181,22 @@ destructor TfrmListagemPedido.Destroy;
 begin
   FFornecedorIds.Free;
   inherited;
+end;
+
+procedure TfrmListagemPedido.DSPedidosDataChange(Sender: TObject;
+  Field: TField);
+  var  COD_PEDIDOCOMPRA, COD_EMPRESA : integer;
+begin
+  COD_PEDIDOCOMPRA := DSPedidos.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger;
+  COD_EMPRESA := DSPedidos.DataSet.FieldByName('COD_EMPRESA').AsInteger;
+
+  FController
+    .business
+    .Pedido
+    .setIdPedido(COD_PEDIDOCOMPRA)
+    .setIdEmpresa(COD_EMPRESA)
+    .GetItems;
+
 end;
 
 end.

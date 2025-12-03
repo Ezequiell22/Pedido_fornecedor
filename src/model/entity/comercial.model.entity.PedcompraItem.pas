@@ -118,6 +118,9 @@ end;
 
 function TModelEntityPedcompraItem.COD_EMPRESA: Integer;
 begin
+  if FCOD_EMPRESA <= 0 then
+    raise Exception.Create('id empresa inválido');
+
   Result := FCOD_EMPRESA;
 end;
 

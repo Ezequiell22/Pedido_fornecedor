@@ -1,7 +1,7 @@
 object frmListagemPedido: TfrmListagemPedido
   Left = 0
   Top = 0
-  Caption = 'Listagem de Pedidos'
+  Caption = 'Listagem de Pedidos EMPRESA 200'
   ClientHeight = 445
   ClientWidth = 775
   Color = clBtnFace
@@ -87,11 +87,12 @@ object frmListagemPedido: TfrmListagemPedido
       Height = 21
       Style = csDropDownList
       TabOrder = 2
+      OnSelect = CbFornecedorSelect
     end
     object BtnAplicarFiltros: TButton
-      Left = 637
+      Left = 686
       Top = 30
-      Width = 100
+      Width = 75
       Height = 25
       Caption = 'Aplicar Filtros'
       TabOrder = 3
@@ -126,6 +127,7 @@ object frmListagemPedido: TfrmListagemPedido
     end
   end
   object DSPedidos: TDataSource
+    OnDataChange = DSPedidosDataChange
     Left = 352
     Top = 272
   end

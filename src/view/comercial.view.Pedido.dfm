@@ -2,7 +2,7 @@ object frmPedido: TfrmPedido
   Left = 0
   Top = 0
   Caption = 'Pedido de Venda'
-  ClientHeight = 437
+  ClientHeight = 395
   ClientWidth = 900
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -12,42 +12,6 @@ object frmPedido: TfrmPedido
   Font.Style = []
   Position = poScreenCenter
   TextHeight = 13
-  object btnFinalizar: TButton
-    Left = 790
-    Top = 400
-    Width = 75
-    Height = 25
-    Caption = 'Finalizar'
-    TabOrder = 0
-    OnClick = BtnFinalizarClick
-  end
-  object btnExcluirPedido: TButton
-    Left = 704
-    Top = 400
-    Width = 75
-    Height = 25
-    Caption = 'Excluir'
-    TabOrder = 4
-    OnClick = btnExcluirPedidoClick
-  end
-  object btnRemoverItem: TButton
-    Left = 616
-    Top = 400
-    Width = 75
-    Height = 25
-    Caption = 'Remover Item'
-    TabOrder = 5
-    OnClick = btnRemoverItemClick
-  end
-  object btnEditarItem: TButton
-    Left = 528
-    Top = 400
-    Width = 75
-    Height = 25
-    Caption = 'Editar Item'
-    TabOrder = 6
-    OnClick = btnEditarItemClick
-  end
   object GridItens: TDBGrid
     Left = 0
     Top = 146
@@ -55,7 +19,7 @@ object frmPedido: TfrmPedido
     Height = 248
     Align = alTop
     DataSource = DSItens
-    TabOrder = 1
+    TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
@@ -69,44 +33,44 @@ object frmPedido: TfrmPedido
     Height = 73
     Align = alTop
     Caption = 'Produto'
-    TabOrder = 2
+    TabOrder = 1
     object Label4: TLabel
-      Left = 261
+      Left = 21
       Top = 17
       Width = 33
       Height = 13
       Caption = 'C'#243'digo'
     end
     object Label5: TLabel
-      Left = 347
+      Left = 107
       Top = 17
       Width = 24
       Height = 13
       Caption = 'Valor'
     end
     object Label6: TLabel
-      Left = 433
+      Left = 193
       Top = 17
       Width = 56
       Height = 13
       Caption = 'Quantidade'
     end
     object edtValor: TEdit
-      Left = 347
+      Left = 107
       Top = 36
       Width = 80
       Height = 21
       TabOrder = 0
     end
     object edtQuantidade: TEdit
-      Left = 433
+      Left = 193
       Top = 36
       Width = 80
       Height = 21
       TabOrder = 1
     end
     object btnAddItem: TButton
-      Left = 535
+      Left = 295
       Top = 32
       Width = 100
       Height = 25
@@ -114,12 +78,30 @@ object frmPedido: TfrmPedido
       TabOrder = 2
       OnClick = BtnAddItemClick
     end
-    object Edit1: TEdit
-      Left = 261
+    object edtCodItem: TEdit
+      Left = 21
       Top = 36
       Width = 80
       Height = 21
       TabOrder = 3
+    end
+    object btnEditarItem: TButton
+      Left = 408
+      Top = 32
+      Width = 75
+      Height = 25
+      Caption = 'Editar Item'
+      TabOrder = 4
+      OnClick = btnEditarItemClick
+    end
+    object btnRemoverItem: TButton
+      Left = 496
+      Top = 32
+      Width = 75
+      Height = 25
+      Caption = 'Remover Item'
+      TabOrder = 5
+      OnClick = btnRemoverItemClick
     end
   end
   object Panel1: TPanel
@@ -128,7 +110,7 @@ object frmPedido: TfrmPedido
     Width = 900
     Height = 73
     Align = alTop
-    TabOrder = 3
+    TabOrder = 2
     object Label1: TLabel
       Left = 16
       Top = 8
@@ -165,7 +147,7 @@ object frmPedido: TfrmPedido
       Top = 25
       Width = 75
       Height = 25
-      Caption = 'Novo'
+      Caption = 'Criar Pedido'
       TabOrder = 2
       OnClick = btnNovoClick
     end

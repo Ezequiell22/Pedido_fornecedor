@@ -66,8 +66,11 @@ begin
   FQuery
     .active(False)
     .sqlClear
-      .sqlAdd('delete from PEDIDO_COMPRA where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
+      .sqlAdd('delete from PEDIDO_COMPRA ')
+      .sqlAdd('where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
+      .sqlAdd('and COD_EMPRESA = :COD_EMPRESA')
       .addParam('COD_PEDIDOCOMPRA', FEntity.COD_PEDIDOCOMPRA)
+      .addParam('COD_EMPRESA', FEntity.COD_EMPRESA)
       .execSql;
 end;
 
@@ -79,25 +82,32 @@ begin
     .sqlClear
       .sqlAdd('select * from PEDIDO_COMPRA')
       .open;
-  FDataSource.DataSet := FQuery.DataSet;
 end;
 
 function TModelDAOPedidoCompra.Get(AFieldsWhere: TDictionary<string, Variant>): iModelDAOEntity<TModelEntityPedidoCompra>;
 var
   hasWhere: Boolean;
+  codEmpresa : integer;
+  codClifor : variant;
 begin
   Result := Self;
+  codEmpresa := FEntity.COD_EMPRESA;
+
   hasWhere := False;
   FQuery
     .active(False)
     .sqlClear
-      .sqlAdd('select * from PEDIDO_COMPRA');
+      .sqlAdd('select * from PEDIDO_COMPRA')
+      .sqlAdd('where COD_EMPRESA = :COD_EMPRESA')
+      .addParam('COD_EMPRESA', FEntity.COD_EMPRESA);
+  hasWhere := True;
 
   if Assigned(AFieldsWhere) then
   begin
+
     if AFieldsWhere.ContainsKey('DT_EMISSAO_INI') and AFieldsWhere.ContainsKey('DT_EMISSAO_FIM') then
     begin
-      FQuery.sqlAdd(' where DT_EMISSAO between :DTINI and :DTFIM');
+      FQuery.sqlAdd(' and DT_EMISSAO between :DTINI and :DTFIM');
       FQuery.addParam('DTINI', AFieldsWhere['DT_EMISSAO_INI']);
       FQuery.addParam('DTFIM', AFieldsWhere['DT_EMISSAO_FIM']);
       hasWhere := True;
@@ -105,6 +115,7 @@ begin
 
     if AFieldsWhere.ContainsKey('COD_CLIFOR') then
     begin
+      codCliFor := AFieldsWhere['COD_CLIFOR'];
       if hasWhere then
         FQuery.sqlAdd(' and COD_CLIFOR = :COD_CLIFOR')
       else
@@ -123,10 +134,13 @@ begin
   FQuery
     .active(False)
     .sqlClear
-      .sqlAdd('select * from PEDIDO_COMPRA where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
+      .sqlAdd('select * from PEDIDO_COMPRA ')
+      .sqlAdd('where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
+      .sqlAdd('and COD_EMPRESA = :COD_EMPRESA')
       .addParam('COD_PEDIDOCOMPRA', AValue)
+      .addParam('COD_EMPRESA', FEntity.COD_EMPRESA)
       .open;
-  FDataSource.DataSet := FQuery.DataSet;
+
 end;
 
 function TModelDAOPedidoCompra.GetDataSet: TDataSet;
