@@ -81,7 +81,7 @@ end;
 
 function TModelEntityFornecedor.FANTASIA: string;
 begin
-  Result := FFANTASIA;
+  Result := UpperCase ( FFANTASIA );
 end;
 
 function TModelEntityFornecedor.RAZAO(aValue: string): TModelEntityFornecedor;
@@ -92,7 +92,7 @@ end;
 
 function TModelEntityFornecedor.RAZAO: string;
 begin
-  Result := FRAZAO;
+  Result := UpperCase( FRAZAO );
 end;
 
 function TModelEntityFornecedor.ACTIVE: Integer;

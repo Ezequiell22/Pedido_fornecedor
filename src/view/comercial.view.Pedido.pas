@@ -187,6 +187,8 @@ begin
 
     edtIdPedido.Text := DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsString;
     edtIdPedidoExit(nil);
+
+    btnCriarPedido.Visible := False;
 end;
 
 procedure TfrmPedido.btnRemoverItemClick(Sender: TObject);
