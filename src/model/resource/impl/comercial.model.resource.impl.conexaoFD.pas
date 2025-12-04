@@ -52,6 +52,9 @@ begin
     FConn.Params.Values['User_Name'] := dbUser;
     FConn.Params.Values['Password'] := dbPass;
     FConn.Params.Values['OSAuthent'] := IfThen((dbUser = '') and (dbPass = ''), 'Yes', 'No');
+    FConn.FormatOptions.MapRules.Add(dtMemo, dtAnsiString);
+    FConn.FormatOptions.MapRules.Add(dtWideMemo, dtWideString);
+    FConn.FormatOptions.MaxStringSize := 32767;
     FConn.LoginPrompt := False;
   finally
     ini.Free;

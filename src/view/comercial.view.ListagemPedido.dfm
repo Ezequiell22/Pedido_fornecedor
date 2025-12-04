@@ -2,7 +2,7 @@ object frmListagemPedido: TfrmListagemPedido
   Left = 0
   Top = 0
   Caption = 'Listagem de Pedidos EMPRESA 200'
-  ClientHeight = 445
+  ClientHeight = 520
   ClientWidth = 775
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,7 +15,7 @@ object frmListagemPedido: TfrmListagemPedido
   TextHeight = 13
   object GridPedidos: TDBGrid
     Left = 0
-    Top = 105
+    Top = 177
     Width = 775
     Height = 145
     Align = alTop
@@ -29,7 +29,7 @@ object frmListagemPedido: TfrmListagemPedido
   end
   object GridItens: TDBGrid
     Left = 0
-    Top = 250
+    Top = 322
     Width = 775
     Height = 192
     Align = alTop
@@ -45,7 +45,7 @@ object frmListagemPedido: TfrmListagemPedido
     Left = 0
     Top = 0
     Width = 775
-    Height = 105
+    Height = 177
     Align = alTop
     TabOrder = 2
     object LabelFornecedor: TLabel
@@ -61,6 +61,13 @@ object frmListagemPedido: TfrmListagemPedido
       Width = 36
       Height = 13
       Caption = 'Per'#237'odo'
+    end
+    object Label1: TLabel
+      Left = 16
+      Top = 59
+      Width = 68
+      Height = 13
+      Caption = 'C'#243'digo pedido'
     end
     object DtIni: TDateTimePicker
       Left = 16
@@ -90,8 +97,8 @@ object frmListagemPedido: TfrmListagemPedido
       OnSelect = CbFornecedorSelect
     end
     object BtnAplicarFiltros: TButton
-      Left = 686
-      Top = 30
+      Left = 280
+      Top = 76
       Width = 75
       Height = 25
       Caption = 'Aplicar Filtros'
@@ -100,7 +107,7 @@ object frmListagemPedido: TfrmListagemPedido
     end
     object BtnNovo: TButton
       Left = 16
-      Top = 74
+      Top = 130
       Width = 75
       Height = 25
       Caption = 'Novo'
@@ -109,7 +116,7 @@ object frmListagemPedido: TfrmListagemPedido
     end
     object BtnEditar: TButton
       Left = 96
-      Top = 74
+      Top = 130
       Width = 75
       Height = 25
       Caption = 'Editar'
@@ -118,12 +125,29 @@ object frmListagemPedido: TfrmListagemPedido
     end
     object BtnExcluir: TButton
       Left = 176
-      Top = 74
+      Top = 130
       Width = 75
       Height = 25
       Caption = 'Excluir'
       TabOrder = 6
       OnClick = BtnExcluirClick
+    end
+    object edtCodigo: TEdit
+      Left = 16
+      Top = 78
+      Width = 121
+      Height = 21
+      NumbersOnly = True
+      TabOrder = 7
+    end
+    object ButtonLimparFiltros: TButton
+      Left = 361
+      Top = 76
+      Width = 75
+      Height = 25
+      Caption = 'Limpar filtros'
+      TabOrder = 8
+      OnClick = ButtonLimparFiltrosClick
     end
   end
   object DSPedidos: TDataSource

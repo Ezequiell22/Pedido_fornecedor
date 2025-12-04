@@ -32,9 +32,11 @@ type
     function Get: iModelBusinessPedido;
     function Abrir(
     AcomboBoxFornecedor : TComboBox): iModelBusinessPedido;
-    function AdicionarItem(aCodItem : integer; aValor: Double; aQuantidade: Double): iModelBusinessPedido;
+    function AdicionarItem(aCodItem : integer;
+    aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
-    function EditarItem(aSequencia: Integer; aValor: Double; aQuantidade: Double): iModelBusinessPedido;
+    function EditarItem(aSequencia: Integer;
+     aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
     function ExcluirPedido : iModelBusinessPedido;
     function LinkDataSourcePedido(aDataSource: TDataSource): iModelBusinessPedido;
     function LinkDataSourceItens(aDataSource: TDataSource): iModelBusinessPedido;
@@ -205,7 +207,7 @@ begin
 end;
 
 function TModelBusinessPedido.AdicionarItem( aCodItem : integer;
-    aValor: Double; aQuantidade: Double): iModelBusinessPedido;
+    aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
 var
   VUnit, VTotalItem, FTotal: Double;
 begin
@@ -217,6 +219,7 @@ begin
     FTotal := FTotal + VTotalItem;
     FDAOItem
       .This
+        .DESCRICAO(aDescricaoProduto)
         .COD_ITEM(aCodItem)
         .QTD_PEDIDA(aQuantidade)
         .QTD_RECEBIDA(aQuantidade)
@@ -244,7 +247,8 @@ begin
 
 end;
 
-function TModelBusinessPedido.EditarItem(aSequencia: Integer; aValor: Double; aQuantidade: Double): iModelBusinessPedido;
+function TModelBusinessPedido.EditarItem(aSequencia: Integer;
+ aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
 var
   VUnit, VTotalItem: Double;
 begin
@@ -261,6 +265,7 @@ begin
   Fdaoitem
     .this
     .SEQUENCIA(aSequencia)
+    .DESCRICAO(aDescricaoProduto)
     .PRECO_UNITARIO(VUnit)
     .VALOR_TOTAL(VTotalItem)
     .QTD_PEDIDA(aQuantidade)

@@ -45,9 +45,9 @@ object frmPedido: TfrmPedido
     object Label5: TLabel
       Left = 107
       Top = 17
-      Width = 24
+      Width = 63
       Height = 13
-      Caption = 'Valor'
+      Caption = 'Valor unitario'
     end
     object Label6: TLabel
       Left = 193
@@ -56,7 +56,14 @@ object frmPedido: TfrmPedido
       Height = 13
       Caption = 'Quantidade'
     end
-    object edtValor: TEdit
+    object Label2: TLabel
+      Left = 279
+      Top = 17
+      Width = 38
+      Height = 13
+      Caption = 'Produto'
+    end
+    object edtPrecoUnitario: TEdit
       Left = 107
       Top = 36
       Width = 80
@@ -71,7 +78,7 @@ object frmPedido: TfrmPedido
       TabOrder = 1
     end
     object btnAddItem: TButton
-      Left = 295
+      Left = 557
       Top = 32
       Width = 100
       Height = 25
@@ -84,10 +91,11 @@ object frmPedido: TfrmPedido
       Top = 36
       Width = 80
       Height = 21
+      NumbersOnly = True
       TabOrder = 3
     end
     object btnEditarItem: TButton
-      Left = 408
+      Left = 670
       Top = 32
       Width = 75
       Height = 25
@@ -96,13 +104,20 @@ object frmPedido: TfrmPedido
       OnClick = btnEditarItemClick
     end
     object btnRemoverItem: TButton
-      Left = 496
+      Left = 758
       Top = 32
       Width = 75
       Height = 25
       Caption = 'Remover Item'
       TabOrder = 5
       OnClick = btnRemoverItemClick
+    end
+    object EdtDescricao: TEdit
+      Left = 279
+      Top = 36
+      Width = 121
+      Height = 21
+      TabOrder = 6
     end
   end
   object Panel1: TPanel
@@ -131,6 +146,7 @@ object frmPedido: TfrmPedido
       Top = 27
       Width = 80
       Height = 21
+      ReadOnly = True
       TabOrder = 0
       OnExit = edtIdPedidoExit
     end
@@ -158,6 +174,7 @@ object frmPedido: TfrmPedido
     Top = 336
   end
   object DSItens: TDataSource
+    OnDataChange = DSItensDataChange
     Left = 328
     Top = 336
   end

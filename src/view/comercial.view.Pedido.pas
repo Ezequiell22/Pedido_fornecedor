@@ -20,7 +20,7 @@ type
   TfrmPedido = class(TForm)
     GroupBox2: TGroupBox;
     Label4: TLabel;
-    edtValor: TEdit;
+    edtPrecoUnitario: TEdit;
     edtQuantidade: TEdit;
     btnAddItem: TButton;
     Label5: TLabel;
@@ -39,6 +39,8 @@ type
     edtCodItem: TEdit;
     btnEditarItem: TButton;
     btnRemoverItem: TButton;
+    EdtDescricao: TEdit;
+    Label2: TLabel;
     procedure BtnAddItemClick(Sender: TObject);
     procedure ComboBoxFornecedorSelect(Sender: TObject);
 
@@ -47,6 +49,7 @@ type
     procedure btnRemoverItemClick(Sender: TObject);
     procedure btnEditarItemClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure DSItensDataChange(Sender: TObject; Field: TField);
   private
     FController: iController;
     function ValidatePedidoItem: Boolean;
@@ -83,6 +86,15 @@ end;
 destructor TfrmPedido.Destroy;
 begin
   inherited;
+end;
+
+procedure TfrmPedido.DSItensDataChange(Sender: TObject; Field: TField);
+begin
+  edtCodItem.Text := dsItens.DataSet.FieldByName('cod_item').AsString;
+  edtPrecoUnitario.Text := dsItens.DataSet.FieldByName('preco_unitario').AsString;
+  edtQuantidade.Text := dsItens.DataSet.FieldByName('qtd_pedida').AsString;
+  EdtDescricao.Text := dsItens.DataSet.FieldByName('descricao').AsString;
+
 end;
 
 procedure TfrmPedido.edtIdPedidoExit(Sender: TObject);
@@ -145,7 +157,7 @@ var
 begin
   Result := False;
 
-  V := StrToFloatDef(edtValor.Text, -1);
+  V := StrToFloatDef(edtPrecoUnitario.Text, -1);
   if V < 0 then
   begin
     ShowMessage('Valor deve ser numero maior ou igual a zero');
@@ -171,8 +183,9 @@ begin
     .setIdEmpresa(DSPedido.DataSet.FieldByName('COD_EMPRESA').AsInteger)
     .AdicionarItem(
                   strTointDef(edtCodItem.Text, 0),
-                  StrToFloatDef(edtValor.Text, 0),
-                  StrToFloatDef(edtQuantidade.Text, 0))
+                  StrToFloatDef(edtPrecoUnitario.Text, 0),
+                  StrToFloatDef(edtQuantidade.Text, 0),
+                  edtDescricao.text)
     .GetItems;
 end;
 
@@ -207,13 +220,13 @@ begin
   if Assigned(DSItens.DataSet) and not DSItens.DataSet.IsEmpty then
   begin
     seq := DSItens.DataSet.FieldByName('SEQUENCIA').AsInteger;
-    valor := StrToFloatDef(edtValor.Text, 0);
+    valor := StrToFloatDef(edtPrecoUnitario.Text, 0);
     quantidade := StrToFloatDef(edtQuantidade.Text, 1);
     FController.business
     .Pedido
     .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
     .setIdEmpresa(DSPedido.DataSet.FieldByName('COD_EMPRESA').AsInteger)
-    .EditarItem(seq, valor, quantidade)
+    .EditarItem(seq, valor, quantidade, edtDescricao.text)
     .GetItems;
   end;
 end;
@@ -225,7 +238,7 @@ begin
     FController
       .business
       .Pedido.
-      setIdFornecedor(
+        setIdFornecedor(
         DSFornecedores.DataSet.FieldByName('COD_CLIFOR').AsInteger);
   end;
 end;

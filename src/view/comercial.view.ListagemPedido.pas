@@ -24,6 +24,9 @@ type
     BtnNovo: TButton;
     BtnEditar: TButton;
     BtnExcluir: TButton;
+    edtCodigo: TEdit;
+    Label1: TLabel;
+    ButtonLimparFiltros: TButton;
     procedure FormShow(Sender: TObject);
     procedure BtnAplicarFiltrosClick(Sender: TObject);
     procedure BtnNovoClick(Sender: TObject);
@@ -31,6 +34,7 @@ type
     procedure BtnExcluirClick(Sender: TObject);
     procedure DSPedidosDataChange(Sender: TObject; Field: TField);
     procedure CbFornecedorSelect(Sender: TObject);
+    procedure ButtonLimparFiltrosClick(Sender: TObject);
   private
     FController: iController;
     FFornecedorIds: TList<Integer>;
@@ -117,6 +121,10 @@ begin
     if SelectedFornecedorId > 0 then
       filters.Add('COD_CLIFOR', SelectedFornecedorId);
 
+    if trim(edtCodigo.Text) <> EmptyStr then
+      filters.Add('COD_PEDIDOCOMPRA', trim(edtCodigo.Text));
+
+
     FController
     .business
     .Pedido
@@ -134,6 +142,7 @@ begin
   frm:= TfrmPedido.Create(self);
   try
     frm.Caption := 'Novo Pedido';
+    frm.edtIdPedido.ReadOnly := True;
     frm.FIDEMPRESA := FidEmpresa;
     frm.ShowModal;
   finally
@@ -141,6 +150,16 @@ begin
   end;
 
   BtnAplicarFiltrosClick(nil);
+end;
+
+procedure TfrmListagemPedido.ButtonLimparFiltrosClick(Sender: TObject);
+begin
+
+  edtCodigo.Text := EmptyStr;
+  CbFornecedor.ItemIndex := -1;
+  DtIni.DateTime := now - 30;
+  DtFim.DateTime := now;
+
 end;
 
 procedure TfrmListagemPedido.CbFornecedorSelect(Sender: TObject);

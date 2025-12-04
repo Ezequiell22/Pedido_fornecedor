@@ -34,7 +34,7 @@ type
 
 implementation
 
-uses comercial.model.resource.impl.queryFD;
+uses comercial.model.resource.impl.queryFD, System.SysUtils;
 
 procedure TModelDAOPedidoCompra.AfterScroll(DataSet: TDataSet);
 begin
@@ -105,23 +105,26 @@ begin
   if Assigned(AFieldsWhere) then
   begin
 
+    if AFieldsWhere.ContainsKey('COD_PEDIDOCOMPRA') then
+    begin
+      FQuery.sqlAdd(' and COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA');
+      FQuery.addParam('COD_PEDIDOCOMPRA',
+        StrTointDef(AFieldsWhere['COD_PEDIDOCOMPRA'], 0));
+    end;
+
+
     if AFieldsWhere.ContainsKey('DT_EMISSAO_INI') and AFieldsWhere.ContainsKey('DT_EMISSAO_FIM') then
     begin
       FQuery.sqlAdd(' and DT_EMISSAO between :DTINI and :DTFIM');
       FQuery.addParam('DTINI', AFieldsWhere['DT_EMISSAO_INI']);
       FQuery.addParam('DTFIM', AFieldsWhere['DT_EMISSAO_FIM']);
-      hasWhere := True;
     end;
 
     if AFieldsWhere.ContainsKey('COD_CLIFOR') then
     begin
       codCliFor := AFieldsWhere['COD_CLIFOR'];
-      if hasWhere then
-        FQuery.sqlAdd(' and COD_CLIFOR = :COD_CLIFOR')
-      else
-        FQuery.sqlAdd(' where COD_CLIFOR = :COD_CLIFOR');
+      FQuery.sqlAdd(' and COD_CLIFOR = :COD_CLIFOR');
       FQuery.addParam('COD_CLIFOR', AFieldsWhere['COD_CLIFOR']);
-      hasWhere := True;
     end;
   end;
 

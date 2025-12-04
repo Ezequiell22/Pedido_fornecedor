@@ -20,7 +20,7 @@ type
     function Get: iModelBusinessPedido;
     function Abrir(AcomboBoxFornecedor: TComboBox): iModelBusinessPedido;
     function AdicionarItem(aCodItem: Integer; aValor: Double;
-      aQuantidade: Double): iModelBusinessPedido;
+      aQuantidade: Double; aDescricaoProduto: string): iModelBusinessPedido;
 
     function LinkDataSourcePedido(aDataSource: TDataSource)
       : iModelBusinessPedido;
@@ -31,7 +31,7 @@ type
     function setIdFornecedor(aValue: Integer): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
     function EditarItem(aSequencia: Integer; aValor: Double;
-      aQuantidade: Double): iModelBusinessPedido;
+      aQuantidade: Double; aDescricaoProduto: string): iModelBusinessPedido;
     function ExcluirPedido: iModelBusinessPedido;
     function GetItems: iModelBusinessPedido;
     function loadPedidos(AFieldsWhere: TDictionary<string, Variant>)
