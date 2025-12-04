@@ -1,4 +1,4 @@
-unit comercial.view.Pedido;
+Ôªøunit comercial.view.Pedido;
 
 interface
 
@@ -14,7 +14,7 @@ Data.DB,
 System.UITypes,
 comercial.controller,
 comercial.controller.interfaces,
-comercial.util.printhtml;
+comercial.util.printhtml, System.Generics.Collections;
 
 type
   TfrmPedido = class(TForm)
@@ -54,7 +54,6 @@ type
     FController: iController;
     function ValidatePedidoItem: Boolean;
     function ValidatePedidoCab: Boolean;
-    procedure LoadComboboxFornecedor;
   public
     FIDEMPRESA : INTEGER;
     constructor Create(AOwner: TComponent); override;
@@ -78,13 +77,16 @@ begin
     .LinkDataSourcePedido(DSPedido)
     .LinkDataSourceItens(DSItens);
 
-  LoadComboboxFornecedor;
+    FController.business
+    .Pedido
+    .LoadComboboxFornecedor(ComboBoxFornecedor);
 
   gridItens.Options := gridItens.Options - [dgediting];
 end;
 
 destructor TfrmPedido.Destroy;
 begin
+
   inherited;
 end;
 
@@ -117,22 +119,6 @@ begin
     .setIdEmpresa(FIDEMPRESA);
 
     edtIdPedidoExit(nil);
-end;
-
-procedure TfrmPedido.LoadComboboxFornecedor;
-begin
-  FController.business.Fornecedor.Bind(DSFornecedores).Get;
-  ComboBoxFornecedor.Items.Clear;
-  if Assigned(DSFornecedores.DataSet) then
-  begin
-    DSFornecedores.DataSet.First;
-    while not DSFornecedores.DataSet.Eof do
-    begin
-      ComboBoxFornecedor.Items.Add(DSFornecedores.DataSet.FieldByName('FANTASIA')
-        .AsString);
-      DSFornecedores.DataSet.Next;
-    end;
-  end;
 end;
 
 function TfrmPedido.ValidatePedidoCab: Boolean;
@@ -178,7 +164,7 @@ begin
     Exit;
 
   if DSPedido.DataSet.IsEmpty then
-    raise Exception.Create('Antes de adicionar um item È necesss·rio criar o pedido');
+    raise Exception.Create('Antes de adicionar um item √© necesss√°rio criar o pedido');
 
   FController.business
     .Pedido
@@ -239,14 +225,17 @@ end;
 
 procedure TfrmPedido.ComboBoxFornecedorSelect(Sender: TObject);
 begin
-  if Assigned(DSFornecedores.DataSet) then
-  begin
-    FController
-      .business
-      .Pedido.
-        setIdFornecedor(
-        DSFornecedores.DataSet.FieldByName('COD_CLIFOR').AsInteger);
-  end;
+
+  var cod_clifor :=
+  Fcontroller
+    .business
+      .Pedido
+        .getSelectedCodCombo(ComboBoxFornecedor);
+
+   Fcontroller
+    .business
+      .Pedido
+        .setIdFornecedor(cod_clifor);
 end;
 
 end.

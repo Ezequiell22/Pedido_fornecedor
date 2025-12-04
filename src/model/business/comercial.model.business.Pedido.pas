@@ -24,14 +24,16 @@ type
     FDAOFornecedor: iModelDAOEntity<TModelEntityFornecedor>;
     FDAOPedido: iModelDAOEntity<TModelEntityPedidoCompra>;
     FDAOItem: iModelDAOEntity<TModelEntityPedcompraItem>;
+    function buildStrComboBox(id : integer; description : string) : string;
+    function getIndexByCode(aCombo : TComboBox; Acode :integer ) : integer;
+    function getCodeSelectedCombo(aValue : string ) : integer;
   public
     constructor Create;
     destructor Destroy; override;
     class function New: iModelBusinessPedido;
     function Novo : iModelBusinessPedido;
     function Get: iModelBusinessPedido;
-    function Abrir(
-    AcomboBoxFornecedor : TComboBox): iModelBusinessPedido;
+
     function AdicionarItem(aCodItem : integer;
     aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
@@ -44,7 +46,12 @@ type
     function setIdPedido(aValue : integer) : iModelBusinessPedido;
     function setIdEmpresa(aValue : integer) : iModelBusinessPedido;
     function setIdFornecedor(aValue : integer) : iModelBusinessPedido;
-    function loadPedidos(AFieldsWhere: TDictionary<string, Variant>) : iModelBusinessPedido;
+     function loadPedidos(AFieldsWhere: TDictionary<string, Variant>) : iModelBusinessPedido;
+    function Abrir(
+    AcomboBoxFornecedor : TComboBox): iModelBusinessPedido;
+    procedure LoadComboboxFornecedor(
+         aComboBox : TComboBox  );
+    function getSelectedCodCombo(aCombo : TComboBox ) : integer;
   end;
 
 implementation
@@ -60,6 +67,33 @@ begin
   FDAOItem := TModelDAOPedcompraItem.New;
 end;
 
+procedure TModelBusinessPedido.LoadComboboxFornecedor(
+  aComboBox : TComboBox
+);
+begin
+  FDAOFornecedor := TModelDAOFornecedor.New;
+  FDAOFornecedor.Get;
+  aComboBox.Items.Clear;
+
+  if not(FDAOFornecedor.GetDataSet.IsEmpty) then
+  begin
+    FDAOFornecedor.GetDataSet.First;
+    while not FDAOFornecedor.GetDataSet.Eof do
+    begin
+      var str :=
+        buildStrComboBox(
+            FDAOFornecedor.GetDataSet.FieldByName('COD_CLIFOR')
+                  .asInteger,
+                FDAOFornecedor.GetDataSet.FieldByName('FANTASIA')
+              .AsString );
+
+      aComboBox.Items.Add(str);
+
+      FDAOFornecedor.GetDataSet.Next;
+    end;
+  end;
+end;
+
 function TModelBusinessPedido.Abrir(
   AcomboBoxFornecedor : TComboBox): iModelBusinessPedido;
 var idFornecedor : integer;
@@ -69,16 +103,13 @@ begin
   try
     FDAOPedido.GetbyId(FDAOPedido.this.COD_PEDIDOCOMPRA);
 
-    idFornecedor := FDAOPedido.GetDataSet.FieldByName('COD_CLIFOR').AsInteger;
+    setIdFornecedor(
+        FDAOPedido.GetDataSet.FieldByName('COD_CLIFOR').AsInteger);
 
-    FDAOFornecedor:= TModelDAOFornecedor.New;
-    FDAOFornecedor.GetbyId(idFornecedor);
+    AcomboBoxFornecedor.ItemIndex := getIndexByCode(
+        AcomboBoxFornecedor,FDAOPedido.GetDataSet.FieldByName('COD_CLIFOR').AsInteger );
 
-    AcomboBoxFornecedor.Items.Clear;
-    AcomboBoxFornecedor.Items.Add(FDAOFornecedor.GetDataSet
-      .FieldByName('FANTASIA').AsString);
-
-    AcomboBoxFornecedor.ItemIndex := 0;
+    AcomboBoxFornecedor.Enabled := false;
   except
     on E: Exception do
       raise Exception.Create(E.Message);
@@ -108,6 +139,11 @@ begin
 
   FDAOItem
     .GetbyId(idPedido);
+end;
+
+function TModelBusinessPedido.getSelectedCodCombo(aCombo: TComboBox): integer;
+begin
+   result := getCodeSelectedCombo(aCombo.Text)
 end;
 
 function TModelBusinessPedido.LinkDataSourceItens(aDataSource: TDataSource): iModelBusinessPedido;
@@ -209,7 +245,7 @@ end;
 function TModelBusinessPedido.AdicionarItem( aCodItem : integer;
     aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
 var
-  VUnit, VTotalItem, FTotal: Double;
+  VUnit, VTotalItem: Double;
 begin
   Result := Self;
 
@@ -226,13 +262,63 @@ begin
         .COD_ITEM(aCodItem)
         .QTD_PEDIDA(aQuantidade)
         .QTD_RECEBIDA(aQuantidade)
-        .VALOR_TOTAL(FTotal)
+        .VALOR_TOTAL(VTotalItem)
+        .VALOR_DESCTO(0)
+        .VALOR_FINANC(0)
+        .COD_unidadecompra('UN')
+        .DT_INCLUSAO(now)
+        .DT_SOLICITADA(now)
+        .DT_RECEBIDA(now)
         .&End
       .Insert;
   except
     on E: Exception do
       raise Exception.Create(E.Message);
   end;
+end;
+
+function TModelBusinessPedido.buildStrComboBox(id: integer;
+  description: string): string;
+  var separetor : string;
+begin
+  separetor := ' - ';
+
+  result := id.ToString + separetor + description;
+
+end;
+
+function TModelBusinessPedido.getCodeSelectedCombo(aValue : string): integer;
+begin
+
+  try
+    result := strTointdef(avalue.Split(['-'])[0].Trim, 0)
+  except
+    result := 0;
+  end;
+
+end;
+
+function TModelBusinessPedido.getIndexByCode(aCombo : TComboBox; Acode :integer): integer;
+ var i , code : integer;
+begin
+  result := -1;
+
+  for I := 0 to aCombo.Items.Count - 1 do
+  begin
+    try
+       code := getCodeSelectedCombo(aCombo.Items[i]);
+
+       if code = aCode then
+       begin
+          result := i;
+          break;
+       end;
+    except
+      code := 0;
+    end;
+
+  end;
+
 end;
 
 function TModelBusinessPedido.RemoverItem(aSequencia: Integer): iModelBusinessPedido;
@@ -273,6 +359,12 @@ begin
     .VALOR_TOTAL(VTotalItem)
     .QTD_PEDIDA(aQuantidade)
     .QTD_RECEBIDA(aQuantidade)
+    .VALOR_DESCTO(0)
+    .VALOR_FINANC(0)
+    .COD_unidadecompra('UN')
+    .DT_INCLUSAO(now)
+    .DT_SOLICITADA(now)
+    .DT_RECEBIDA(now)
     .&end
   .update;
 end;

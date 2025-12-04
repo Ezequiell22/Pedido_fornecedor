@@ -99,6 +99,8 @@ begin
     exit;
   end;
 
+   var emp := FEntity.COD_EMPRESA;
+
   FQuery
     .active(False)
     .sqlClear
@@ -106,7 +108,7 @@ begin
       .sqlAdd(' where COD_PEDIDOCOMPRA = :COD_PEDIDOCOMPRA')
       .sqlAdd(' and COD_EMPRESA = :COD_EMPRESA')
       .addParam('COD_PEDIDOCOMPRA', aValue)
-      .addParam('COD_EMPRESA', FEntity.COD_EMPRESA)
+      .addParam('COD_EMPRESA',emp )
       .open;
 end;
 

@@ -37,10 +37,7 @@ type
     procedure ButtonLimparFiltrosClick(Sender: TObject);
   private
     FController: iController;
-    FFornecedorIds: TList<Integer>;
     FIDEMPRESA : Integer;
-    procedure LoadFornecedores;
-    function SelectedFornecedorId: Integer;
   public
     destructor Destroy; override;
   end;
@@ -62,11 +59,8 @@ begin
   FController.business.Pedido.LinkDataSourcePedido(DSPedidos);
   FController.business.Pedido.LinkDataSourceItens(DSItens);
 
-  FFornecedorIds := TList<Integer>.Create;
-
   GridPedidos.DataSource := DSPedidos;
   GridItens.DataSource := DSItens;
-
 
   DtIni.Date := Now - 30;
   DtFim.Date := Now;
@@ -74,40 +68,9 @@ begin
   FController
     .business
     .Pedido
-    .setIdEmpresa(FIDEMPRESA);
+    .setIdEmpresa(FIDEMPRESA)
+    .LoadComboboxFornecedor(CbFornecedor)
 
-  LoadFornecedores;
-end;
-
-procedure TfrmListagemPedido.LoadFornecedores;
-var
-  ds: TDataSource;
-begin
-  ds := TDataSource.Create(nil);
-  try
-    FController.business.Fornecedor.Bind(ds).Get;
-    CbFornecedor.Items.Clear;
-    FFornecedorIds.Clear;
-    ds.DataSet.First;
-    while not ds.DataSet.Eof do
-    begin
-      CbFornecedor.Items.Add(
-        ds.DataSet.FieldByName('FANTASIA').AsString
-      );
-      FFornecedorIds.Add(ds.DataSet.FieldByName('COD_CLIFOR').AsInteger);
-      ds.DataSet.Next;
-    end;
-  finally
-    ds.Free;
-  end;
-end;
-
-function TfrmListagemPedido.SelectedFornecedorId: Integer;
-begin
-  Result := 0;
-  if (CbFornecedor.ItemIndex >= 0)
-    and (CbFornecedor.ItemIndex < FFornecedorIds.Count) then
-    Result := FFornecedorIds[CbFornecedor.ItemIndex];
 end;
 
 procedure TfrmListagemPedido.BtnAplicarFiltrosClick(Sender: TObject);
@@ -118,8 +81,16 @@ begin
   try
     filters.Add('DT_EMISSAO_INI', DtIni.DateTime);
     filters.Add('DT_EMISSAO_FIM', DtFim.DateTime);
-    if SelectedFornecedorId > 0 then
-      filters.Add('COD_CLIFOR', SelectedFornecedorId);
+
+    if CbFornecedor.Text <> EmptyStr then
+    begin
+      var COD_CLIFOR := Fcontroller
+        .business
+          .Pedido
+            .getSelectedCodCombo(CbFornecedor);
+
+      filters.Add('COD_CLIFOR', COD_CLIFOR);
+    end;
 
     if trim(edtCodigo.Text) <> EmptyStr then
       filters.Add('COD_PEDIDOCOMPRA', trim(edtCodigo.Text));
@@ -164,10 +135,16 @@ end;
 
 procedure TfrmListagemPedido.CbFornecedorSelect(Sender: TObject);
 begin
+  var cod_clifor :=
+  Fcontroller
+    .business
+      .Pedido
+        .getSelectedCodCombo(CbFornecedor);
+
    Fcontroller
     .business
       .Pedido
-        .setIdFornecedor(SelectedFornecedorId);
+        .setIdFornecedor(cod_clifor);
 end;
 
 procedure TfrmListagemPedido.BtnEditarClick(Sender: TObject);
@@ -203,7 +180,7 @@ end;
 
 destructor TfrmListagemPedido.Destroy;
 begin
-  FFornecedorIds.Free;
+
   inherited;
 end;
 

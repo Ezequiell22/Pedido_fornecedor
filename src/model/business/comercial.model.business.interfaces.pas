@@ -21,7 +21,6 @@ type
     function Abrir(AcomboBoxFornecedor: TComboBox): iModelBusinessPedido;
     function AdicionarItem(aCodItem: Integer; aValor: Double;
       aQuantidade: Double; aDescricaoProduto: string): iModelBusinessPedido;
-
     function LinkDataSourcePedido(aDataSource: TDataSource)
       : iModelBusinessPedido;
     function LinkDataSourceItens(aDataSource: TDataSource)
@@ -36,6 +35,8 @@ type
     function GetItems: iModelBusinessPedido;
     function loadPedidos(AFieldsWhere: TDictionary<string, Variant>)
       : iModelBusinessPedido;
+    procedure LoadComboboxFornecedor(aComboBox: TComboBox);
+    function getSelectedCodCombo(aCombo : TComboBox ) : integer;
   end;
 
   iModelBusinessRelatorio = interface
