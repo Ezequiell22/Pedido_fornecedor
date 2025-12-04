@@ -16,6 +16,7 @@ uses
   FireDAC.UI.Intf,
   FireDAC.VCLUI.Wait,
   System.IniFiles,
+  system.StrUtils,
   comercial.model.resource.interfaces;
 
 type
@@ -39,8 +40,8 @@ begin
   var iniPath := ExtractFilePath(ParamStr(0)) + 'comercial.ini';
   var ini := TIniFile.Create(iniPath);
   try
-    var server := ini.ReadString('Database', 'Server', 'localhost');
-    var database := ini.ReadString('Database', 'Database', 'PedidoFornecedor');
+    var server := ini.ReadString('Database', 'Server', '172.20.10.6,1433');
+    var database := ini.ReadString('Database', 'Database', '');
     var dbUser := ini.ReadString('Database', 'User', 'sa');
     var dbPass := ini.ReadString('Database', 'Password', '');
 

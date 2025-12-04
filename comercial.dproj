@@ -133,7 +133,6 @@
         <DCCReference Include="src\controller\comercial.controller.business.pas"/>
         <DCCReference Include="src\model\business\comercial.model.business.interfaces.pas"/>
         <DCCReference Include="src\model\resource\comercial.model.resource.interfaces.pas"/>
-        <DCCReference Include="src\model\db\comercial.model.db.migrations.pas"/>
         <DCCReference Include="src\model\entity\comercial.model.entity.Fornecedor.pas"/>
         <DCCReference Include="src\model\entity\comercial.model.entity.PedidoCompra.pas"/>
         <DCCReference Include="src\model\entity\comercial.model.entity.PedcompraItem.pas"/>
@@ -160,7 +159,6 @@
         <DCCReference Include="src\model\resource\impl\comercial.model.resource.impl.queryFD.pas"/>
         <DCCReference Include="src\utils\comercial.util.log.pas"/>
         <DCCReference Include="src\utils\comercial.util.printhtml.pas"/>
-        <DCCReference Include="src\model\db\comercial.model.db.migrations.seed.pas"/>
         <DCCReference Include="src\view\comercial.view.ListagemPedido.pas">
             <Form>frmListagemPedido</Form>
             <FormType>dfm</FormType>

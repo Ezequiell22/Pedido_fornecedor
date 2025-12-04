@@ -1,5 +1,4 @@
-﻿{ copied from Cliente.pas with same unit name }
-unit comercial.model.entity.Fornecedor;
+﻿unit comercial.model.entity.Fornecedor;
 
 interface
 

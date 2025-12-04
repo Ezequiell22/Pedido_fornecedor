@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{7F1FB5C5-6B99-4B0A-9D1C-9B7B33C96A72}</ProjectGuid>
         <ProjectVersion>20.3</ProjectVersion>
@@ -22,8 +22,7 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="Comercial.Tests.Migrations.pas"/>
-        <DCCReference Include="Comercial.Tests.Cliente.pas"/>
+        <DCCReference Include="Comercial.Tests.Fornecedor.pas"/>
         <DCCReference Include="Comercial.Tests.Pedido.pas"/>
         <DCCReference Include="Comercial.Tests.RelatorioHTML.pas"/>
         <DCCReference Include="..\src\model\db\comercial.model.db.migrations.pas"/>
@@ -37,8 +36,10 @@
         <DCCReference Include="..\src\model\business\comercial.model.business.Pedido.pas"/>
         <DCCReference Include="..\src\model\DAO\comercial.model.DAO.Fornecedor.pas"/>
         <DCCReference Include="..\src\model\DAO\comercial.model.DAO.interfaces.pas"/>
-        <DCCReference Include="..\src\model\entity\comercial.model.entity.Fornecedor.pas"/>
         <DCCReference Include="..\src\model\comercial.model.validation.pas"/>
+        <DCCReference Include="..\src\model\entity\comercial.model.entity.Fornecedor.pas"/>
+        <DCCReference Include="..\src\model\entity\comercial.model.entity.PedcompraItem.pas"/>
+        <DCCReference Include="..\src\model\entity\comercial.model.entity.PedidoCompra.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
