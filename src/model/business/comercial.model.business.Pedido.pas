@@ -215,11 +215,14 @@ begin
 
   try
 
+    VUnit := aValor;
+    if VUnit < 0 then VUnit := 0;
+    if aQuantidade <= 0 then aQuantidade := 1;
     VTotalItem := VUnit * aQuantidade;
-    FTotal := FTotal + VTotalItem;
     FDAOItem
       .This
         .DESCRICAO(aDescricaoProduto)
+        .PRECO_UNITARIO(VUnit)
         .COD_ITEM(aCodItem)
         .QTD_PEDIDA(aQuantidade)
         .QTD_RECEBIDA(aQuantidade)

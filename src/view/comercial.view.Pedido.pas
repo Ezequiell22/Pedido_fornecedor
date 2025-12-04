@@ -177,6 +177,9 @@ begin
   if not ValidatePedidoItem then
     Exit;
 
+  if DSPedido.DataSet.IsEmpty then
+    raise Exception.Create('Antes de adicionar um item é necesssário criar o pedido');
+
   FController.business
     .Pedido
     .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
@@ -195,6 +198,9 @@ begin
     .business
     .Pedido
     .novo;
+
+    edtIdPedido.Text := DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsString;
+    edtIdPedidoExit(nil);
 end;
 
 procedure TfrmPedido.btnRemoverItemClick(Sender: TObject);

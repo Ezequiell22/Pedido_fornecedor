@@ -115,7 +115,7 @@ object frmPedido: TfrmPedido
     object EdtDescricao: TEdit
       Left = 279
       Top = 36
-      Width = 121
+      Width = 272
       Height = 21
       TabOrder = 6
     end

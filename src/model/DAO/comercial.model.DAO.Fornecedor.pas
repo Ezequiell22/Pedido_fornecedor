@@ -84,6 +84,7 @@ begin
     FQuery.active(False)
       .sqlClear
       .sqlAdd('select * from FORNECEDORES WHERE ACTIVE = 1')
+      .sqlAdd(' order by Fantasia')
       .Open;
     FQuery.DataSet.First;
   except
