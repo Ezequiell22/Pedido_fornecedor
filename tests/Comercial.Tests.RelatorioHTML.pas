@@ -32,7 +32,7 @@ procedure TTestRelatorioHTML.ShouldGenerateComprasPorProdutoHTML;
 var
   S: string;
 begin
-  S := TPrintHtmlPedido.GerarRelatorioPorProduto(Now - 30, Now, '');
+  S := TPrintHtmlPedido.GerarRelatorioPorProduto('');
   Assert.IsTrue(S <> '');
   Assert.IsTrue(Pos('<html', S) > 0);
   Assert.IsTrue(Pos('Compras por Produto', S) > 0);
@@ -42,7 +42,7 @@ procedure TTestRelatorioHTML.ShouldGenerateComprasPorFornecedorHTML;
 var
   S: string;
 begin
-  S := TPrintHtmlPedido.GerarRelatorioPorFornecedor(Now - 30, Now, '');
+  S := TPrintHtmlPedido.GerarRelatorioPorFornecedor('');
   Assert.IsTrue(S <> '');
   Assert.IsTrue(Pos('<html', S) > 0);
   Assert.IsTrue(Pos('Compras por Fornecedor', S) > 0);

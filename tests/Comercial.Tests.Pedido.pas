@@ -50,7 +50,7 @@ begin
   PedidoId := Q.DataSet.FieldByName('ID').AsInteger;
   Assert.IsTrue(PedidoId > 0);
   BPedido.setIdPedido(PedidoId).setIdEmpresa(1).setIdFornecedor(FornecedorId);
-  BPedido.AdicionarItem(123, 10.0, 2.0);
+  BPedido.AdicionarItem(123, 10.0, 2.0, 'Produto 1');
 
   Q.active(False).sqlClear
     .sqlAdd('select top 1 COD_Item, QTD_PEDIDA from PEDCOMPRA_ITEM where COD_PEDIDOCOMPRA = :ID and COD_EMPRESA = :EMP')

@@ -22,7 +22,10 @@ uses
   comercial.model.validation in '..\src\model\comercial.model.validation.pas',
   comercial.model.entity.Fornecedor in '..\src\model\entity\comercial.model.entity.Fornecedor.pas',
   comercial.model.entity.PedcompraItem in '..\src\model\entity\comercial.model.entity.PedcompraItem.pas',
-  comercial.model.entity.PedidoCompra in '..\src\model\entity\comercial.model.entity.PedidoCompra.pas';
+  comercial.model.entity.PedidoCompra in '..\src\model\entity\comercial.model.entity.PedidoCompra.pas',
+  comercial.model.resource.impl.conexaoFD in '..\src\model\resource\impl\comercial.model.resource.impl.conexaoFD.pas',
+  comercial.model.DAO.PedcompraItem in '..\src\model\DAO\comercial.model.DAO.PedcompraItem.pas',
+  comercial.model.DAO.PedidoCompra in '..\src\model\DAO\comercial.model.DAO.PedidoCompra.pas';
 
 var
   Runner: ITestRunner;

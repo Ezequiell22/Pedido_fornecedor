@@ -39,6 +39,9 @@
         <DCCReference Include="..\src\model\entity\comercial.model.entity.Fornecedor.pas"/>
         <DCCReference Include="..\src\model\entity\comercial.model.entity.PedcompraItem.pas"/>
         <DCCReference Include="..\src\model\entity\comercial.model.entity.PedidoCompra.pas"/>
+        <DCCReference Include="..\src\model\resource\impl\comercial.model.resource.impl.conexaoFD.pas"/>
+        <DCCReference Include="..\src\model\DAO\comercial.model.DAO.PedcompraItem.pas"/>
+        <DCCReference Include="..\src\model\DAO\comercial.model.DAO.PedidoCompra.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
