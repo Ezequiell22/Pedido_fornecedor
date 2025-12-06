@@ -37,7 +37,7 @@ type
     function AdicionarItem(aCodItem : integer;
     aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
-    function EditarItem(aSequencia: Integer;
+    function EditarItem(aCodItem, aSequencia: Integer;
      aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
     function ExcluirPedido : iModelBusinessPedido;
     function LinkDataSourcePedido(aDataSource: TDataSource): iModelBusinessPedido;
@@ -336,7 +336,7 @@ begin
 
 end;
 
-function TModelBusinessPedido.EditarItem(aSequencia: Integer;
+function TModelBusinessPedido.EditarItem(aCodItem, aSequencia: Integer;
  aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
 var
   VUnit, VTotalItem: Double;
@@ -353,6 +353,7 @@ begin
 
   Fdaoitem
     .this
+    .COD_Item(aCodItem)
     .SEQUENCIA(aSequencia)
     .DESCRICAO(aDescricaoProduto)
     .PRECO_UNITARIO(VUnit)

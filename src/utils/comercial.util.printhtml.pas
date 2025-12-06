@@ -125,8 +125,8 @@ begin
     .sqlClear
     .sqlAdd('select f.COD_CLIFOR, f.FANTASIA, sum(i.VALOR_TOTAL) as VALOR_TOTAL')
     .sqlAdd('  from PEDIDO_COMPRA d')
-    .sqlAdd('  left join FORNECEDORES f on f.COD_CLIFOR = d.COD_CLIFOR')
-    .sqlAdd('  left join PEDCOMPRA_ITEM i on (i.COD_PEDIDOCOMPRA = d.COD_PEDIDOCOMPRA')
+    .sqlAdd('   join FORNECEDORES f on f.COD_CLIFOR = d.COD_CLIFOR')
+    .sqlAdd('   join PEDCOMPRA_ITEM i on (i.COD_PEDIDOCOMPRA = d.COD_PEDIDOCOMPRA')
     .sqlAdd('  and d.cod_empresa = i.cod_empresa )')
     .sqlAdd(' group by f.COD_CLIFOR, f.FANTASIA')
     .sqlAdd(' order by f.fantasia')

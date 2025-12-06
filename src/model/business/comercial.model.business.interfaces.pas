@@ -29,7 +29,7 @@ type
     function setIdEmpresa(aValue: Integer): iModelBusinessPedido;
     function setIdFornecedor(aValue: Integer): iModelBusinessPedido;
     function RemoverItem(aSequencia: Integer): iModelBusinessPedido;
-    function EditarItem(aSequencia: Integer; aValor: Double;
+    function EditarItem(aCodItem, aSequencia: Integer; aValor: Double;
       aQuantidade: Double; aDescricaoProduto: string): iModelBusinessPedido;
     function ExcluirPedido: iModelBusinessPedido;
     function GetItems: iModelBusinessPedido;

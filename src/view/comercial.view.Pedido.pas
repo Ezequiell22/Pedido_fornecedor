@@ -2,8 +2,7 @@
 
 interface
 
-uses System.SysUtils,
-System.Classes,
+uses System.Classes,
 Vcl.Forms,
 Vcl.StdCtrls,
 Vcl.Controls,
@@ -63,7 +62,7 @@ type
 implementation
 
 uses
-  Vcl.Dialogs;
+  Vcl.Dialogs, System.SysUtils;
 
 {$R *.dfm}
 
@@ -208,11 +207,12 @@ end;
 
 procedure TfrmPedido.btnEditarItemClick(Sender: TObject);
 var
-  seq: Integer;
+  codItem, seq: Integer;
   valor, quantidade : Double;
 begin
   if Assigned(DSItens.DataSet) and not DSItens.DataSet.IsEmpty then
   begin
+    codItem := strTointDef(edtCodItem.Text, 0);
     seq := DSItens.DataSet.FieldByName('SEQUENCIA').AsInteger;
     valor := StrToFloatDef(edtPrecoUnitario.Text, 0);
     quantidade := StrToFloatDef(edtQuantidade.Text, 1);
@@ -220,7 +220,7 @@ begin
     .Pedido
     .setIdPedido(DSPedido.DataSet.FieldByName('COD_PEDIDOCOMPRA').AsInteger)
     .setIdEmpresa(DSPedido.DataSet.FieldByName('COD_EMPRESA').AsInteger)
-    .EditarItem(seq, valor, quantidade, edtDescricao.text)
+    .EditarItem( codItem, seq, valor, quantidade, edtDescricao.text)
     .GetItems;
   end;
 end;

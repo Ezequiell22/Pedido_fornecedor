@@ -45,6 +45,7 @@ begin
   FornecedorId := Q.DataSet.FieldByName('ID').AsInteger;
 
   BPedido := TModelBusinessPedido.New;
+  BPedido.setIdEmpresa(1);
   BPedido.Novo;
   Q.active(False).sqlClear.sqlAdd('select max(COD_PEDIDOCOMPRA) as ID from PEDIDO_COMPRA').open;
   PedidoId := Q.DataSet.FieldByName('ID').AsInteger;
