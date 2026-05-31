@@ -18,10 +18,13 @@ uses
   Vcl.Menus,
   Vcl.StdCtrls,
   Vcl.ComCtrls,
-  comercial.controller.interfaces;
+  comercial.controller.interfaces,
+  siComp;
 
 type
   TfrmIndex = class(Tform)
+    siLangDispatcher1: TsiLangDispatcher;
+    siLang1: TsiLang;
     ButtonFornecedores: TButton;
     ButtonPedidos: TButton;
     buttonPorProduto: TButton;
@@ -53,7 +56,8 @@ uses
   comercial.view.Pedido,
   comercial.view.ListagemFornecedor,
   comercial.util.printhtml,
-  comercial.view.ListagemPedido;
+  comercial.view.ListagemPedido,
+  Language.Bootstrap;
 
 procedure TfrmIndex.ButtonFornecedoresClick(Sender: TObject);
 begin
@@ -84,7 +88,7 @@ begin
     .Relatorio
     .GerarPorFornecedor();
 
-  showMessage('Relatório salvo em ' + GetCurrentDir);
+  showMessage(Translator.FormatMsg('MSG_RELATORIO_SALVO', [GetCurrentDir]));
 
 end;
 
@@ -97,7 +101,7 @@ begin
     .Relatorio
     .GerarPorProduto();
 
-  showMessage('Relatório salvo em ' + GetCurrentDir);
+  showMessage(Translator.FormatMsg('MSG_RELATORIO_SALVO', [GetCurrentDir]));
 
 end;
 

@@ -15,6 +15,20 @@ object frmIndex: TfrmIndex
   FormStyle = fsMDIForm
   Position = poScreenCenter
   TextHeight = 13
+  object siLangDispatcher1: TsiLangDispatcher
+    Left = 400
+    Top = 8
+    LangNames.Strings = (
+      'Portuguese'
+      'English'
+      'Spanish')
+    FileName = 'Languages\comercial.sil'
+  end
+  object siLang1: TsiLang
+    Left = 400
+    Top = 40
+    LangDispatcher = siLangDispatcher1
+  end
   object ButtonFornecedores: TButton
     Left = 120
     Top = 24

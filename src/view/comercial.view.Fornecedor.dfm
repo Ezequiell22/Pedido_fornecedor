@@ -13,6 +13,10 @@ object frmFornecedor: TfrmFornecedor
   Position = poScreenCenter
   OnShow = FormShow
   TextHeight = 13
+  object siLangLinked1: TsiLangLinked
+    LangDispatcher = frmIndex.siLangDispatcher1
+    CommonContainer = frmIndex.siLang1
+  end
   object Label1: TLabel
     Left = 16
     Top = 16

@@ -13,10 +13,12 @@ Data.DB,
 System.UITypes,
 comercial.controller,
 comercial.controller.interfaces,
-comercial.util.printhtml, System.Generics.Collections;
+comercial.util.printhtml, System.Generics.Collections,
+siComp;
 
 type
   TfrmPedido = class(TForm)
+    siLangLinked1: TsiLangLinked;
     GroupBox2: TGroupBox;
     Label4: TLabel;
     edtPrecoUnitario: TEdit;
@@ -62,7 +64,8 @@ type
 implementation
 
 uses
-  Vcl.Dialogs, System.SysUtils;
+  Vcl.Dialogs, System.SysUtils,
+  Language.Bootstrap;
 
 {$R *.dfm}
 
@@ -125,12 +128,12 @@ begin
   Result := False;
   if StrToIntDef(edtIdPedido.Text, 0) <= 0 then
   begin
-    ShowMessage('ID Pedido invalido');
+    ShowMessage(Translator.Msg('MSG_PEDIDO_ID_INVALIDO'));
     Exit;
   end;
   if Trim(ComboBoxFornecedor.Text) = EmptyStr then
   begin
-    ShowMessage('ID Fornecedor invalido');
+    ShowMessage(Translator.Msg('MSG_FORNECEDOR_ID_INVALIDO'));
     Exit;
   end;
   Result := True;
@@ -145,13 +148,13 @@ begin
   V := StrToFloatDef(edtPrecoUnitario.Text, -1);
   if V < 0 then
   begin
-    ShowMessage('Valor deve ser numero maior ou igual a zero');
+    ShowMessage(Translator.Msg('MSG_VALOR_INVALIDO'));
     Exit;
   end;
   Q := StrToFloatDef(edtQuantidade.Text, -1);
   if Q <= 0 then
   begin
-    ShowMessage('Quantidade deve ser maior que zero');
+    ShowMessage(Translator.Msg('MSG_QUANTIDADE_INVALIDA'));
     Exit;
   end;
   Result := True;

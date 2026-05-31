@@ -6,10 +6,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls,
-  comercial.controller.interfaces, comercial.controller;
+  comercial.controller.interfaces, comercial.controller,
+  siComp;
 
 type
   TfrmListagemFornecedor = class(TForm)
+    siLangLinked1: TsiLangLinked;
     Grid: TDBGrid;
     DS: TDataSource;
     BtnNovo: TButton;

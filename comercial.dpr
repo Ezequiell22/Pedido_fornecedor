@@ -29,7 +29,10 @@ uses
   comercial.model.resource.impl.queryFD in 'src\model\resource\impl\comercial.model.resource.impl.queryFD.pas',
   comercial.util.log in 'src\utils\comercial.util.log.pas',
   comercial.util.printhtml in 'src\utils\comercial.util.printhtml.pas',
-  comercial.view.ListagemPedido in 'src\view\comercial.view.ListagemPedido.pas' {frmListagemPedido};
+  comercial.view.ListagemPedido in 'src\view\comercial.view.ListagemPedido.pas' {frmListagemPedido},
+  Language.Bootstrap in 'src\language\Language.Bootstrap.pas',
+  Language.TsiLang.Service in 'src\language\Language.TsiLang.Service.pas',
+  Language.Runtime.Config in 'src\language\Language.Runtime.Config.pas';
 
 {$R *.res}
 
@@ -57,6 +60,7 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmIndex, frmIndex);
+  TLanguageBootstrap.Initialize;
   Application.CreateForm(TfrmListagemPedido, frmListagemPedido);
   Application.Run;
 

@@ -6,10 +6,12 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ComCtrls,
-  System.Generics.Collections, comercial.controller.interfaces, Vcl.ExtCtrls;
+  System.Generics.Collections, comercial.controller.interfaces, Vcl.ExtCtrls,
+  siComp;
 
 type
   TfrmListagemPedido = class(TForm)
+    siLangLinked1: TsiLangLinked;
     GridPedidos: TDBGrid;
     GridItens: TDBGrid;
     DSPedidos: TDataSource;
