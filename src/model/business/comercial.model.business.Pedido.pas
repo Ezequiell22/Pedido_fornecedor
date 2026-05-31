@@ -49,7 +49,7 @@ type
 
 implementation
 
-uses System.SysUtils, comercial.model.DAO.Fornecedor;
+uses System.SysUtils, comercial.model.DAO.Fornecedor, comercial.model.DAO.Produto, comercial.model.entity.Produto;
 
 constructor TModelBusinessPedido.Create;
 begin
@@ -210,10 +210,16 @@ function TModelBusinessPedido.AdicionarItem( aCodItem : integer;
     aValor: Double; aQuantidade: Double; aDescricaoProduto : string): iModelBusinessPedido;
 var
   VUnit, VTotalItem, FTotal: Double;
+  LDAOProduto: iModelDAOEntity<TModelEntityProduto>;
 begin
   Result := Self;
 
   try
+    LDAOProduto := TModelDAOProduto.New;
+    LDAOProduto.GetbyId(aCodItem);
+
+    if LDAOProduto.This.ALIQUOTA_ESTADUAL > 0 then
+      raise Exception.Create('N√£o √© permitido incluir produtos com al√≠quota estadual maior que zero.');
 
     VUnit := aValor;
     if VUnit < 0 then VUnit := 0;
@@ -240,7 +246,7 @@ begin
   Result := Self;
 
   if aSequencia <= 0 then
-    raise Exception.Create('Id sequencia inv·lido');
+    raise Exception.Create('Id sequencia invÔøΩlido');
 
   FDAOItem
     .This
@@ -258,7 +264,7 @@ begin
   Result := Self;
 
   if aSequencia <= 0 then
-    raise Exception.Create('Id sequencia inv·lido');
+    raise Exception.Create('Id sequencia invÔøΩlido');
 
   VUnit := aValor;
   if VUnit < 0 then VUnit := 0;

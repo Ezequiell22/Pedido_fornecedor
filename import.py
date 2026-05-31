@@ -7,7 +7,7 @@ from urllib.parse import quote_plus
 # ----------------------------------------
 server   = "localhost"
 port     = 1433
-database = "aptr"          # Troque pelo nome do seu banco
+database = "aptr2"          # Troque pelo nome do seu banco
 username = "sa"
 password = "SenhaForte123!"
 

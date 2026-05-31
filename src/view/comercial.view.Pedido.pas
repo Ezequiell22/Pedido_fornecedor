@@ -4,6 +4,7 @@ interface
 
 uses System.SysUtils,
 System.Classes,
+System.Generics.Collections,
 Vcl.Forms,
 Vcl.StdCtrls,
 Vcl.Controls,
@@ -49,12 +50,13 @@ type
     procedure btnRemoverItemClick(Sender: TObject);
     procedure btnEditarItemClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure DSItensDataChange(Sender: TObject; Field: TField);
+    procedure DSItensDataChange(Sender: TField);
   private
     FController: iController;
     function ValidatePedidoItem: Boolean;
     function ValidatePedidoCab: Boolean;
     procedure LoadComboboxFornecedor;
+    FFornecedorIds: TList<Integer>;
   public
     FIDEMPRESA : INTEGER;
     constructor Create(AOwner: TComponent); override;
@@ -64,7 +66,8 @@ type
 implementation
 
 uses
-  Vcl.Dialogs;
+  Vcl.Dialogs,
+  Language.Bootstrap;
 
 {$R *.dfm}
 
@@ -72,6 +75,7 @@ constructor TfrmPedido.Create(AOwner: TComponent);
 begin
   inherited;
   FController := TController.New;
+  FFornecedorIds := TList<Integer>.Create;
 
   FController.business
     .Pedido
@@ -85,6 +89,7 @@ end;
 
 destructor TfrmPedido.Destroy;
 begin
+  FFornecedorIds.Free;
   inherited;
 end;
 
@@ -123,6 +128,7 @@ procedure TfrmPedido.LoadComboboxFornecedor;
 begin
   FController.business.Fornecedor.Bind(DSFornecedores).Get;
   ComboBoxFornecedor.Items.Clear;
+  FFornecedorIds.Clear;
   if Assigned(DSFornecedores.DataSet) then
   begin
     DSFornecedores.DataSet.First;
@@ -130,6 +136,7 @@ begin
     begin
       ComboBoxFornecedor.Items.Add(DSFornecedores.DataSet.FieldByName('FANTASIA')
         .AsString);
+      FFornecedorIds.Add(DSFornecedores.DataSet.FieldByName('COD_CLIFOR').AsInteger);
       DSFornecedores.DataSet.Next;
     end;
   end;
@@ -140,12 +147,12 @@ begin
   Result := False;
   if StrToIntDef(edtIdPedido.Text, 0) <= 0 then
   begin
-    ShowMessage('ID Pedido invalido');
+    ShowMessage(Translator.Msg('MSG_PEDIDO_ID_INVALIDO'));
     Exit;
   end;
   if Trim(ComboBoxFornecedor.Text) = EmptyStr then
   begin
-    ShowMessage('ID Fornecedor invalido');
+    ShowMessage(Translator.Msg('MSG_FORNECEDOR_ID_INVALIDO'));
     Exit;
   end;
   Result := True;
@@ -160,13 +167,13 @@ begin
   V := StrToFloatDef(edtPrecoUnitario.Text, -1);
   if V < 0 then
   begin
-    ShowMessage('Valor deve ser numero maior ou igual a zero');
+    ShowMessage(Translator.Msg('MSG_VALOR_INVALIDO'));
     Exit;
   end;
   Q := StrToFloatDef(edtQuantidade.Text, -1);
   if Q <= 0 then
   begin
-    ShowMessage('Quantidade deve ser maior que zero');
+    ShowMessage(Translator.Msg('MSG_QUANTIDADE_INVALIDA'));
     Exit;
   end;
   Result := True;
@@ -178,7 +185,7 @@ begin
     Exit;
 
   if DSPedido.DataSet.IsEmpty then
-    raise Exception.Create('Antes de adicionar um item é necesssário criar o pedido');
+    raise Exception.Create('Antes de adicionar um item ï¿½ necesssï¿½rio criar o pedido');
 
   FController.business
     .Pedido
@@ -239,13 +246,13 @@ end;
 
 procedure TfrmPedido.ComboBoxFornecedorSelect(Sender: TObject);
 begin
-  if Assigned(DSFornecedores.DataSet) then
+  if (ComboBoxFornecedor.ItemIndex >= 0)
+    and (ComboBoxFornecedor.ItemIndex < FFornecedorIds.Count) then
   begin
     FController
       .business
-      .Pedido.
-        setIdFornecedor(
-        DSFornecedores.DataSet.FieldByName('COD_CLIFOR').AsInteger);
+      .Pedido
+      .setIdFornecedor(FFornecedorIds[ComboBoxFornecedor.ItemIndex]);
   end;
 end;
 

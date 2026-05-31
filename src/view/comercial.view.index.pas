@@ -53,7 +53,8 @@ uses
   comercial.view.Pedido,
   comercial.view.ListagemFornecedor,
   comercial.util.printhtml,
-  comercial.view.ListagemPedido;
+  comercial.view.ListagemPedido,
+  Language.Bootstrap;
 
 procedure TfrmIndex.ButtonFornecedoresClick(Sender: TObject);
 begin
@@ -84,7 +85,7 @@ begin
     .Relatorio
     .GerarPorFornecedor();
 
-  showMessage('Relatório salvo em ' + GetCurrentDir);
+  showMessage(Translator.Format('MSG_RELATORIO_SALVO', [GetCurrentDir]));
 
 end;
 
@@ -97,7 +98,7 @@ begin
     .Relatorio
     .GerarPorProduto();
 
-  showMessage('Relatório salvo em ' + GetCurrentDir);
+  showMessage(Translator.Format('MSG_RELATORIO_SALVO', [GetCurrentDir]));
 
 end;
 

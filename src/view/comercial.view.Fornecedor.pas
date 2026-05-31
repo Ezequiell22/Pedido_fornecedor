@@ -40,7 +40,8 @@ implementation
 
 uses
   system.StrUtils,
-  Vcl.Dialogs;
+  Vcl.Dialogs,
+  Language.Bootstrap;
 
 {$R *.dfm}
 
@@ -82,12 +83,12 @@ begin
   Result := False;
   if Trim(AOwner.edtFantasia.Text) = '' then
   begin
-    ShowMessage('Nome fantasia obrigatorio');
+    ShowMessage(Translator.Msg('MSG_FANTASIA_OBRIGATORIO'));
     Exit;
   end;
   if Trim(AOwner.edtRazao.Text) = '' then
   begin
-    ShowMessage('Razao social obrigatoria');
+    ShowMessage(Translator.Msg('MSG_RAZAO_OBRIGATORIA'));
     Exit;
   end;
 

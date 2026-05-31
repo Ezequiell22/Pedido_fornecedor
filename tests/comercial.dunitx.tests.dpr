@@ -4,6 +4,7 @@ program comercial_dunitx_tests;
 
 uses
   System.SysUtils,
+  Vcl.Forms,
   DUnitX.TestFramework,
   DUnitX.Loggers.Console,
   Comercial.Tests.Fornecedor in 'Comercial.Tests.Fornecedor.pas',
@@ -22,7 +23,28 @@ uses
   comercial.model.validation in '..\src\model\comercial.model.validation.pas',
   comercial.model.entity.Fornecedor in '..\src\model\entity\comercial.model.entity.Fornecedor.pas',
   comercial.model.entity.PedcompraItem in '..\src\model\entity\comercial.model.entity.PedcompraItem.pas',
-  comercial.model.entity.PedidoCompra in '..\src\model\entity\comercial.model.entity.PedidoCompra.pas';
+  comercial.model.entity.PedidoCompra in '..\src\model\entity\comercial.model.entity.PedidoCompra.pas',
+  Language.Bootstrap in '..\src\language\Language.Bootstrap.pas',
+  Language.Core.Interfaces in '..\src\language\Language.Core.Interfaces.pas',
+  Language.Runtime.Config in '..\src\language\Language.Runtime.Config.pas',
+  Language.Runtime.Logger in '..\src\language\Language.Runtime.Logger.pas',
+  Language.Runtime.Cache in '..\src\language\Language.Runtime.Cache.pas',
+  Language.JsonProvider in '..\src\language\Language.JsonProvider.pas',
+  Language.Runtime.Translator in '..\src\language\Language.Runtime.Translator.pas',
+  Language.Runtime.Manager in '..\src\language\Language.Runtime.Manager.pas',
+  Language.VCL.Keys in '..\src\language\Language.VCL.Keys.pas',
+  Language.VCL.ComponentWalker in '..\src\language\Language.VCL.ComponentWalker.pas',
+  Language.VCL.Hook in '..\src\language\Language.VCL.Hook.pas',
+  Language.Tools.Validator in '..\src\language\Language.Tools.Validator.pas',
+  Language.Tests.Helpers in 'Language.Tests.Helpers.pas',
+  Language.Tests.Config in 'Language.Tests.Config.pas',
+  Language.Tests.Cache in 'Language.Tests.Cache.pas',
+  Language.Tests.JsonProvider in 'Language.Tests.JsonProvider.pas',
+  Language.Tests.Translator in 'Language.Tests.Translator.pas',
+  Language.Tests.Manager in 'Language.Tests.Manager.pas',
+  Language.Tests.Validator in 'Language.Tests.Validator.pas',
+  Language.Tests.Keys in 'Language.Tests.Keys.pas',
+  Language.Tests.VCL in 'Language.Tests.VCL.pas';
 
 var
   Runner: ITestRunner;
@@ -30,10 +52,19 @@ var
 
 begin
   ReportMemoryLeaksOnShutdown := True;
+  Application.Initialize;
 
   TDUnitX.RegisterTestFixture(TTestFornecedor);
   TDUnitX.RegisterTestFixture(TTestPedido);
   TDUnitX.RegisterTestFixture(TTestRelatorioHTML);
+  TDUnitX.RegisterTestFixture(TTestLanguageConfig);
+  TDUnitX.RegisterTestFixture(TTestLanguageCache);
+  TDUnitX.RegisterTestFixture(TTestLanguageJsonProvider);
+  TDUnitX.RegisterTestFixture(TTestLanguageTranslator);
+  TDUnitX.RegisterTestFixture(TTestLanguageManager);
+  TDUnitX.RegisterTestFixture(TTestLanguageValidator);
+  TDUnitX.RegisterTestFixture(TTestLanguageKeys);
+  TDUnitX.RegisterTestFixture(TTestLanguageVCL);
 
   Runner := TDUnitX.CreateRunner;
   Runner.AddLogger(TDUnitXConsoleLogger.Create(True));

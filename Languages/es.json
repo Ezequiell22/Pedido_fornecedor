@@ -1,0 +1,64 @@
+{
+  "_metadata": {
+    "language": "es",
+    "version": "1.0.0",
+    "erpVersion": "1.0"
+  },
+
+  "FORM_FRMINDEX.CAPTION": "Módulo Comercial",
+  "FORM_FRMINDEX.BUTTONFORNECEDORES": "Proveedores",
+  "FORM_FRMINDEX.BUTTONPEDIDOS": "Pedidos",
+  "FORM_FRMINDEX.BUTTONPORPRODUTO": "Informe de Compras por Producto",
+  "FORM_FRMINDEX.BUTTONPORFORNECEDOR": "Informe de Compras por Proveedor",
+
+  "FORM_FRMFORNECEDOR.CAPTION": "Proveedor",
+  "FORM_FRMFORNECEDOR.LABEL1": "Código",
+  "FORM_FRMFORNECEDOR.LABEL2": "Nombre Comercial",
+  "FORM_FRMFORNECEDOR.LABEL3": "Razón Social",
+  "FORM_FRMFORNECEDOR.LABEL4": "Código Estado",
+  "FORM_FRMFORNECEDOR.LABEL5": "Código País",
+  "FORM_FRMFORNECEDOR.BTNSALVAR": "Guardar",
+  "FORM_FRMFORNECEDOR.CHECKBOXCLIENTE": "Cliente",
+  "FORM_FRMFORNECEDOR.CHECKBOXFORNEC": "Proveedor",
+
+  "FORM_FRMLISTAGEMFORNECEDOR.CAPTION": "Listado de Proveedores",
+  "FORM_FRMLISTAGEMFORNECEDOR.BTNNOVO": "Nuevo",
+  "FORM_FRMLISTAGEMFORNECEDOR.BTNEDITAR": "Editar",
+  "FORM_FRMLISTAGEMFORNECEDOR.BTNEXCLUIR": "Eliminar",
+
+  "FORM_FRMLISTAGEMPEDIDO.CAPTION": "Listado de Pedidos EMPRESA 200",
+  "FORM_FRMLISTAGEMPEDIDO.LABELFORNECEDOR": "Proveedor",
+  "FORM_FRMLISTAGEMPEDIDO.LABELPERIODO": "Período",
+  "FORM_FRMLISTAGEMPEDIDO.LABEL1": "Código pedido",
+  "FORM_FRMLISTAGEMPEDIDO.BTNAPLICARFILTROS": "Aplicar Filtros",
+  "FORM_FRMLISTAGEMPEDIDO.BTNNOVO": "Nuevo",
+  "FORM_FRMLISTAGEMPEDIDO.BTNEDITAR": "Editar",
+  "FORM_FRMLISTAGEMPEDIDO.BTNEXCLUIR": "Eliminar",
+  "FORM_FRMLISTAGEMPEDIDO.BUTTONLIMPARFILTROS": "Limpiar filtros",
+
+  "FORM_FRMPEDIDO.CAPTION": "Pedido de Venta",
+  "FORM_FRMPEDIDO.GROUPBOX2": "Producto",
+  "FORM_FRMPEDIDO.LABEL4": "Código",
+  "FORM_FRMPEDIDO.LABEL5": "Valor unitario",
+  "FORM_FRMPEDIDO.LABEL6": "Cantidad",
+  "FORM_FRMPEDIDO.LABEL2": "Producto",
+  "FORM_FRMPEDIDO.BTNADDITEM": "Agregar Item",
+  "FORM_FRMPEDIDO.BTNEDITARITEM": "Editar Item",
+  "FORM_FRMPEDIDO.BTNREMOVERITEM": "Eliminar Item",
+  "FORM_FRMPEDIDO.LABEL1": "Código pedido",
+  "FORM_FRMPEDIDO.LABEL8": "Proveedor",
+  "FORM_FRMPEDIDO.BTNCRIARPEDIDO": "Crear Pedido",
+
+  "MSG_RELATORIO_SALVO": "Informe guardado en {0}",
+  "MSG_FANTASIA_OBRIGATORIO": "Nombre comercial obligatorio",
+  "MSG_RAZAO_OBRIGATORIA": "Razón social obligatoria",
+  "MSG_PEDIDO_ID_INVALIDO": "ID de pedido invalido",
+  "MSG_FORNECEDOR_ID_INVALIDO": "ID de proveedor invalido",
+  "MSG_VALOR_INVALIDO": "El valor debe ser un numero mayor o igual a cero",
+  "MSG_QUANTIDADE_INVALIDA": "La cantidad debe ser mayor que cero",
+
+  "ITEMS_FOUND": {
+    "one": "{0} artículo encontrado",
+    "other": "{0} artículos encontrados"
+  }
+}
