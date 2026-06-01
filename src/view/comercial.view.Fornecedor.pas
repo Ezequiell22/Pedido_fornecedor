@@ -8,7 +8,7 @@ uses
   Vcl.Controls, Vcl.Grids,
   comercial.controller,
   comercial.controller.interfaces,
-  siComp;
+  siComp, siLngLnk;
 
 type
   TfrmFornecedor = class(TForm)
@@ -61,6 +61,12 @@ end;
 
 procedure TfrmFornecedor.FormShow(Sender: TObject);
 begin
+  if Tag = 1 then
+    Caption := Translator.Msg('FRM_FORNECEDOR_NOVO')
+  else if Tag = 2 then
+    Caption := Translator.Msg('FRM_FORNECEDOR_EDITAR');
+
+  TLanguageBootstrap.ApplyFormTranslations(Self, Tag = 0);
   FController.business.Fornecedor
   .GetById(strTointdef(edtCod_clifor.Text, 0));
   LoadData;

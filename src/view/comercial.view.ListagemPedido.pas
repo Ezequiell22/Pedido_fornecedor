@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls, Vcl.ComCtrls,
   System.Generics.Collections, comercial.controller.interfaces, Vcl.ExtCtrls,
-  siComp;
+  siComp, siLngLnk;
 
 type
   TfrmListagemPedido = class(TForm)
@@ -52,10 +52,13 @@ implementation
 {$R *.dfm}
 
 uses
-  comercial.controller, comercial.view.Pedido;
+  comercial.controller,
+  comercial.view.Pedido,
+  Language.Bootstrap;
 
 procedure TfrmListagemPedido.FormShow(Sender: TObject);
 begin
+  TLanguageBootstrap.ApplyFormTranslations(Self);
   FIDEMPRESA := 200;
   FController := TController.New;
   FController.business.Pedido.LinkDataSourcePedido(DSPedidos);

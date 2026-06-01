@@ -1,0 +1,7 @@
+[Language]
+Current=pt
+Fallback=en
+HotReload=1
+AuditMode=0
+DiscoveryMode=0
+TranslationFile=Languages\comercial.sil

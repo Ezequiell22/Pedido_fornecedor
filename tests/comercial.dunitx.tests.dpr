@@ -28,7 +28,9 @@ uses
   comercial.model.DAO.PedidoCompra in '..\src\model\DAO\comercial.model.DAO.PedidoCompra.pas',
   Language.Runtime.Config in '..\src\language\Language.Runtime.Config.pas',
   Language.Tests.Helpers in 'Language.Tests.Helpers.pas',
-  Language.Tests.TsiLang.Config in 'Language.Tests.TsiLang.Config.pas';
+  Language.Tests.TsiLang.Config in 'Language.Tests.TsiLang.Config.pas',
+  Language.Tests.Translator in 'Language.Tests.Translator.pas',
+  Language.Translations.Catalog in '..\src\language\Language.Translations.Catalog.pas';
 
 var
   Runner: ITestRunner;
@@ -41,6 +43,7 @@ begin
   TDUnitX.RegisterTestFixture(TTestPedido);
   TDUnitX.RegisterTestFixture(TTestRelatorioHTML);
   TDUnitX.RegisterTestFixture(TTestTsiLangConfig);
+  TDUnitX.RegisterTestFixture(TTestTranslatorCatalog);
 
   Runner := TDUnitX.CreateRunner;
   Runner.AddLogger(TDUnitXConsoleLogger.Create(True));

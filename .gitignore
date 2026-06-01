@@ -21,6 +21,7 @@ __recovery/
 *.dcu
 *.vlb
 *.ini
+!Config.ini.example
 *.log
 *.html
 *.DS_Store  

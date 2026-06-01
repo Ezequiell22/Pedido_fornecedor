@@ -105,6 +105,10 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
+        <PostBuildEvent><![CDATA[if not exist "$(MSBuildProjectDirectory)\Win32\Debug\Languages" mkdir "$(MSBuildProjectDirectory)\Win32\Debug\Languages"
+xcopy /Y /E /I "$(MSBuildProjectDirectory)\Languages\*.*" "$(MSBuildProjectDirectory)\Win32\Debug\Languages\" >nul
+if not exist "$(MSBuildProjectDirectory)\Win32\Debug\Config.ini" copy /Y "$(MSBuildProjectDirectory)\Config.ini.example" "$(MSBuildProjectDirectory)\Win32\Debug\Config.ini" >nul
+exit /b 0]]></PostBuildEvent>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
@@ -163,6 +167,12 @@
             <Form>frmListagemPedido</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="src\language\Language.Bootstrap.pas"/>
+        <DCCReference Include="src\language\Language.TsiLang.Service.pas"/>
+        <DCCReference Include="src\language\Language.Runtime.Config.pas"/>
+        <DCCReference Include="src\language\Language.Translations.Catalog.pas"/>
+        <DCCReference Include="src\language\Language.Translations.Apply.pas"/>
+        <DCCReference Include="src\language\Language.Translations.Seed.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

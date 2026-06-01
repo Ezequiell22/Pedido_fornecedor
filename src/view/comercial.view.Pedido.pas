@@ -14,7 +14,7 @@ System.UITypes,
 comercial.controller,
 comercial.controller.interfaces,
 comercial.util.printhtml, System.Generics.Collections,
-siComp;
+siComp, siLngLnk;
 
 type
   TfrmPedido = class(TForm)
@@ -116,11 +116,12 @@ end;
 
 procedure TfrmPedido.FormShow(Sender: TObject);
 begin
-     FController.business
+  TLanguageBootstrap.ApplyFormTranslations(Self);
+  FController.business
     .Pedido
     .setIdEmpresa(FIDEMPRESA);
 
-    edtIdPedidoExit(nil);
+  edtIdPedidoExit(nil);
 end;
 
 function TfrmPedido.ValidatePedidoCab: Boolean;

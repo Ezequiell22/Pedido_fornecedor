@@ -32,7 +32,10 @@ uses
   comercial.view.ListagemPedido in 'src\view\comercial.view.ListagemPedido.pas' {frmListagemPedido},
   Language.Bootstrap in 'src\language\Language.Bootstrap.pas',
   Language.TsiLang.Service in 'src\language\Language.TsiLang.Service.pas',
-  Language.Runtime.Config in 'src\language\Language.Runtime.Config.pas';
+  Language.Runtime.Config in 'src\language\Language.Runtime.Config.pas',
+  Language.Translations.Catalog in 'src\language\Language.Translations.Catalog.pas',
+  Language.Translations.Apply in 'src\language\Language.Translations.Apply.pas',
+  Language.Translations.Seed in 'src\language\Language.Translations.Seed.pas';
 
 {$R *.res}
 

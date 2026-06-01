@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.StdCtrls,
   comercial.controller.interfaces, comercial.controller,
-  siComp;
+  siComp, siLngLnk;
 
 type
   TfrmListagemFornecedor = class(TForm)
@@ -33,10 +33,13 @@ implementation
 
 {$R *.dfm}
 
-uses comercial.view.Fornecedor;
+uses
+  comercial.view.Fornecedor,
+  Language.Bootstrap;
 
 procedure TfrmListagemFornecedor.FormShow(Sender: TObject);
 begin
+  TLanguageBootstrap.ApplyFormTranslations(Self);
   FController := TController.New;
   FController.business.Fornecedor.Bind(DS).Get;
 end;
@@ -45,7 +48,7 @@ procedure TfrmListagemFornecedor.BtnNovoClick(Sender: TObject);
 begin
   with TfrmFornecedor.Create(self) do
     try
-      Caption := 'Novo Fornecedor';
+      Tag := 1;
       ShowModal;
     finally
       Free;
@@ -57,7 +60,7 @@ procedure TfrmListagemFornecedor.BtnEditarClick(Sender: TObject);
 begin
   with TfrmFornecedor.Create(self) do
     try
-      Caption := 'Editar Fornecedor';
+      Tag := 2;
       edtCod_clifor.Text := DS.DataSet.FieldByName('COD_CLIFOR').AsString;
       edtCod_clifor.ReadOnly := True;
       ShowModal;

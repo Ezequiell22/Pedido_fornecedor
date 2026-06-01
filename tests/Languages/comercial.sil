@@ -1,0 +1,14 @@
+; TsiLang external translations - comercial module
+; Idiomas na ordem: Portuguese | English | Spanish (delimitador CHR(1))
+; Pode ser editado no SIL Editor ou mantido em sincronia com Language.Translations.Catalog.pas
+
+[frmIndex.siLang1.stStrings]
+MSG_RELATORIO_SALVO=Relatorio salvo em {0}Report saved to {0}Informe guardado en {0}
+MSG_FANTASIA_OBRIGATORIO=Informe o nome fantasia.Trade name is required.Indique el nombre de fantasia.
+MSG_RAZAO_OBRIGATORIA=Informe a razao social.Legal name is required.Indique la razon social.
+MSG_PEDIDO_ID_INVALIDO=Informe um codigo de pedido valido.Enter a valid purchase order id.Indique un codigo de pedido valido.
+MSG_FORNECEDOR_ID_INVALIDO=Selecione um fornecedor valido.Select a valid supplier.Seleccione un proveedor valido.
+MSG_VALOR_INVALIDO=Informe um valor unitario valido.Enter a valid unit price.Indique un precio unitario valido.
+MSG_QUANTIDADE_INVALIDA=Informe uma quantidade valida.Enter a valid quantity.Indique una cantidad valida.
+FRM_FORNECEDOR_NOVO=Novo FornecedorNew SupplierNuevo Proveedor
+FRM_FORNECEDOR_EDITAR=Editar FornecedorEdit SupplierEditar Proveedor
